@@ -9,6 +9,10 @@ urlpatterns = patterns('',
     # url(r'^$', 'server.views.home', name='home'),
     # url(r'^server/', include('server.foo.urls')),
 
+    url(r'^controller/phone_id', include('controller.views.download')),
+
+    url(r'^datalogger/phone_id', include('datalogger.views.upload')),
+
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
