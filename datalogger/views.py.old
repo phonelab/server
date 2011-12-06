@@ -13,11 +13,10 @@ def handle_uploaded_file(f):
 @csrf_protect
 def upload_file(request, phone_id):
   if request.method == 'POST':
-    ufile = '/home/lsm5/log'
-    form = UploadFileForm(request.POST, ufile)
+    form = UploadFileForm(request.POST, request.FILES)
     if form.is_valid():
-      handle_uploaded_file(ufile)
+      handle_uploaded_file(request.FILES['file'])
       return HttpResponse("success")
   else:
     form = UploadFileForm()
-    return render_to_response('datalogger.html', {'form': form}, context_instance=RequestContext(request))
+  return render_to_response('datalogger.html', {'form': form}, context_instance=RequestContext(request))

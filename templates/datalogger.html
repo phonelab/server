@@ -1,0 +1,7 @@
+{% if form.is_multipart %}
+<form enctype="multipart/form-data" method="post" action="/log/(?P<phone_id>[A-Z0-9]\w+)/">{% csrf_token %}
+{% else %}
+<form method="post" action="/log/(?P<phone_id>[A-Z0-9]\w+)/">{% csrf_token %}
+{% endif %}
+{{ form }}
+</form>
