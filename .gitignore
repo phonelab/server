@@ -1,6 +1,5 @@
 *.log
 *.pot
 *.pyc
-local_settings.py
 
-datalogger/logs
+datalogger/logs/

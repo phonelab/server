@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.utils import  simplejson as json
 
 import time
-import os
+import os, errno
 
 RAW_LOG_ROOT = os.path.join(settings.SITE_ROOT, 'datalogger', 'logs')
 
@@ -32,11 +32,11 @@ def upload_file(request, deviceId):
     print request.FILES
     # filename
     filename = os.path.join(RAW_LOG_ROOT, deviceId, str(int(time.time())) + ".log")
-    dir = os.path.dirname(filename)
+    filedir = os.path.dirname(filename)
     # create folder for user if it doesn`t exist
     try:
-      print "trying to create dir"
-      os.mkdir(dir)
+      print "trying to create dir" + str(filedir)
+      os.mkdir(filedir)
     except OSError, e:
       if e.errno != errno.EEXIST:
         print "some problem in creating dir"
@@ -60,4 +60,4 @@ def upload_file(request, deviceId):
       logFile = request.GET.get('logfile', ''),
       deviceId = deviceIddeviceId, 
     )
-  return HttpResponse(json.dumps({err: err, msg: msg}), mimetype='application/json')
+  return HttpResponse(json.dumps({"err": err, "msg": msg}), mimetype='application/json')
