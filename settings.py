@@ -1,10 +1,18 @@
 # Django settings for server project.
 
+import os
+import django
+
+DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
+SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+DATABASE_ENGINE = 'django.db.backends.sqlite3'
+DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
     ('Lokesh Mandvekar', 'lsm5@buffalo.edu'),
 )
 
@@ -12,12 +20,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/lsm5/src/server/server.sqlite3',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE'    : DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME'      : DATABASE_NAME,   # Or path to database file if using sqlite3.
+        'USER'      : '', # Not used with sqlite3.
+        'PASSWORD'  : '', # Not used with sqlite3.
+        'HOST'      : '', # Set to empty string for localhost. Not used with sqlite3.
+        'PORT'      : '', # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -46,7 +54,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -107,7 +115,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/lsm5/src/server/templates/',
+    os.path.join(SITE_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
