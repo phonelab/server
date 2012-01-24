@@ -6,7 +6,7 @@ from django.conf.urls.defaults import patterns, include, url
 
 if settings.DEBUG:
   urlpatterns = patterns('',
-    url(r'^manifest/(?P<phone_id>[A-Z0-9]\w+)/$', 'controller.views.download_manifest'),
+    url(r'^manifest/(?P<deviceId>[A-Z0-9]\w+)/$', 'controller.views.download_manifest'),
     url(r'^log/(?P<deviceId>[A-Z0-9]\w+)/$', 'datalogger.views.upload_file'),
 
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
