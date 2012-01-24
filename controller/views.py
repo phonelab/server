@@ -12,6 +12,15 @@ from django.shortcuts import render
 # a.save()
 # b.save()
 #
+
+"""
+Generate Manifest based on deviceId
+
+@date 01/24/2012
+@param String deviceId
+
+@author Micheal
+"""
 def download_manifest(request, deviceId): 
   device = Device.objects.filter(id=deviceId)
   # device exists

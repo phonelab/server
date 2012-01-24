@@ -10,17 +10,19 @@ import os, errno
 
 RAW_LOG_ROOT = os.path.join(settings.SITE_ROOT, 'datalogger', 'logs')
 
-def handle_uploaded_file(f):
-  destination = open('log', 'wb+')
-  for chunk in f.chunks():
-    destination.write(chunk)
-  destination.close()
-
 #
 # TODO::
 # need a better mechanism to tackle cross site forgery POST
 #
 
+"""
+Upload File based on deviceId
+
+@date 12/10/2011
+@param String deviceId
+
+@author Micheal
+"""
 @csrf_exempt
 def upload_file(request, deviceId):
   err = ""
@@ -56,8 +58,5 @@ def upload_file(request, deviceId):
 
   else:
     print request.GET
-    logfile = LogFile(
-      logFile = request.GET.get('logfile', ''),
-      deviceId = deviceIddeviceId, 
-    )
+
   return HttpResponse(json.dumps({"err": err, "msg": msg}), mimetype='application/json')
