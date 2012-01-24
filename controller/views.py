@@ -50,7 +50,7 @@ def download_manifest(request, deviceId):
       return render(request,
       'manifest/fail.xml', 
       {
-          msg: "apps not found"
+          "msg": "apps not found"
       },
       content_type="application/xml"
     )
@@ -59,7 +59,7 @@ def download_manifest(request, deviceId):
     return render(request,
       'manifest/fail.xml', 
       {
-          msg: "deviceID not found"
+          "msg": "deviceID not found"
       },
       content_type="application/xml"
     )
