@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <manifest>
+    <id meid="{{deviceId}}" />
+    <source
+      name="phonelab"
+      version="1"
+      base="http://ps1.phonelab.org/download/">
+    </source>
+
+    <default
+      asyncappdir="/mnt/sdcard/phonelab/apps/"
+      hiddenappdir="/mnt/sdcard/phonelab/hidden/apps/">
+    </default>
+
+    {% for key,app in apps.items %}
+    <application
+      name="{{app.app_object.name}}"
+      package_name="{{app.app_object.package_name}}"
+      intent_name="{{app.app_object.intent_name}}"
+      description="{{app.app_object.description}}"
+      type="{{app.app_object.type}}"
+      startime="{{app.app_object.starttime}}"
+      endtime="{{app.app_object.endtime}}"
+      download="{{app.app_object.download}}" 
+      version="{{app.app_object.version}}"
+      action="{{app.app_status}}">
+    </application>
+    {% endfor %}
+
+    <statusmonitor>
+      <parameter name="runInterval" value="10" units="min" setby="server" action="keep" />
+    </statusmonitor>
+  </manifest>

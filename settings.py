@@ -8,12 +8,14 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 DATABASE_ENGINE = 'django.db.backends.sqlite3'
 DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
+#DATABASE_NAME = "phonelab"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Lokesh Mandvekar', 'lsm5@buffalo.edu'),
+    ('Micheal Benedict', 'micheala@buffalo.edu'),
 )
 
 MANAGERS = ADMINS
@@ -127,7 +129,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'controller',
     'datalogger',
-
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',

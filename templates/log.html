@@ -1,7 +1,0 @@
-{% if form.is_multipart %}
-<form enctype="multipart/form-data" method="post" action="/log/">{% csrf_token %}
-{% else %}
-<form method="post" action="/log/">{% csrf_token %}
-{% endif %}
-{{ form }}
-</form>
