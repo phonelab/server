@@ -128,7 +128,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'application',
-    'controller',
+    'manifest',
     'datalogger',
     'device',
 )

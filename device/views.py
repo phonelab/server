@@ -58,12 +58,23 @@ def create(request):
 
 
 """
+Update Device Details
+
+@date 02/01/2012
+@param String deviceId
+
+# curl -X http://127.0.0.1:3000/device/
+
+@author Micheal
+"""
+def update(request, deviceId):
+
+
+"""
 Show Device Details
 
 @date 01/29/2012
 @param String deviceId
-
-# curl -X http://127.0.0.1:3000/device/123
 
 @author Micheal
 """

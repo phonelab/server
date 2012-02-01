@@ -17,7 +17,7 @@ if settings.DEBUG:
     ## Controller
     #
     # Manifest [GET]
-    url(r'^manifest/(?P<deviceId>[A-Z0-9]\w+)/$', 'controller.views.download_manifest'),
+    url(r'^manifest/(?P<deviceId>[A-Z0-9]\w+)/$', 'manifest.views.download_manifest'),
 
     #
     ## Logger
