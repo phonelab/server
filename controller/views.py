@@ -1,7 +1,18 @@
 from django.http import HttpResponse
-from controller.models import Application, Device, DeviceApplication
+from application.models import Application
+from device.models import Device, DeviceApplication
 from django.shortcuts import render
+import simplejson as json
 
+"""
+Generate Manifest based on deviceId
+
+@date 01/24/2012
+@param String deviceId
+
+@author Micheal
+
+# <b>Stub to create New Devices</b>
 #
 # from controller.models import Application, Device, DeviceApplication
 # import datetime
@@ -12,16 +23,9 @@ from django.shortcuts import render
 # a.save()
 # b.save()
 #
-
-"""
-Generate Manifest based on deviceId
-
-@date 01/24/2012
-@param String deviceId
-
-@author Micheal
 """
 def download_manifest(request, deviceId): 
+  # get device
   device = Device.objects.filter(id=deviceId)
   # device exists
   if device.count() == 1:
@@ -37,29 +41,34 @@ def download_manifest(request, deviceId):
     # apps present
     if len(apps) > 0 :
       print apps
-      return render(request,
+      return render(
+        request,
         'manifest/success.xml', 
         {
             'deviceId':deviceId
-          , 'apps': apps
+          , 'apps'    : apps
         },
         content_type="application/xml"
       )
     # no apps present
     else :
-      return render(request,
-      'manifest/fail.xml', 
-      {
-          "msg": "apps not found"
-      },
-      content_type="application/xml"
-    )
+      return render(
+        request,
+        'manifest/fail.xml', 
+        {
+            'no' : 'err2'
+          , 'msg': 'apps not found'
+        },
+        content_type="application/xml"
+      )
   # device does not exist
   else :
-    return render(request,
-      'manifest/fail.xml', 
-      {
-          "msg": "deviceID not found"
-      },
-      content_type="application/xml"
-    )
+    return render(
+      request,
+        'manifest/fail.xml', 
+        {
+            'no' : 'err1'
+          , 'msg': 'invalid device'
+        },
+        content_type="application/xml"
+      )

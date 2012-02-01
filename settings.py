@@ -6,9 +6,9 @@ import django
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
-DATABASE_ENGINE = 'django.db.backends.sqlite3'
-DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
-#DATABASE_NAME = "phonelab"
+DATABASE_ENGINE = 'django.db.backends.mysql'
+#DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
+DATABASE_NAME = "phonelab"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -24,8 +24,8 @@ DATABASES = {
     'default': {
         'ENGINE'    : DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME'      : DATABASE_NAME,   # Or path to database file if using sqlite3.
-        'USER'      : '', # Not used with sqlite3.
-        'PASSWORD'  : '', # Not used with sqlite3.
+        'USER'      : 'root', # Not used with sqlite3.
+        'PASSWORD'  : 'root', # Not used with sqlite3.
         'HOST'      : '', # Set to empty string for localhost. Not used with sqlite3.
         'PORT'      : '', # Set to empty string for default. Not used with sqlite3.
     }
@@ -106,7 +106,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
@@ -127,11 +127,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'application',
     'controller',
     'datalogger',
-    'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'device',
 )
 
 # A sample logging configuration. The only tangible logging
