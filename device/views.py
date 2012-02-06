@@ -29,7 +29,7 @@ def create(request):
   # get params from POST
   params = request.POST
   # error checking
-  if params['id'] == "" or params['email'] == "" or params['reg_id'] == "":
+  if params['id'] == "" or params['reg_id'] == "":
     response['err'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
