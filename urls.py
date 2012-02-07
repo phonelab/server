@@ -7,21 +7,29 @@ if settings.DEBUG:
     ## Device
     #
     # New device registration [POST]
-    url(r'^device/$', 'device.views.create'),
-    # Device List [GET]
-    url(r'^devices/$', 'device.views.index'),
-    # Device Show [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)$', 'device.views.show'),
+    url(r'^device/$', 'device.views.create_device'),
 
     #
-    ## Controller
+    ## Manifest
     #
-    # Manifest [GET]
+    # Download Manifest [GET]
     url(r'^manifest/(?P<deviceId>[A-Z0-9]\w+)/$', 'manifest.views.download_manifest'),
 
     #
     ## Logger
     #
-    # Logger [POST]
-    url(r'^log/(?P<deviceId>[A-Z0-9]\w+)/$', 'datalogger.views.upload_file'),
+    # POST Logfiles [POST]
+    url(r'^log/(?P<deviceId>[A-Z0-9]\w+)/$', 'datalogger.views.upload_log'),
+
+    #
+    ## Application
+    #
+    # Download Application [GET]
+    url(r'^experiment/(?P<deviceId>[A-Z0-9]\w+)/$', 'application.views.get_download'),
+
+    #
+    ## Error
+    #
+    # Error Handling [POST]
+    url(r'^error/(?P<deviceId>[A-Z0-9]\w+)/$', 'error.views.create_error'),
   )

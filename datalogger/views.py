@@ -22,7 +22,7 @@ Upload File based on deviceId
 
 @author Micheal
 """
-def upload_file(request, deviceId):
+def upload_log(request, deviceId):
   # return if GET request
   if request.method == 'GET':
     return HttpResponse(

@@ -5,6 +5,7 @@ from lib.helper import json_response_from
 
 """
 Create New Device [POST]
+Update Device Details [POST]
 
 @date 01/29/2012
 @param id IMEI number
@@ -16,7 +17,7 @@ Create New Device [POST]
 
 @author Micheal
 """
-def create(request): 
+def create_device(request): 
   # define default response
   response = { "err": "", "data": "" }
   # return if GET request
@@ -37,13 +38,17 @@ def create(request):
     return json_response_from(response)
   # get device
   device = Device.objects.filter(id=params['id'])
-  # device exists
+  # if device exists, update
   if device.count() == 1:
-    response['err'] = {
-      'no' : 'err2',
-      'msg': 'device already exists'
-    }
-  # device does not exist
+    if (device.email != params['email']):
+      device.email = params['email']
+    if (device.reg_id != params['reg_id']):
+      device.reg_id = params['reg_id']
+      # get new token from goog servers
+    
+    # save if changed, else let it b
+
+  # device does not exist, insert
   else:
     device = Device(
         id     = params['id'], 
@@ -55,19 +60,6 @@ def create(request):
     response['data'] = device
   # render json response
   return json_response_from(response)
-
-
-"""
-Update Device Details
-
-@date 02/01/2012
-@param String deviceId
-
-# curl -X http://127.0.0.1:3000/device/
-
-@author Micheal
-"""
-def update(request, deviceId):
 
 
 """
