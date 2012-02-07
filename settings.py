@@ -130,10 +130,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'application',
-    'manifest',
-    'datalogger',
-    'device',
+    'application', # experiment
+    'manifest', # manifest
+    'datalogger', # datalogger
+    'device', # device
+    'error', # error
 )
 
 # A sample logging configuration. The only tangible logging

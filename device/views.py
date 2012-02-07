@@ -21,7 +21,6 @@ def index(request):
             }
           )
 
-
 """
 Create New Device [POST]
 Update Device Details [POST]
@@ -96,14 +95,16 @@ def show(request, deviceId):
   device = Device.objects.filter(id=deviceId)
   # device exists
   if device.count() == 1:
-    device = device[0]
     # TODO get logs for that particular device
-    response['data'] = device
+    return render_to_response(
+            'device/show.html', 
+            {
+                'device': device[0]
+            }
+          )
   # device does not exist
   else:
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid device'
     }
-
-  return json_response_from(response)

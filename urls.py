@@ -7,7 +7,14 @@ if settings.DEBUG:
     ##### Web Endpoints
     ##### Used by Admin and others
     #####
+    
+    #
+    ## Device
+    #
+    # All Devices
     url(r'^devices/$', 'device.views.index'),
+    # Single Device
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.show'),
 
 
     #####

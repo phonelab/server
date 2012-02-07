@@ -1,10 +1,22 @@
 <!-- Show list of devices !-->
 {% extends "base.html" %}
 
-{% block title %}All Devices{% endblock %}
-
 {% block content %}
-  {% for device in devices %}
-    {{ device.id }} - {{ device.email }}
-  {% endfor %}
+  <h1>{% block title %}All Devices{% endblock %}</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Device ID</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for device in devices %}
+    <tr>
+      <td><a href='/device/{{device.id}}'>{{ device.id }}</a></td>
+      <td>{{ device.email }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
