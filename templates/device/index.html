@@ -1,0 +1,10 @@
+<!-- Show list of devices !-->
+{% extends "base.html" %}
+
+{% block title %}All Devices{% endblock %}
+
+{% block content %}
+  {% for device in devices %}
+    {{ device.id }} - {{ device.email }}
+  {% endfor %}
+{% endblock %}

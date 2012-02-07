@@ -3,6 +3,18 @@ from django.conf.urls.defaults import patterns, include, url
 
 if settings.DEBUG:
   urlpatterns = patterns('',
+    #####
+    ##### Web Endpoints
+    ##### Used by Admin and others
+    #####
+    url(r'^devices/$', 'device.views.index'),
+
+
+    #####
+    ##### API Endpoints
+    ##### Used by PhoneLab Application on Device
+    #####
+
     #
     ## Device
     #
@@ -29,7 +41,7 @@ if settings.DEBUG:
 
     #
     ## Error
-    #
+    ## TODO
     # Error Handling [POST]
-    url(r'^error/(?P<deviceId>[A-Z0-9]\w+)/$', 'error.views.create_error'),
+    # url(r'^error/(?P<deviceId>[A-Z0-9]\w+)/$', 'error.views.create_error'),
   )

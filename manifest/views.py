@@ -45,9 +45,9 @@ def download_manifest(request, deviceId):
         request,
         'manifest/success.xml', 
         {
-            'deviceId':deviceId
-          , 'status_monitor_update_value': device.update_value
-          , 'apps'    : apps
+            'deviceId'                    : deviceId
+          , 'status_monitor_update_value' : device.update_value
+          , 'apps'                        : apps
         },
         content_type="application/xml"
       )

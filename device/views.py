@@ -1,7 +1,26 @@
 from django.http import HttpResponse
 from device.models import Device, DeviceApplication
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from
+
+"""
+List All Devices
+
+@date 02/07/2012
+
+@author Micheal
+"""
+def index(request): 
+  # get all devices
+  devices = Device.objects.all
+
+  return render_to_response(
+            'device/index.html', 
+            {
+                'devices': devices
+            }
+          )
+
 
 """
 Create New Device [POST]
