@@ -25,7 +25,7 @@ if settings.DEBUG:
     ## Application
     #
     # Download Application [GET]
-    url(r'^experiment/(?P<deviceId>[A-Z0-9]\w+)/$', 'application.views.get_download'),
+    url(r'^experiment/(?P<appId>[0-9]\w+).apk$', 'application.views.get_download'),
 
     #
     ## Error

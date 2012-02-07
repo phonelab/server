@@ -8,19 +8,20 @@ from urllib2 import URLError
 import datetime
 
 """
-Class DeviceId
+Class Device
 
 @date 01/24/2012
 """
 class Device(models.Model):
-  id            = models.CharField(max_length=30, null=False, primary_key=True)
-  email         = models.CharField(max_length=30, null=False)
-  reg_id        = models.CharField(max_length=30, null=False)
-  collapse_key  = models.CharField(max_length = 50)
-  last_messaged = models.DateTimeField(blank = True, default = datetime.datetime.now)
-  failed_push   = models.BooleanField(default = False)
-  created       = models.DateTimeField(auto_now_add=True)
-  updated       = models.DateTimeField(auto_now_add=True)
+  id              = models.CharField(max_length=30, null=False, primary_key=True)
+  email           = models.CharField(max_length=30, null=False)
+  reg_id          = models.CharField(max_length=30, null=False)
+  collapse_key    = models.CharField(max_length = 50)
+  last_messaged   = models.DateTimeField(blank = True, default = datetime.datetime.now)
+  failed_push     = models.BooleanField(default = False)
+  update_interval = models.CharField(max_length=5, null=False, default=10)
+  created         = models.DateTimeField(auto_now_add=True)
+  updated         = models.DateTimeField(auto_now_add=True)
 
   """
   Send Message to Device
