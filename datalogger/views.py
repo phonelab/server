@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.conf import settings
 from django.template import RequestContext
 from django.utils import  simplejson as json
+from device.models import Device
 
 import time
 import os, errno
@@ -57,3 +58,37 @@ def upload_log(request, deviceId):
   response['data'] = "done"
   # render json response
   return json_response_from(response)
+
+
+"""
+Show Log for Device
+
+@date 01/29/2012
+@param String deviceId
+@param String logFilename
+
+@author Taeyeon
+"""
+def show(request, deviceId, logFilename):
+  # get device
+  device = Device.objects.filter(id=deviceId)
+  # if device exists, update
+  if device.count() != 1:
+    # render error
+  else:
+    # generate file name
+    filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename)
+    # open log file
+    Logfile = open(filename, 'r+')
+    # read file
+    Logdata = Logfile.read()
+    # render respone
+    return render_to_response(
+      'device/log.html',
+        {
+          'device': device[0],
+          'logFilename': logFilename,
+          'Logdata': Logdata
+        }
+      )
+

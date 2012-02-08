@@ -60,14 +60,17 @@ def create_or_update_device(request):
   device = Device.objects.filter(id=params['id'])
   # if device exists, update
   if device.count() == 1:
+    # email
     if (device.email != params['email']):
       device.email = params['email']
+    # reg_id
     if (device.reg_id != params['reg_id']):
       device.reg_id = params['reg_id']
-      # get new token from goog servers
-    
-    # save if changed, else let it b
-
+    # update
+    if (device.update_interval != params['update_interval']):
+      device.update_interval = params['update_interval']
+    # save device
+    device.save()
   # device does not exist, insert
   else:
     device = Device(
@@ -116,28 +119,24 @@ def show(request, deviceId):
       'msg': 'invalid device'
     }
 
-def log(request, deviceId, logFilename):
-	device = Device.objects.filter(id=deviceId)
-	Logfile = open(logFilename, 'r+')
-	Logdata = Logfile.read()
-	return render_to_response(
-		'device/log.html',
-			{
-				'device': device[0],
-				'logFilename': logFilename,
-				'Logdata': Logdata
-			}
-		)
 
-def update_status(request, deviceId):
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-  if device.count() == 1:
-	if request.POST.has_key('time') == True:
-		time = request.POST['time']
-		Device.objects.filter(id=device[0].id).update(update_interval=time)
-		return HttpResponse('Success to update the time.')
-	else:
-		return HttpResponse('Please enter time.')
+"""
+Update 
+
+@date 01/29/2012
+@param String deviceId
+
+@author Taeyeon
+"""
+# def update_status(request, deviceId):
+#   # get device
+#   device = Device.objects.filter(id=deviceId)
+#   # device exists
+#   if device.count() == 1:
+# 	if request.POST.has_key('time') == True:
+# 		time = request.POST['time']
+# 		Device.objects.filter(id=device[0].id).update(update_interval=time)
+# 		return HttpResponse('Success to update the time.')
+# 	else:
+# 		return HttpResponse('Please enter time.')
 	

@@ -15,11 +15,11 @@ if settings.DEBUG:
     url(r'^devices/$', 'device.views.index'),
     # Single Device [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.show'),
-	# Log Data
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+)/$', 'device.views.log'),
-
+	# Log Data [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+)/$', 'datalogger.views.show'),
 	# Update Status
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
+    # url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
+
     #####
     ##### API Endpoints
     ##### Used by PhoneLab Application on Device
