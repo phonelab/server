@@ -1,6 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from device.models import Device, DeviceApplication
-from django.shortcuts import render_to_response, render, redirect
+from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from
 from django.conf import settings
 
@@ -151,7 +151,7 @@ def edit(request, deviceId):
       'no' : 'err1',
       'msg': 'invalid device'
     }
-    return redirect('/error/')
+    return HttpResponseRedirect('/error/')
 
 """
 Update Device
@@ -170,13 +170,15 @@ def update(request, deviceId):
       'no' : 'err0',
       'msg': 'sorry no gets'
     }
-    return json_response_from(response)
+    return redirect('/error/')
   # get params from POST
   params = request.POST
   # get device
   device = Device.objects.filter(id=deviceId)
   # if device exists, update
   if device.count() == 1:
+    #
+    device = device[0]
     # email
     if (device.email != params['email']):
       device.email = params['email']
@@ -188,7 +190,8 @@ def update(request, deviceId):
       device.update_interval = params['update_interval']
     # save device
     device.save()
-    return redirect('/device/' + deviceId)
+    # redirect to device/<deviceId>
+    return HttpResponseRedirect('/device/' + device.id)
   # device does not exist
   else:
-    return redirect('/error/')
+    return HttpResponseRedirect('/error/')

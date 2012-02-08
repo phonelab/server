@@ -17,7 +17,7 @@ class Device(models.Model):
   email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=30, null=False)
   collapse_key    = models.CharField(max_length = 50)
-  last_messaged   = models.DateTimeField(blank = True, default = datetime.datetime.now)
+  last_messaged   = models.DateTimeField(blank = True, null=True)
   failed_push     = models.BooleanField(default = False)
   update_interval = models.CharField(max_length=5, null=False, default=10)
   created         = models.DateTimeField(auto_now_add=True)
