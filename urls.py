@@ -11,9 +11,9 @@ if settings.DEBUG:
     #
     ## Device
     #
-    # All Devices
+    # All Devices [GET]
     url(r'^devices/$', 'device.views.index'),
-    # Single Device
+    # Single Device [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.show'),
 
 
@@ -26,7 +26,8 @@ if settings.DEBUG:
     ## Device
     #
     # New device registration [POST]
-    url(r'^device/$', 'device.views.create_device'),
+    # Update Previous device registration [POST]
+    url(r'^device/$', 'device.views.create_or_update_device'),
 
     #
     ## Manifest

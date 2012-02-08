@@ -35,7 +35,7 @@ Update Device Details [POST]
 
 @author Micheal
 """
-def create_device(request): 
+def create_or_update_device(request): 
   # define default response
   response = { "err": "", "data": "" }
   # return if GET request
