@@ -5,6 +5,7 @@ import django
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 
 DATABASE_ENGINE = 'django.db.backends.mysql'
 #DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'

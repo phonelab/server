@@ -2,5 +2,4 @@
 *.log
 *.pot
 *.pyc
-
 datalogger/logs/

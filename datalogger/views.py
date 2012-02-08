@@ -7,8 +7,8 @@ from device.models import Device
 
 import time
 import os, errno
-
-RAW_LOG_ROOT = os.path.join(settings.SITE_ROOT, 'datalogger', 'logs')
+# Log Dir
+RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
 #
 # TODO::

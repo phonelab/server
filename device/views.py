@@ -2,9 +2,14 @@ from django.http import HttpResponse
 from device.models import Device, DeviceApplication
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from
+from django.conf import settings
 
 import os
 import datetime
+
+# Log Dir
+RAW_LOG_ROOT = settings.RAW_LOG_ROOT
+
 """
 List All Devices
 
@@ -100,18 +105,18 @@ def show(request, deviceId):
   device = Device.objects.filter(id=deviceId)
   # device exists
   if device.count() == 1:
-	#get log data list from deviceId directory
-	Pwd = os.path.dirname(os.path.abspath(__file__))
-	Path = os.path.join(Pwd, 'Datalogger', device[0].id)
-	os.chdir(Path) 
-	filelist =  os.listdir(".")     
-	return render_to_response(
-		'device/show.html', 
-			{
-				'device': device[0],
-				'filelist': filelist
-			}
-		)
+  	# get log data list from deviceId directory
+  	path = os.path.join(RAW_LOG_ROOT, device[0].id)
+  	os.chdir(path) 
+  	filelist =  os.listdir(".")
+    
+  	return render_to_response(
+  		'device/show.html', 
+  			{
+  				'device': device[0],
+  				'filelist': filelist
+  			}
+  		)
   # device does not exist
   else:
     response['err'] = {
