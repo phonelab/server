@@ -27,10 +27,20 @@
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="1">
-      <p>I'm in Section 1.</p>
+      <p>
+       {% for file in filelist %}
+       <a href='/device/{{device.id}}/{{file}}'>{{ file }}</a><br>
+       {% endfor %}
+	</p>
     </div>
     <div class="tab-pane" id="2">
-      <p>Coming Soon ...</p>
+      <p>
+		<form method="post" action="/device/{{device.id}}/update/status/">
+		<label for="time"> Time </label>
+		<input type="text" id="time" name="time" value="" />
+		<input type="submit" value="OK" />
+		</form>
+	  </p>
     </div>
   </div>
 </div>

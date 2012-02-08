@@ -3,6 +3,8 @@ from device.models import Device, DeviceApplication
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from
 
+import os
+import datetime
 """
 List All Devices
 
@@ -95,16 +97,47 @@ def show(request, deviceId):
   device = Device.objects.filter(id=deviceId)
   # device exists
   if device.count() == 1:
-    # TODO get logs for that particular device
-    return render_to_response(
-            'device/show.html', 
-            {
-                'device': device[0]
-            }
-          )
+	#get log data list from deviceId directory
+	Pwd = os.path.dirname(os.path.abspath(__file__))
+	Path = os.path.join(Pwd, 'Datalogger', device[0].id)
+	os.chdir(Path) 
+	filelist =  os.listdir(".")     
+	return render_to_response(
+		'device/show.html', 
+			{
+				'device': device[0],
+				'filelist': filelist
+			}
+		)
   # device does not exist
   else:
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid device'
     }
+
+def log(request, deviceId, logFilename):
+	device = Device.objects.filter(id=deviceId)
+	Logfile = open(logFilename, 'r+')
+	Logdata = Logfile.read()
+	return render_to_response(
+		'device/log.html',
+			{
+				'device': device[0],
+				'logFilename': logFilename,
+				'Logdata': Logdata
+			}
+		)
+
+def update_status(request, deviceId):
+  # get device
+  device = Device.objects.filter(id=deviceId)
+  # device exists
+  if device.count() == 1:
+	if request.POST.has_key('time') == True:
+		time = request.POST['time']
+		Device.objects.filter(id=device[0].id).update(update_interval=time)
+		return HttpResponse('Success to update the time.')
+	else:
+		return HttpResponse('Please enter time.')
+	
