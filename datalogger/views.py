@@ -73,11 +73,9 @@ def show(request, deviceId, logFilename):
   # get device
   device = Device.objects.filter(id=deviceId)
   # if device exists, update
-  if device.count() != 1:
-    # render error
-  else:
+  if device.count() == 1:
     # generate file name
-    filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename)
+    filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename + ".log")
     # open log file
     Logfile = open(filename, 'r+')
     # read file
