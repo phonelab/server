@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{% block title %}DeviceID {{device.id}}{% endblock %}</h1>
+<h1>{% block title %}DeviceID {{device.id}} (<a href='/device/{{device.id}}/edit/'>Edit</a>){% endblock %}</h1>
 <table class="table table-bordered table-striped">
   <tbody>
     <tr>
@@ -24,6 +24,7 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#1" data-toggle="tab">Log</a></li>
     <li><a href="#2" data-toggle="tab">Status Updates</a></li>
+    <li><a href="#3" data-toggle="tab">Send C2DM</a></li>
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="1">
@@ -34,13 +35,13 @@
 	</p>
     </div>
     <div class="tab-pane" id="2">
-      <p>
-		<form method="post" action="/device/{{device.id}}/update/status/">
-		<label for="time"> Time </label>
-		<input type="text" id="time" name="time" value="" />
-		<input type="submit" value="OK" />
-		</form>
-	  </p>
+      coming soon :)
+    </div>
+    <div class="tab-pane" id="3">
+      <form>
+        <input type='text' id='c2dm_msg' name='c2dm_msg' />
+        <input type='submit' value='go !' />
+      </form>
     </div>
   </div>
 </div>
@@ -178,5 +179,11 @@
   })
 
 }( window.jQuery )
+</script>
+
+<script>
+  $(document).ready(function() {
+
+  });
 </script>
 {% endblock %}

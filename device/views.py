@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from device.models import Device, DeviceApplication
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, redirect
 from lib.helper import json_response_from
 from django.conf import settings
 
@@ -60,7 +60,6 @@ def create_or_update_device(request):
       'no' : 'err1',
       'msg': 'missing mandatory params'
     }
-    return json_response_from(response)
   # get device
   device = Device.objects.filter(id=params['id'])
   # if device exists, update
@@ -126,22 +125,70 @@ def show(request, deviceId):
 
 
 """
-Update 
+Edit Device Form
 
-@date 01/29/2012
+@date 02/08/2012
 @param String deviceId
 
-@author Taeyeon
+@author Micheal
 """
-# def update_status(request, deviceId):
-#   # get device
-#   device = Device.objects.filter(id=deviceId)
-#   # device exists
-#   if device.count() == 1:
-# 	if request.POST.has_key('time') == True:
-# 		time = request.POST['time']
-# 		Device.objects.filter(id=device[0].id).update(update_interval=time)
-# 		return HttpResponse('Success to update the time.')
-# 	else:
-# 		return HttpResponse('Please enter time.')
-	
+def edit(request, deviceId):
+  # define default response
+  response = { "err": "", "data": "" }
+  # get device
+  device = Device.objects.filter(id=deviceId)
+  # device exists
+  if device.count() == 1:
+    return render_to_response(
+      'device/edit.html', 
+        {
+          'device': device[0]
+        }
+      )
+  # device does not exist
+  else:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+    }
+    return redirect('/error/')
+
+"""
+Update Device
+
+@date 02/08/2012
+@param String deviceId
+
+@author Micheal
+"""
+def update(request, deviceId):
+  # define default response
+  response = { "err": "", "data": "" }
+  # return if GET request
+  if request.method == 'GET':
+    response['err'] = {
+      'no' : 'err0',
+      'msg': 'sorry no gets'
+    }
+    return json_response_from(response)
+  # get params from POST
+  params = request.POST
+  # get device
+  device = Device.objects.filter(id=deviceId)
+  # if device exists, update
+  if device.count() == 1:
+    # email
+    if (device.email != params['email']):
+      device.email = params['email']
+    # reg_id
+    if (device.reg_id != params['reg_id']):
+      device.reg_id = params['reg_id']
+    # update
+    if (device.update_interval != params['update_interval']):
+      device.update_interval = params['update_interval']
+    # save device
+    device.save()
+    return redirect('/device/' + deviceId)
+  # device does not exist
+  else:
+    return redirect('/error/')

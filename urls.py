@@ -15,6 +15,10 @@ if settings.DEBUG:
     url(r'^devices/$', 'device.views.index'),
     # Single Device [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.show'),
+    # Edit Device Form [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/edit/$', 'device.views.edit'),
+    # Update Device Form [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/$', 'device.views.update'),
 	# Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status

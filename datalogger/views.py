@@ -70,6 +70,8 @@ Show Log for Device
 @author Taeyeon
 """
 def show(request, deviceId, logFilename):
+  # define default response
+  response = { "err": "", "data": "" }
   # get device
   device = Device.objects.filter(id=deviceId)
   # if device exists, update
@@ -89,4 +91,8 @@ def show(request, deviceId, logFilename):
           'Logdata': Logdata
         }
       )
-
+  else:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+    }
