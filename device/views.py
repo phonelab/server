@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from
 from django.conf import settings
 
-import os
+import os, errno
 import datetime
 
 # Log Dir
@@ -38,16 +38,16 @@ Update Device Details [POST]
 @param reg_id Registration Id
 
 # Create new device
-# curl -X POST -d "id=123&email=micheala@buffalo.edu&reg_id=some_id" http://127.0.0.1:8000/device/
+# curl -X POST -d "device_id=123&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
 
 @author Micheal
 """
 def create_or_update_device(request): 
   # define default response
-  response = { "err": "", "data": "" }
+  response = { "error": "", "data": "" }
   # return if GET request
   if request.method == 'GET':
-    response['err'] = {
+    response['error'] = {
       'no' : 'err0',
       'msg': 'sorry no gets'
     }
@@ -55,13 +55,13 @@ def create_or_update_device(request):
   # get params from POST
   params = request.POST
   # error checking
-  if params['id'] == "" or params['reg_id'] == "":
-    response['err'] = {
+  if params['device_id'] == "" or params['reg_id'] == "":
+    response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
     }
   # get device
-  device = Device.objects.filter(id=params['id'])
+  device = Device.objects.filter(id=params['device_id'])
   # if device exists, update
   if device.count() == 1:
     # email
@@ -78,8 +78,8 @@ def create_or_update_device(request):
   # device does not exist, insert
   else:
     device = Device(
-        id     = params['id'], 
-        email  = params['email'], 
+        id     = params['device_id'], 
+        email  = "phonelab@gmail.com", #params['email'] 
         reg_id = params['reg_id']
     )
     # create device
@@ -104,11 +104,22 @@ def show(request, deviceId):
   device = Device.objects.filter(id=deviceId)
   # device exists
   if device.count() == 1:
-  	# get log data list from deviceId directory
-  	path = os.path.join(RAW_LOG_ROOT, device[0].id)
-  	os.chdir(path) 
-  	filelist =  os.listdir(".")
-    
+    # get log data list from deviceId directory
+    path = os.path.join(RAW_LOG_ROOT, device[0].id)
+    # empty
+    filelist = {}
+    # try to change dir
+    try:
+      os.chdir(path) 
+      filelist =  os.listdir(".")
+    except OSError, e:
+      if e.errno != errno.EEXIST:
+        response['err'] = {
+          'no' : 'err1', 
+          'msg': 'cannot change dir, failed upload'
+        }
+        # TODO: report error
+  	
   	return render_to_response(
   		'device/show.html', 
   			{
@@ -122,6 +133,8 @@ def show(request, deviceId):
       'no' : 'err1',
       'msg': 'invalid device'
     }
+    return json_response_from(response)
+
 
 
 """
