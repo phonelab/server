@@ -15,7 +15,6 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Lokesh Mandvekar', 'lsm5@buffalo.edu'),
     ('Micheal Benedict', 'micheala@buffalo.edu'),
 )
 

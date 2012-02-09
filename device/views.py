@@ -108,19 +108,18 @@ def show(request, deviceId):
     path = os.path.join(RAW_LOG_ROOT, device[0].id)
     # empty
     filelist = {}
-    # try to change dir
+
     try:
-      os.chdir(path) 
-      filelist =  os.listdir(".")
+      os.chdir(path)
+      filelist = os.listdir(".")
     except OSError, e:
       if e.errno != errno.EEXIST:
         response['err'] = {
           'no' : 'err1', 
           'msg': 'cannot change dir, failed upload'
         }
-        # TODO: report error
-  	
-  	return render_to_response(
+    
+    return render_to_response(
   		'device/show.html', 
   			{
   				'device': device[0],
