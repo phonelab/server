@@ -7,9 +7,9 @@ DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 
-DATABASE_ENGINE = 'django.db.backends.mysql'
-#DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
-DATABASE_NAME = "phonelab"
+DATABASE_ENGINE = 'django.db.backends.sqlite3'
+DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
+#DATABASE_NAME = "phonelab"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -19,7 +19,7 @@ ADMINS = (
 )
 
 # C2DM Auth Token
-C2DM_AUTH_TOKEN = "DQAAAMcAAABqAyJY3ebP2Eg4isdIEmJLfHQmVwL92zjrZ0G1Kaa-K-qBaoRuAqJJEotBVZvInzutoqdOj5Di0KejRzTniGZIjCOwbMTrF5OAx7Un38HUi_MNhgvZq0Wjt_m9gMee1Y61UOg1tzom9l7wVXLXE6U5QqDobJg4M6Jr6xOsN1zJ1vx02KAD2NlspcVBQG099850Uddsay6BVLzEV59EN16m_vuTRjOn5JOTrh_5i99cZ5utoFPVS9XEIq_sNt8Ib9US5_GlLm9448HmuldIYk9_"
+C2DM_AUTH_TOKEN = "DQAAAMgAAAAnzB8fGC_zo5zbiDFzx9mAl55V5SMCrqmWYAPCdcUgNwrTlFHaON81KFPXzGfvbgYNVGuxseJec_QsKPrHYzg0AsoeqrHDNOy2GbUsZcSjVF71SvxU__MIosf0K2Ih04Xhl4hpvxYqSXfvhGfcPe5Vx4MkyaEnOjXy82vhQs93JymjOtvzyi0dA6MRxJUctwk7LdrGZFs7kr6FsVTjJ3XmDtG3GbpKgWjREHotYs3u1p7tBfRjj67EPsdzIv-v1DabPyo4T0oeD2f4uv54ONay"
 
 MANAGERS = ADMINS
 
@@ -27,8 +27,8 @@ DATABASES = {
     'default': {
         'ENGINE'    : DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME'      : DATABASE_NAME,   # Or path to database file if using sqlite3.
-        'USER'      : 'root', # Not used with sqlite3.
-        'PASSWORD'  : 'root', # Not used with sqlite3.
+        'USER'      : '', # Not used with sqlite3.
+        'PASSWORD'  : '', # Not used with sqlite3.
         'HOST'      : '', # Set to empty string for localhost. Not used with sqlite3.
         'PORT'      : '', # Set to empty string for default. Not used with sqlite3.
     }

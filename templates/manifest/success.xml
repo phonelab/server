@@ -28,6 +28,6 @@
     {% endfor %}
 
     <statusmonitor>
-      <parameter name="runInterval" value="{{status_monitor_update_value}}" units="min" setby="server" action="keep" />
+      <parameter name="runInterval" value="{{status_monitor_update_value}}" units="min" setby="server" />
     </statusmonitor>
   </manifest>

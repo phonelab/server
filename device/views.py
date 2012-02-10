@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from device.models import Device, DeviceApplication
 from django.shortcuts import render_to_response, render
-from lib.helper import json_response_from
+from lib.helper import json_response_from, json
 from django.conf import settings
 
 import os, errno
@@ -228,6 +228,11 @@ def c2dm(request, deviceId):
     }
   else:	
     msg = request.POST['c2dm_msg']
-    device = Device()
-    device.send_message(X=msg)
+    # get device
+    device = Device.objects.filter(id=deviceId)
+    # if device exists, update
+    if device.count() == 1:
+      response = device[0].send_message(payload=json({"message": msg}))
+    else:
+      return HttpResponseRedirect('/error/')
   return json_response_from(response)		

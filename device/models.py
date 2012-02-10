@@ -14,12 +14,12 @@ Class Device
 @date 01/24/2012
 """
 class Device(models.Model):
-  id              = models.CharField(max_length=30, null=False, primary_key=True)
+  id              = models.CharField(max_length=15, null=False, primary_key=True)
   email           = models.CharField(max_length=30, null=False)
-  reg_id          = models.CharField(max_length=30, null=False)
-  collapse_key    = models.CharField(max_length = 50)
-  last_messaged   = models.DateTimeField(blank = True, null=True)
-  failed_push     = models.BooleanField(default = False)
+  reg_id          = models.CharField(max_length=300, null=False)
+  collapse_key    = models.CharField(max_length=255)
+  last_messaged   = models.DateTimeField(blank=True, null=True)
+  failed_push     = models.BooleanField(default=False)
   update_interval = models.CharField(max_length=5, null=False, default=10)
   created         = models.DateTimeField(auto_now_add=True)
   updated         = models.DateTimeField(auto_now_add=True)
@@ -41,7 +41,7 @@ class Device(models.Model):
 
     values = {
       'registration_id': self.reg_id,
-      'collapse_key': self.collapse_key,
+      'collapse_key': 0,
     }
 
     if delay_while_idle:
@@ -61,12 +61,12 @@ class Device(models.Model):
       response = urllib2.urlopen(request)
       # get result
       result = response.read().split('=')
-
       if 'Error' in result:
         if result[1] == 'InvalidRegistration' or result[1] == 'NotRegistered':
           self.failed_push = True
           self.save()
         raise Exception(result[1])
+      return result
     except URLError:
       return False
     except Exception, error:

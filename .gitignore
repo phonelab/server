@@ -3,3 +3,4 @@
 *.pot
 *.pyc
 datalogger/logs/
+fabfile.py

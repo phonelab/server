@@ -19,8 +19,10 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/edit/$', 'device.views.edit'),
     # Update Device Form [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/$', 'device.views.update'),
-	  # C2dm [GET]
+	# REFACTOR: C2DM [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/c2dm/$', 'device.views.c2dm'),
+    # TODO: Phone Status [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/$', 'device.views.status'),
 	  # Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	  # Update Status
@@ -37,6 +39,8 @@ if settings.DEBUG:
     # New device registration [POST]
     # Update Previous device registration [POST]
     url(r'^device/$', 'device.views.create_or_update_device'),
+    # Device Status [POST]
+    url(r'^devicestatus/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.device_status'),
 
     #
     ## Manifest
