@@ -126,12 +126,6 @@ def show(request, deviceId):
   			'filelist': filelist
   		}
   	)
-	#deviceId directory does not exist
-	else:
-		response['err'] = {
-    	'no' : 'err1',
-      'msg': 'No such directory'
-    }
   # device does not exist
   else:
     response['err'] = {

@@ -72,8 +72,8 @@ class Device(models.Model):
     except Exception, error:
       return False 
 
-	def __unicode__(self):
-		return '%s' % self.id
+  def __unicode__(self):
+    return '%s' % self.id
 
 """
 Send Message to multiple devices

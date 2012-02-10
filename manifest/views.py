@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from application.models import Application
 from device.models import Device, DeviceApplication
 from django.shortcuts import render
-import simplejson as json
 
 """
 Generate Manifest based on deviceId
@@ -26,7 +25,7 @@ Generate Manifest based on deviceId
 """
 def download_manifest(request, deviceId): 
   # get device
-  device = Device.objects.filter(id=deviceId)
+  device = Device.objects.filter(id=deviceId) 
   # device exists
   if device.count() == 1:
     device = device[0]
@@ -38,30 +37,17 @@ def download_manifest(request, deviceId):
     # get list of apps to download
     for app in Application.objects.filter(id__in=app_list.keys()):
       apps[app.id] = {"app_object": app, "app_status": app_list[app.id]}
-    # apps present
-    if len(apps) > 0 :
-      print apps
-      return render(
-        request,
-        'manifest/success.xml', 
-        {
-            'deviceId'                    : deviceId
-          , 'status_monitor_update_value' : device.update_value
-          , 'apps'                        : apps
-        },
-        content_type="application/xml"
-      )
-    # no apps present
-    else :
-      return render(
-        request,
-        'manifest/fail.xml', 
-        {
-            'no' : 'err2'
-          , 'msg': 'apps not found'
-        },
-        content_type="application/xml"
-      )
+    
+    return render(
+      request,
+      'manifest/success.xml', 
+      {
+          'deviceId'                    : deviceId
+        , 'status_monitor_update_value' : device.update_interval
+        , 'apps'                        : apps
+      },
+      content_type="application/xml"
+    )
   # device does not exist
   else :
     return render(
