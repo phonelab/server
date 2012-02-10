@@ -121,19 +121,24 @@ def show(request, deviceId):
     
     return render_to_response(
   		'device/show.html', 
-  			{
-  				'device': device[0],
-  				'filelist': filelist
-  			}
-  		)
+  		{
+  			'device': device[0],
+  			'filelist': filelist
+  		}
+  	)
+	#deviceId directory does not exist
+	else:
+		response['err'] = {
+    	'no' : 'err1',
+      'msg': 'No such directory'
+    }
   # device does not exist
   else:
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid device'
     }
-    return json_response_from(response)
-
+  return json_response_from(response)
 
 
 """
@@ -182,7 +187,7 @@ def update(request, deviceId):
       'no' : 'err0',
       'msg': 'sorry no gets'
     }
-    return redirect('/error/')
+    return HttpResponseRedirect('/error/')
   # get params from POST
   params = request.POST
   # get device
@@ -207,3 +212,28 @@ def update(request, deviceId):
   # device does not exist
   else:
     return HttpResponseRedirect('/error/')
+
+
+"""
+Send message to a phone using c2dm
+
+@date 02/09/2012
+@param String deviceId
+@c2dm_mag message string POST method
+
+@author Taeyeon
+"""
+def c2dm(request, deviceId):
+  # define default response
+  response = { "err": "", "data": "" }
+  # return if GET request
+  if request.method == 'GET':
+    response['err'] = {
+      'no' : 'err0',
+      'msg': 'sorry no gets'
+    }
+  else:	
+    msg = request.POST['c2dm_msg']
+    device = Device()
+    device.send_message(X=msg)
+  return json_response_from(response)		

@@ -2,6 +2,7 @@ from django.db import models
 from django import forms
 from application.models import Application
 from django.conf import settings
+
 ## other includes
 import urllib, urllib2
 from urllib2 import URLError
@@ -39,7 +40,7 @@ class Device(models.Model):
       return
 
     values = {
-      'registration_id': self.registration_id,
+      'registration_id': self.reg_id,
       'collapse_key': self.collapse_key,
     }
 
@@ -67,24 +68,25 @@ class Device(models.Model):
           self.save()
         raise Exception(result[1])
     except URLError:
-      return false
+      return False
     except Exception, error:
-      return false 
+      return False 
 
-  """
-  Send Message to multiple devices
+	#def __unicode__(self):
+	#	return '%s' % self.id
 
-  @date 02/06/2012
-  @param Array device_list
+"""
+Send Message to multiple devices
 
-  @author Micheal
-  """
-  def send_multiple_messages(device_list, **kwargs):
-    for device in device_list:
-      device.send_message(kwargs)
+@date 02/06/2012
+@param Array device_list
+@author Micheal
+"""
 
-  def __unicode__(self):
-    return '%s' % self.id
+def send_multiple_messages(device_list, **kwargs):
+	for device in device_list:
+		device.send_message(kwargs)
+
 
 """
 Class DeviceApplication

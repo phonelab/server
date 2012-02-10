@@ -71,29 +71,38 @@ Show Log for Device
 @author Taeyeon
 """
 def show(request, deviceId, logFilename):
-  # define default response
-  response = { "err": "", "data": "" }
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # if device exists, update
-  if device.count() == 1:
-    # generate file name
-    filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename + ".log")
-    # open log file
-    Logfile = open(filename, 'r+')
-    # read file
-    Logdata = Logfile.read()
-    # render respone
-    return render_to_response(
-      'device/log.html',
-        {
-          'device': device[0],
-          'logFilename': logFilename,
-          'Logdata': Logdata
-        }
-      )
-  else:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
+	# define default response  
+	response = { "err": "", "data": "" }  
+	# get device  
+	device = Device.objects.filter(id=deviceId)
+	# if device exists, update  
+	if device.count() == 1:
+		# generate file name    
+		filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename + ".log")		
+		if os.path.isfile(filename):			
+			# open log file
+			Logfile = open(filename, 'r+')
+			# read file
+			Logdata = Logfile.read()
+			# render respone
+			return render_to_response(
+				'device/log.html',
+				{
+					'device': device[0],
+					'logFilename': logFilename,
+					'Logdata': Logdata
+				}
+			)
+		#the file does not exist
+		else:
+			response['err'] = {
+				'no' : 'err1',
+				'msg': 'No such log file'
+			}
+	#device does not exist		
+	else:
+		response['err'] = {
+			'no' : 'err1',
+			'msg': 'invalid device'
+		}
+	return json_response_from(response)
