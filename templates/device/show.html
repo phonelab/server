@@ -31,6 +31,7 @@
       <p>
        {% for file in filelist %}
        <a href='/device/{{device.id}}/{{file}}'>{{ file }}</a><br>
+	   {% empty %} There is no log files.
        {% endfor %}
 	</p>
     </div>
@@ -38,9 +39,9 @@
       coming soon :)
     </div>
     <div class="tab-pane" id="3">
-      <form>
+      <form method="post" action="/device/{{device.id}}/c2dm/">
         <input type='text' id='c2dm_msg' name='c2dm_msg' />
-        <input type='submit' value='go !' />
+        <input type='submit' value='Send' />
       </form>
     </div>
   </div>

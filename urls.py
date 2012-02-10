@@ -19,9 +19,11 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/edit/$', 'device.views.edit'),
     # Update Device Form [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/$', 'device.views.update'),
-	# Log Data [GET]
+	  # C2dm [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/c2dm/$', 'device.views.c2dm'),
+	  # Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
-	# Update Status
+	  # Update Status
     # url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
 
     #####
