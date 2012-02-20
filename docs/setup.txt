@@ -1,0 +1,18 @@
+==Gunicorn==
+Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for UNIX. It's a pre-fork worker model ported from Ruby's Unicorn project. The Gunicorn server is broadly compatible with various web frameworks, simply implemented, light on server resources, and fairly speedy.
+http://gunicorn.org/
+
+$ sudo pip install gunicorn
+
+===Add Gunicorn to config_production===
+
+INSTALLED_APPS += ("gunicorn",)
+
+
+==Set up Env Vars=
+$ vi ~/.bash_profile
+
+# Add the following line
+export ENV=production
+
+$ source ~/.bash_profile

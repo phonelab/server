@@ -5,17 +5,10 @@ import django
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+# Log Path
 RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 
 ENV = os.environ.get("ENV") or "development"
-
-# database vars
-if ENV == "development":
-    from config_development import *
-else:
-    from config_production import *
-
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('Micheal Benedict', 'micheala@buffalo.edu'),
@@ -153,3 +146,16 @@ LOGGING = {
         },
     }
 }
+
+
+# database vars
+if ENV == "development":
+    from config_development import *
+else:
+    # Log Path
+    RAW_LOG_ROOT = os.path.join("/mnt", 'datalogger', 'logs')
+    # Add gunicorn
+    INSTALLED_APPS += ("gunicorn",)
+    from config_production import *
+
+TEMPLATE_DEBUG = DEBUG
