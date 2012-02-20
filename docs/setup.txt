@@ -1,3 +1,12 @@
+==For Fedora==
+$ sudo yum install mysql mysql-devel mysql-server python-devel gcc
+
+===start mysql serice===
+$ service mysqld start
+
+==Install PIP==
+$ curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | sudo python
+
 ==Gunicorn==
 Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for UNIX. It's a pre-fork worker model ported from Ruby's Unicorn project. The Gunicorn server is broadly compatible with various web frameworks, simply implemented, light on server resources, and fairly speedy.
 http://gunicorn.org/
@@ -16,3 +25,8 @@ $ vi ~/.bash_profile
 export ENV=production
 
 $ source ~/.bash_profile
+
+==Create Phonelab service==
+Install the init.sh file into /etc/init.d
+$ sudo chmod +x phonelab
+$ sudo chkconfig phonelab --add
