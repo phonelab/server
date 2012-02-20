@@ -38,7 +38,7 @@ Update Device Details [POST]
 @param reg_id Registration Id
 
 # Create new device
-# curl -X POST -d "device_id=123&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
+# curl -X POST -d "device_id=12421&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
 
 @author Micheal
 """
@@ -64,6 +64,7 @@ def create_or_update_device(request):
   device = Device.objects.filter(id=params['device_id'])
   # if device exists, update
   if device.count() == 1:
+    device = device[0]
     # email
     if (device.email != params['email']):
       device.email = params['email']
