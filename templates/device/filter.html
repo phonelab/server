@@ -1,0 +1,13 @@
+<!-- Show list of devices !-->
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{% block title %}DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ TagFilename }}{% endblock %}</h1>
+  <table class="table table-striped">
+    <tbody>
+    <tr>
+      <td><pre>{{ Tagdata }}</pre></td>
+    </tr>
+    </tbody>
+  </table>
+{% endblock %}

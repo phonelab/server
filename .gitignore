@@ -4,3 +4,4 @@
 *.pyc
 datalogger/logs/
 fabfile.py
+server.sqlite3

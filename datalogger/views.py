@@ -7,7 +7,7 @@ from device.models import Device
 from lib.helper import json_response_from
 
 import time
-import os, errno
+import os, errno, re
 # Log Dir
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
@@ -106,3 +106,69 @@ def show(request, deviceId, logFilename):
 			'msg': 'invalid device'
 		}
 	return json_response_from(response)
+
+"""
+Log Tag filter
+
+@date 02/16/2012
+@param String deviceId
+@param String tagName
+
+@author Taeyeon
+"""
+def show_tag(request, deviceId):
+  # define default response
+  response = { "err": "", "data": "" }
+  # get device
+  device = Device.objects.filter(id=deviceId)
+  # device exists
+  if device.count() == 1:
+    # get log data list from deviceId directory
+    path = os.path.join(RAW_LOG_ROOT, device[0].id)
+    # empty
+    filelist = {}
+
+    try:
+      os.chdir(path)
+      filelist = os.listdir(".")
+      Tagdata = ''
+      for file in filelist:
+        filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
+        Logfile = open(filename, 'r+')
+        for line in Logfile:
+          #Logdata = Logfile.readline()
+          if re.search(request.POST['tagName'], line):
+            Tagdata += line
+        
+      # render respone
+      return render_to_response(
+        'device/filter.html',
+        {
+          'device': device[0],
+          'TagFilename': request.POST['tagName'],
+          'Tagdata': Tagdata
+        }
+      )
+      Logfile.close()
+      Tagfile.close()
+    except OSError, e:
+      if e.errno != errno.EEXIST:
+        response['err'] = {
+          'no' : 'err1', 
+          'msg': 'cannot change dir'
+        }
+    
+    return render_to_response(
+  		'device/show.html', 
+  		{
+  			'device': device[0],
+  			'filelist': filelist
+  		}
+  	)
+  # device does not exist
+  else:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+    }
+  return json_response_from(response)
