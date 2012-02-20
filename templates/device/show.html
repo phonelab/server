@@ -23,8 +23,9 @@
 <div class="tabbable">
   <ul class="nav nav-tabs">
     <li class="active"><a href="#1" data-toggle="tab">Log</a></li>
-    <li><a href="#2" data-toggle="tab">Status Updates</a></li>
-    <li><a href="#3" data-toggle="tab">Send C2DM</a></li>
+    <li><a href="#2" data-toggle="tab">Log Tag Filter</a></li>
+    <li><a href="#3" data-toggle="tab">Status Updates</a></li>
+    <li><a href="#4" data-toggle="tab">Send C2DM</a></li>
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="1">
@@ -36,9 +37,15 @@
 	</p>
     </div>
     <div class="tab-pane" id="2">
-      coming soon :)
+      <form method="post" action="/device/{{device.id}}/tag/">
+        <input type='text' id='tagName' name='tagName' value='PhoneLab' />
+        <input type='submit' value='Send' />
+      </form>
     </div>
     <div class="tab-pane" id="3">
+      coming soon :)
+    </div>
+    <div class="tab-pane" id="4">
       <form method="post" action="/device/{{device.id}}/c2dm/">
         <input type='text' id='c2dm_msg' name='c2dm_msg' />
         <input type='submit' value='Send' />

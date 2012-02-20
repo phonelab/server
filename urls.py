@@ -21,6 +21,8 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/$', 'device.views.update'),
 	# REFACTOR: C2DM [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/c2dm/$', 'device.views.c2dm'),
+    # Log Tag filter[GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/tag/$', 'datalogger.views.show_tag'),
     # TODO: Phone Status [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/$', 'device.views.status'),
 	  # Log Data [GET]

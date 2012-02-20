@@ -64,6 +64,7 @@ def create_or_update_device(request):
   device = Device.objects.filter(id=params['device_id'])
   # if device exists, update
   if device.count() == 1:
+    device = device[0]
     # email
     if (device.email != params['email']):
       device.email = params['email']
