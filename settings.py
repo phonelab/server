@@ -7,11 +7,14 @@ DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 
-DATABASE_ENGINE = 'django.db.backends.mysql'
-#DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
-DATABASE_NAME = "phonelab"
+ENV = os.environ.get("ENV") or "development"
 
-DEBUG = True
+# database vars
+if ENV == "development":
+    from config_development import *
+else:
+    from config_production import *
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -24,17 +27,6 @@ ADMINS = (
 C2DM_AUTH_TOKEN = "DQAAAMgAAAAnzB8fGC_zo5zbiDFzx9mAl55V5SMCrqmWYAPCdcUgNwrTlFHaON81KFPXzGfvbgYNVGuxseJec_QsKPrHYzg0AsoeqrHDNOy2GbUsZcSjVF71SvxU__MIosf0K2Ih04Xhl4hpvxYqSXfvhGfcPe5Vx4MkyaEnOjXy82vhQs93JymjOtvzyi0dA6MRxJUctwk7LdrGZFs7kr6FsVTjJ3XmDtG3GbpKgWjREHotYs3u1p7tBfRjj67EPsdzIv-v1DabPyo4T0oeD2f4uv54ONay"
 
 MANAGERS = ADMINS
-
-DATABASES = {
-    'default': {
-        'ENGINE'    : DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME'      : DATABASE_NAME,   # Or path to database file if using sqlite3.
-        'USER'      : 'root', # Not used with sqlite3.
-        'PASSWORD'  : 'root', # Not used with sqlite3.
-        'HOST'      : '', # Set to empty string for localhost. Not used with sqlite3.
-        'PORT'      : '', # Set to empty string for default. Not used with sqlite3.
-    }
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

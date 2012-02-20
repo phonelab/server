@@ -5,3 +5,4 @@
 datalogger/logs/
 fabfile.py
 server.sqlite3
+config_development.py

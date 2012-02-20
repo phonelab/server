@@ -7,7 +7,7 @@ if settings.DEBUG:
     ##### Web Endpoints
     ##### Used by Admin and others
     #####
-    
+
     #
     ## Device
     #

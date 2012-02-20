@@ -24,7 +24,7 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#1" data-toggle="tab">Log</a></li>
     <li><a href="#2" data-toggle="tab">Log Tag Filter</a></li>
-    <li><a href="#3" data-toggle="tab">Status Updates</a></li>
+    <!-- <li><a href="#3" data-toggle="tab">Status Updates</a></li> -->
     <li><a href="#4" data-toggle="tab">Send C2DM</a></li>
   </ul>
   <div class="tab-content">
@@ -42,9 +42,9 @@
         <input type='submit' value='Send' />
       </form>
     </div>
-    <div class="tab-pane" id="3">
+    <!-- <div class="tab-pane" id="3">
       coming soon :)
-    </div>
+    </div> -->
     <div class="tab-pane" id="4">
       <form method="post" action="/device/{{device.id}}/c2dm/">
         <input type='text' id='c2dm_msg' name='c2dm_msg' />
