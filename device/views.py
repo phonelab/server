@@ -3,10 +3,10 @@ from device.models import Device, DeviceApplication
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
 from django.conf import settings
-
-import os, errno
+import default
+import os, errno, re
 import datetime
-
+import string
 # Log Dir
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
@@ -38,7 +38,7 @@ Update Device Details [POST]
 @param reg_id Registration Id
 
 # Create new device
-# curl -X POST -d "device_id=12421&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
+# curl -X POST -d "device_id=123&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
 
 @author Micheal
 """
@@ -109,10 +109,10 @@ def show(request, deviceId):
     path = os.path.join(RAW_LOG_ROOT, device[0].id)
     # empty
     filelist = {}
-
     try:
       os.chdir(path)
       filelist = os.listdir(".")
+      default.sort_nicely(filelist)
     except OSError, e:
       if e.errno != errno.EEXIST:
         response['err'] = {
@@ -214,7 +214,7 @@ Send message to a phone using c2dm
 
 @date 02/09/2012
 @param String deviceId
-@c2dm_mag message string POST method
+@c2dm_mag message string (POST method)
 
 @author Taeyeon
 """
@@ -237,3 +237,87 @@ def c2dm(request, deviceId):
     else:
       return HttpResponseRedirect('/error/')
   return json_response_from(response)		
+
+
+"""
+Status monitor
+
+@date 02/20/2012
+@param String deviceId
+@statusType string (GET method)
+
+@author Taeyeon
+"""
+def status(request, deviceId, statusType):
+  # define default response
+  response = { "err": "", "data": "" }
+  # get device
+  device = Device.objects.filter(id=deviceId)
+  # device exists
+
+  if device.count() == 1:
+    # get log data list from deviceId directory
+    path = os.path.join(RAW_LOG_ROOT, device[0].id)
+    # empty
+    filelist = {}
+    tagName = ''
+    if statusType == '1':
+      #tagName = 'Battery_level'
+      tagName = 'Battery level'
+    elif statusType == '2':
+      #tagName = 'Location_Latitude'
+      tagName = 'Location: Latitude'
+    else:
+      #tagName = 'Signal_Strength'
+      tagName = 'Signal Strength'
+    try:
+      os.chdir(path)
+      filelist = os.listdir(".")
+      default.sort_nicely(filelist)
+      Tagdata = ''
+      for file in filelist:
+        filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
+        Logfile = open(filename, 'r+')
+        for line in Logfile:
+          #Logdata = Logfile.readline()
+          if re.search(tagName, line):
+            temp = line.split(" ")
+            Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
+            if statusType == '1':
+              Tagdata += 'Battery Level: ' + temp[8]
+            elif statusType == '2':
+              Tagdata += 'GPS Latitude: ' + temp[8] + ', Longitude: ' + temp[10] + 'Accuracy: ' + temp[12]
+            else:
+              Tagdata += 'Signal Strengh: ' + temp[8] + ', asu: ' + temp[10]
+      # render respone
+      return render_to_response(
+        'device/status.html',
+        {
+          'device': device[0],
+          'TagName': tagName,
+          'Tagdata': Tagdata
+        }
+      )
+      Logfile.close()
+      Tagfile.close()
+    except OSError, e:
+      if e.errno != errno.EEXIST:
+        response['err'] = {
+          'no' : 'err1', 
+          'msg': 'cannot change dir'
+        }
+    
+    return render_to_response(
+  		'device/show.html', 
+  		{
+  			'device': device[0],
+  			'filelist': filelist
+  		}
+  	)
+  # device does not exist
+  else:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+    }
+  return json_response_from(response)

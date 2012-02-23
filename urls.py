@@ -7,7 +7,7 @@ if settings.DEBUG:
     ##### Web Endpoints
     ##### Used by Admin and others
     #####
-
+    
     #
     ## Device
     #
@@ -24,7 +24,7 @@ if settings.DEBUG:
     # Log Tag filter[GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/tag/$', 'datalogger.views.show_tag'),
     # TODO: Phone Status [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/$', 'device.views.status'),
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
 	  # Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	  # Update Status
