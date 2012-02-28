@@ -6,6 +6,7 @@ from django.utils import  simplejson as json
 from device.models import Device
 from lib.helper import json_response_from
 
+import default
 import time
 import os, errno, re
 # Log Dir
@@ -34,7 +35,8 @@ def upload_log(request, deviceId):
   # define default response
   response = {"err": "", "data": ""}
   # filename
-  filename = os.path.join(RAW_LOG_ROOT, deviceId, str(int(time.time())) + ".log")
+  #filename = os.path.join(RAW_LOG_ROOT, deviceId, str(int(time.time())) + ".log")
+  filename = os.path.join(RAW_LOG_ROOT, deviceId, request.POST['filename'])
   filedir = os.path.dirname(filename)
   # create folder for user if it doesn`t exist
   try:
@@ -131,6 +133,7 @@ def show_tag(request, deviceId):
     try:
       os.chdir(path)
       filelist = os.listdir(".")
+      default.sort_nicely(filelist)
       Tagdata = ''
       for file in filelist:
         filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
@@ -145,7 +148,7 @@ def show_tag(request, deviceId):
         'device/filter.html',
         {
           'device': device[0],
-          'TagFilename': request.POST['tagName'],
+          'TagName': request.POST['tagName'],
           'Tagdata': Tagdata
         }
       )

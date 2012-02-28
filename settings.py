@@ -149,7 +149,7 @@ LOGGING = {
 
 # database vars
 if ENV == "development":
-    from config_development import *
+    from config_development_stub import *
 else:
     # Log Path
     RAW_LOG_ROOT = os.path.join("/mnt", 'datalogger', 'logs')
