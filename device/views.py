@@ -55,7 +55,7 @@ def create_or_update_device(request):
   # get params from POST
   params = request.POST
   # error checking
-  if params['device_id'] == "" or params['reg_id'] == "":
+  if (params['device_id'] == "" or params['reg_id'] == ""):
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
@@ -66,16 +66,14 @@ def create_or_update_device(request):
   if device.count() == 1:
     device = device[0]
     # email
-    if (device.email != params['email']):
+    if ('email' in params and device.email != params['email']):
       device.email = params['email']
     # reg_id
-    if (device.reg_id != params['reg_id']):
+    if ('reg_id' in params and device.reg_id != params['reg_id']):
       device.reg_id = params['reg_id']
     # update
-    if (device.update_interval != params['update_interval']):
+    if ('update_interval' in params and device.update_interval != params['update_interval']):
       device.update_interval = params['update_interval']
-    # save device
-    device.save()
   # device does not exist, insert
   else:
     device = Device(
@@ -83,9 +81,10 @@ def create_or_update_device(request):
         email  = "phonelab@gmail.com", #params['email'] 
         reg_id = params['reg_id']
     )
-    # create device
-    device.save()
-    response['data'] = device
+  # save device
+  device.save()
+  # device
+  response['data'] = device
   # render json response
   return json_response_from(response)
 

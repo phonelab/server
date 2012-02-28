@@ -30,3 +30,6 @@ $ source ~/.bash_profile
 Install the init.sh file into /etc/init.d
 $ sudo chmod +x phonelab
 $ sudo chkconfig phonelab --add
+
+==Start Phonelab==
+$ /etc/init.d/phonelab start
