@@ -12,8 +12,7 @@ ENV = os.environ.get("ENV") or "development"
 
 ADMINS = (
     ('Micheal Benedict', 'micheala@buffalo.edu'),
-    ('Tae', 'micheala@buffalo.edu'),
-    ('Lokesh', 'lokesh@buffalo.edu'),
+    ('Tae', 'tki@buffalo.edu'),
 )
 
 # C2DM Auth Token
