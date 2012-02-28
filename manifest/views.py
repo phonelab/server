@@ -1,7 +1,17 @@
 from django.http import HttpResponse
-from controller.models import Application, Device, DeviceApplication
+from application.models import Application
+from device.models import Device, DeviceApplication
 from django.shortcuts import render
 
+"""
+Generate Manifest based on deviceId
+
+@date 01/24/2012
+@param String deviceId
+
+@author Micheal
+
+# <b>Stub to create New Devices</b>
 #
 # from controller.models import Application, Device, DeviceApplication
 # import datetime
@@ -12,17 +22,10 @@ from django.shortcuts import render
 # a.save()
 # b.save()
 #
-
-"""
-Generate Manifest based on deviceId
-
-@date 01/24/2012
-@param String deviceId
-
-@author Micheal
 """
 def download_manifest(request, deviceId): 
-  device = Device.objects.filter(id=deviceId)
+  # get device
+  device = Device.objects.filter(id=deviceId) 
   # device exists
   if device.count() == 1:
     device = device[0]
@@ -34,32 +37,25 @@ def download_manifest(request, deviceId):
     # get list of apps to download
     for app in Application.objects.filter(id__in=app_list.keys()):
       apps[app.id] = {"app_object": app, "app_status": app_list[app.id]}
-    # apps present
-    if len(apps) > 0 :
-      print apps
-      return render(request,
-        'manifest/success.xml', 
-        {
-            'deviceId':deviceId
-          , 'apps': apps
-        },
-        content_type="application/xml"
-      )
-    # no apps present
-    else :
-      return render(request,
-      'manifest/fail.xml', 
+    
+    return render(
+      request,
+      'manifest/success.xml', 
       {
-          "msg": "apps not found"
+          'deviceId'                    : deviceId
+        , 'status_monitor_update_value' : device.update_interval
+        , 'apps'                        : apps
       },
       content_type="application/xml"
     )
   # device does not exist
   else :
-    return render(request,
-      'manifest/fail.xml', 
-      {
-          "msg": "deviceID not found"
-      },
-      content_type="application/xml"
-    )
+    return render(
+      request,
+        'manifest/fail.xml', 
+        {
+            'no' : 'err1'
+          , 'msg': 'invalid device'
+        },
+        content_type="application/xml"
+      )

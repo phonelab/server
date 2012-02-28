@@ -1,0 +1,16 @@
+<!-- Show list of devices !-->
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{% block title %}DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ TagName }}{% endblock %}</h1>
+  <table class="table table-striped">
+    <tbody>
+    <tr>
+      {% if Tagdata %}
+			<td><pre>{{ Tagdata }}</pre></td>
+      {% else %}<td> Your search "<strong>{{ TagName }}</strong>" did not match any log files</td>
+      {% endif %}
+    </tr>
+    </tbody>
+  </table>
+{% endblock %}

@@ -5,31 +5,20 @@ import django
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+# Log Path
+RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 
-DATABASE_ENGINE = 'django.db.backends.sqlite3'
-DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
-#DATABASE_NAME = "phonelab"
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+ENV = os.environ.get("ENV") or "development"
 
 ADMINS = (
-    ('Lokesh Mandvekar', 'lsm5@buffalo.edu'),
     ('Micheal Benedict', 'micheala@buffalo.edu'),
+    ('Tae', 'tki@buffalo.edu'),
 )
 
-MANAGERS = ADMINS
+# C2DM Auth Token
+C2DM_AUTH_TOKEN = "DQAAAMgAAAAnzB8fGC_zo5zbiDFzx9mAl55V5SMCrqmWYAPCdcUgNwrTlFHaON81KFPXzGfvbgYNVGuxseJec_QsKPrHYzg0AsoeqrHDNOy2GbUsZcSjVF71SvxU__MIosf0K2Ih04Xhl4hpvxYqSXfvhGfcPe5Vx4MkyaEnOjXy82vhQs93JymjOtvzyi0dA6MRxJUctwk7LdrGZFs7kr6FsVTjJ3XmDtG3GbpKgWjREHotYs3u1p7tBfRjj67EPsdzIv-v1DabPyo4T0oeD2f4uv54ONay"
 
-DATABASES = {
-    'default': {
-        'ENGINE'    : DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME'      : DATABASE_NAME,   # Or path to database file if using sqlite3.
-        'USER'      : '', # Not used with sqlite3.
-        'PASSWORD'  : '', # Not used with sqlite3.
-        'HOST'      : '', # Set to empty string for localhost. Not used with sqlite3.
-        'PORT'      : '', # Set to empty string for default. Not used with sqlite3.
-    }
-}
+MANAGERS = ADMINS
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -106,7 +95,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
@@ -127,11 +116,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'controller',
-    'datalogger',
-    'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'application', # experiment
+    'manifest', # manifest
+    'datalogger', # datalogger
+    'device', # device
+    'error', # error
 )
 
 # A sample logging configuration. The only tangible logging
@@ -156,3 +145,16 @@ LOGGING = {
         },
     }
 }
+
+
+# database vars
+if ENV == "development":
+    from config_development_stub import *
+else:
+    # Log Path
+    RAW_LOG_ROOT = os.path.join("/mnt", 'datalogger', 'logs')
+    # Add gunicorn
+    INSTALLED_APPS += ("gunicorn",)
+    from config_production import *
+
+TEMPLATE_DEBUG = DEBUG
