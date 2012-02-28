@@ -191,13 +191,13 @@ def update(request, deviceId):
     #
     device = device[0]
     # email
-    if (device.email != params['email']):
+    if ('email' in params and device.email != params['email']):
       device.email = params['email']
     # reg_id
-    if (device.reg_id != params['reg_id']):
+    if ('reg_id' in params and device.reg_id != params['reg_id']):
       device.reg_id = params['reg_id']
     # update
-    if (device.update_interval != params['update_interval']):
+    if ('update_interval' in params and device.update_interval != params['update_interval']):
       device.update_interval = params['update_interval']
     # save device
     device.save()
