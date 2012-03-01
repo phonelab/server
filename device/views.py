@@ -262,14 +262,14 @@ def status(request, deviceId, statusType):
     filelist = {}
     tagName = ''
     if statusType == '1':
-      #tagName = 'Battery_level'
-      tagName = 'Battery level'
+      tagName = 'Battery_level'
+      #tagName = 'Battery level'
     elif statusType == '2':
-      #tagName = 'Location_Latitude'
-      tagName = 'Location: Latitude'
+      tagName = 'Location_Latitude'
+      #tagName = 'Location: Latitude'
     else:
-      #tagName = 'Signal_Strength'
-      tagName = 'Signal Strength'
+      tagName = 'Signal_Strength'
+      #tagName = 'Signal Strength'
     try:
       os.chdir(path)
       filelist = os.listdir(".")
@@ -282,13 +282,14 @@ def status(request, deviceId, statusType):
           #Logdata = Logfile.readline()
           if re.search(tagName, line):
             temp = line.split(" ")
+            print temp
             Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
             if statusType == '1':
-              Tagdata += 'Battery Level: ' + temp[8]
+              Tagdata += 'Battery Level: ' + temp[9]
             elif statusType == '2':
-              Tagdata += 'GPS Latitude: ' + temp[8] + ', Longitude: ' + temp[10] + 'Accuracy: ' + temp[12]
+              Tagdata += 'GPS Latitude: ' + temp[9] + ', Longitude: ' + temp[11] + 'Accuracy: ' + temp[13]
             else:
-              Tagdata += 'Signal Strengh: ' + temp[8] + ', asu: ' + temp[10]
+              Tagdata += 'Signal Strengh: ' + temp[9] + ', asu: ' + temp[11]
       # render respone
       return render_to_response(
         'device/status.html',
