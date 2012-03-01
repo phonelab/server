@@ -1,8 +1,9 @@
 #!/bin/sh
 # phonelab - this script starts and stops the phonelab server
-#
+# 
 # chkconfig:   - 85 15
 # description:  phonelab system using django gunicorn
+# author: micheal
 #
 # pidfile:     /home/ec2-user/server/8000.pid
 

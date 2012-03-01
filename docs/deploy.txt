@@ -1,5 +1,0 @@
-#
-# Deployment
-#
-
-rsync ~/Dev/phonelab/server/. ec2-user@107.20.190.88:~/phonelab
