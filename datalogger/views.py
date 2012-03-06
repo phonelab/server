@@ -61,7 +61,7 @@ def upload_log(request, deviceId):
     # success msg
     response['data'] = "done"
   else:
-    response["err"] = "e1"
+    response["err"] = "err1"
 
   # render json response
   return json_response_from(response)
@@ -102,7 +102,7 @@ def show(request, deviceId, logFilename):
 		#the file does not exist
 		else:
 			response['err'] = {
-				'no' : 'err1',
+				'no' : 'err2',
 				'msg': 'No such log file'
 			}
 	#device does not exist		
@@ -112,6 +112,7 @@ def show(request, deviceId, logFilename):
 			'msg': 'invalid device'
 		}
 	return json_response_from(response)
+
 
 """
 Log Tag filter
@@ -161,7 +162,7 @@ def show_tag(request, deviceId):
     except OSError, e:
       if e.errno != errno.EEXIST:
         response['err'] = {
-          'no' : 'err1', 
+          'no' : 'err2', 
           'msg': 'cannot change dir'
         }
     

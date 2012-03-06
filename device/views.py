@@ -11,34 +11,19 @@ import string
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
 """
-List All Devices
-
-@date 02/07/2012
-
-@author Micheal
-"""
-def index(request): 
-  # get all devices
-  devices = Device.objects.all
-
-  return render_to_response(
-            'device/index.html', 
-            {
-                'devices': devices
-            }
-          )
-
-"""
 Create New Device [POST]
 Update Device Details [POST]
 
 @date 01/29/2012
+
 @param id IMEI number
 @param email email
 @param reg_id Registration Id
 
 # Create new device
 # curl -X POST -d "device_id=123&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
+
+@api public
 
 @author Micheal
 """
@@ -90,7 +75,25 @@ def create_or_update_device(request):
 
 
 """
-Show Device Details
+List All Devices [GET]
+
+@date 02/07/2012
+
+@author Micheal
+"""
+def index(request): 
+  # get all devices
+  devices = Device.objects.all
+
+  return render_to_response(
+            'device/index.html', 
+            {
+                'devices': devices
+            }
+          )
+
+"""
+Show Device Details [GET]
 
 @date 01/29/2012
 @param String deviceId
@@ -136,7 +139,7 @@ def show(request, deviceId):
 
 
 """
-Edit Device Form
+Edit Device Form [GET]
 
 @date 02/08/2012
 @param String deviceId
@@ -165,7 +168,7 @@ def edit(request, deviceId):
     return HttpResponseRedirect('/error/')
 
 """
-Update Device
+Update Device Via Form [POST]
 
 @date 02/08/2012
 @param String deviceId
@@ -209,11 +212,11 @@ def update(request, deviceId):
 
 
 """
-Send message to a phone using c2dm
+Send message to a phone using C2DM [POST]
 
 @date 02/09/2012
 @param String deviceId
-@c2dm_mag message string (POST method)
+@c2dm_mag message string
 
 @author Taeyeon
 """
@@ -239,11 +242,11 @@ def c2dm(request, deviceId):
 
 
 """
-Status monitor
+Status monitor [GET]
 
 @date 02/20/2012
 @param String deviceId
-@statusType string (GET method)
+@param String statusType
 
 @author Taeyeon
 """

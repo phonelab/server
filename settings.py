@@ -7,6 +7,8 @@ DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 # Log Path
 RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
+# Application Path
+RAW_APP_ROOT = os.path.join(SITE_ROOT, 'apps')
 
 ENV = os.environ.get("ENV") or "development"
 

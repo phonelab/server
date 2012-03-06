@@ -23,12 +23,27 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/c2dm/$', 'device.views.c2dm'),
     # Log Tag filter[GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/tag/$', 'datalogger.views.show_tag'),
-    # TODO: Phone Status [GET]
+    # Phone Status [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
-	  # Log Data [GET]
+	# Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
-	  # Update Status
+	# Update Status
     # url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
+
+    #
+    ## Application
+    #
+    # All Applications [GET]
+    url(r'^experiments/$', 'application.views.index'),
+    # Single Application [GET]
+    url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/$', 'application.views.show'),
+    # New Application Form [GET]
+    url(r'^experiment/new/$', 'application.views.new'),
+    # Edit Application Form [GET]
+    url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/edit/$', 'application.views.edit'),
+    # Create/Update Application [POST]
+    url(r'^experiment/$', 'application.views.create_or_update_application'),
+
 
     #####
     ##### API Endpoints
