@@ -1,13 +1,24 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
 
+#admin interface
+from django.contrib import admin
+admin.autodiscover()
+
 if settings.DEBUG:
   urlpatterns = patterns('',
     #####
     ##### Web Endpoints
     ##### Used by Admin and others
     #####
-    
+    #main_page
+    url(r'^$', 'main_page'),
+    #Admin interface for django version 1.3
+    url(r'^admin/', include(admin.site.urls)),
+    #login page
+    url(r'^login/$', 'django.contrib.auth.views.login'),
+
+
     #
     ## Device
     #
@@ -29,7 +40,7 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	  # Update Status
     # url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
-
+    
     #####
     ##### API Endpoints
     ##### Used by PhoneLab Application on Device
@@ -42,7 +53,7 @@ if settings.DEBUG:
     # Update Previous device registration [POST]
     url(r'^device/$', 'device.views.create_or_update_device'),
     # Device Status [POST]
-    url(r'^devicestatus/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.device_status'),
+    #url(r'^devicestatus/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.device_status'),
 
     #
     ## Manifest

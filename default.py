@@ -27,3 +27,21 @@ def sort_nicely(l):
     """ Sort the given list in the way that humans expect.
     """
     l.sort(key=alphanum_key)
+
+
+
+"""
+Login and Logout function to control session
+
+@date 03/05/2012
+
+@author Taeyeon Ki
+"""
+
+def login(request):
+  request.session[' ']
+  return HttpResponse
+
+def logout(request):
+  del request.session[' ']
+  return 

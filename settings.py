@@ -116,6 +116,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #Activating the administration interface (needs .auth, .contenttypes, sessions, messages)
+    'django.contrib.admin', 
     'application', # experiment
     'manifest', # manifest
     'datalogger', # datalogger
