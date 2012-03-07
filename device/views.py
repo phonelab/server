@@ -39,7 +39,8 @@ List All Devices
 
 @author Micheal
 """
-@login_required(login_url='/login/')
+@login_required
+#@login_required(login_url='/login/')
 def index(request): 
   # get all devices
   devices = Device.objects.all

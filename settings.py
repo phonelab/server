@@ -149,6 +149,8 @@ LOGGING = {
 }
 # Session 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 
 # database vars
 if ENV == "development":
