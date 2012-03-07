@@ -147,7 +147,8 @@ LOGGING = {
         },
     }
 }
-
+# Session 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # database vars
 if ENV == "development":

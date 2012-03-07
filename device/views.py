@@ -1,6 +1,9 @@
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.models import User
+
 from django.http import HttpResponse, HttpResponseRedirect
 from device.models import Device, DeviceApplication
-from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
 from django.conf import settings
@@ -23,6 +26,12 @@ def main_page(request):
            'main_page.html',
            { 'user': request.user}
          )
+
+def logout_page(request):
+  logout(request)
+  return HttpResponseRedirect('/')
+
+
 """
 List All Devices
 
@@ -30,6 +39,7 @@ List All Devices
 
 @author Micheal
 """
+@login_required(login_url='/login/')
 def index(request): 
   # get all devices
   devices = Device.objects.all

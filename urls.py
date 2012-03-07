@@ -17,6 +17,8 @@ if settings.DEBUG:
     url(r'^admin/', include(admin.site.urls)),
     #login page
     url(r'^login/$', 'django.contrib.auth.views.login'),
+    #logout page
+    url(r'^logout/$', 'device.views.logout_page'),
 
 
     #

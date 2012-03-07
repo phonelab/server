@@ -4,12 +4,12 @@
   <h1>{% block title %}PhoneLab Testbed Web Site{% endblock %}</h1>
   <table class="table table-striped">
     <tbody>
-      { % if user.username % }
-        <p> Welcom <strong> {{ user.username }} </strong></p>
-      { % else % }
+      {% if user.username %}
+        <p> Welcom <strong> {{ user.username }} </strong> <a href="/logout/"> logout </a></p>
+      {% else %}
         <p> Welcome anonymous user:
         You need to <a href="/login/">login</a></p>
-      { % endif % }
+      {% endif %}
     </tbody>
   </table>
 {% endblock %}
