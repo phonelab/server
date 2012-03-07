@@ -19,6 +19,8 @@ if settings.DEBUG:
     url(r'^login/$', 'django.contrib.auth.views.login'),
     #logout page
     url(r'^logout/$', 'device.views.logout_page'),
+    #register page
+    url(r'^register/$', 'device.views.register_page'),
 
 
     #

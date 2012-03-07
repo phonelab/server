@@ -1,5 +1,6 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from device.forms import *
 #from django.contrib.auth.models import User
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -31,6 +32,22 @@ def logout_page(request):
   logout(request)
   return HttpResponseRedirect('/')
 
+def register_page(request):
+  if request.method == 'POST':
+    form = RegistrationForm(request.POST)
+    if form.is_valid():
+      user = User.Objects.create_user(
+        username=form.cleaned_data['username'],
+        password=form.cleaned_data['password1'],
+        email=form.cleaned_data['email']
+      )
+      return HttpResponseRedirect('/')
+  else:
+    form = RegistrationForm()
+  return render_to_response(
+           'registration/register.html',
+           { 'form': form }
+         )
 
 """
 List All Devices

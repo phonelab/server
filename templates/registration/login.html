@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load url from future %}
-
-{% block content %}
-  <h1>{% block title %}PhoneLab Testbed - User Logins{% endblock %}</h1>
+{% block title %}PhoneLab Testbed - User Logins{% endblock %}
+    {% block content %}
     <h1> User Login</h1>
     {% if form.errors %}
       <p> Your username and password didn't match. Please try again. </p>
@@ -22,8 +21,8 @@
       </tr>
     </tbody>
     </table>
-<!--      <input type="hidden" name="next" value="/" /> -->
-      <input type="hidden" name="next" value="{{ next }}" />
+      <input type="hidden" name="next" value="/" /> 
+<!--      <input type="hidden" name="next" value="{{ next }}" /> -->
       <input type="submit" value="Login" />
     </form>
 {% endblock %}

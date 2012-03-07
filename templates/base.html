@@ -28,7 +28,14 @@
         <div class="nav-collapse">
           <ul class="nav">
             <li><a href="/">Home</a></li>
-            <li><a href="/devices">Devices</a></li>
+            {% if user.is_authenticated %}
+              <li><a href="/devices">Devices</a></li>
+              <li><a href="/account">{{user.username}}</a></li> 
+              <li><a href="/logout">Logout</a></li>
+            {% else %}
+              <li><a href="/login">Sign In</a></li>  
+              <li><a href="/register">Sign Up</a></li>
+            {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
