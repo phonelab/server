@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from device.models import Device, DeviceApplication
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
 from django.conf import settings

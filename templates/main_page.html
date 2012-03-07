@@ -1,16 +1,15 @@
-<html>
-  <head>
-    <title> PhoneLab Testbed Web Site </title>
-  </head>
-  <body>
-    <h1> Welcome to PhoneLab Testbed Web Site </h1>
-    { % if user.username % }
-      <p> Welcom {{ user.username }} :
-        Here you can upload apk files </p>
-    { % else % }
-      <p> Welcome anonymous user:
-      You need to <a href="/login/">login</a>
-      before you can upload apk files. </p>
-   { % endif % }
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{% block title %}PhoneLab Testbed Web Site{% endblock %}</h1>
+  <table class="table table-striped">
+    <tbody>
+      { % if user.username % }
+        <p> Welcom <strong> {{ user.username }} </strong></p>
+      { % else % }
+        <p> Welcome anonymous user:
+        You need to <a href="/login/">login</a></p>
+      { % endif % }
+    </tbody>
+  </table>
+{% endblock %}
