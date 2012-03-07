@@ -12,7 +12,7 @@ if settings.DEBUG:
     ##### Used by Admin and others
     #####
     #main_page
-    url(r'^$', 'main_page'),
+    url(r'^$', 'device.views.main_page'),
     #Admin interface for django version 1.3
     url(r'^admin/', include(admin.site.urls)),
     #login page

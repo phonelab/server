@@ -11,6 +11,18 @@ import string
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
 """
+Main page
+
+@date 03/05/2012
+
+@author Taeyeon
+"""
+def main_page(request):
+  return render_to_response(
+           'main_page.html',
+           { 'user': request.user}
+         )
+"""
 List All Devices
 
 @date 02/07/2012

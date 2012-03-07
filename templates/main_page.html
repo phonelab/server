@@ -1,6 +1,16 @@
-<!-- Show list of devices !-->
-{% extends "base.html" %}
-
-{% block content %}
-  <h1>{% block title %} Welcome to PhoneLab Testbed Web Site {% endblock %}</h1>
-{% endblock %}
+<html>
+  <head>
+    <title> PhoneLab Testbed Web Site </title>
+  </head>
+  <body>
+    <h1> Welcome to PhoneLab Testbed Web Site </h1>
+    { % if user.username % }
+      <p> Welcom {{ user.username }} :
+        Here you can upload apk files </p>
+    { % else % }
+      <p> Welcome anonymous user:
+      You need to <a href="/login/">login</a>
+      before you can upload apk files. </p>
+   { % endif % }
+  </body>
+</html>
