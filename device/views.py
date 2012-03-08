@@ -1,6 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from device.forms import *
+from django.template import RequestContext
 #from django.contrib.auth.models import User
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -25,7 +26,8 @@ Main page
 def main_page(request):
   return render_to_response(
            'main_page.html',
-           { 'user': request.user}
+           { 'user': request.user},
+           context_instance=RequestContext(request)
          )
 
 def logout_page(request):
@@ -36,7 +38,7 @@ def register_page(request):
   if request.method == 'POST':
     form = RegistrationForm(request.POST)
     if form.is_valid():
-      user = User.Objects.create_user(
+      user = User.objects.create_user(
         username=form.cleaned_data['username'],
         password=form.cleaned_data['password1'],
         email=form.cleaned_data['email']
@@ -46,7 +48,8 @@ def register_page(request):
     form = RegistrationForm()
   return render_to_response(
            'registration/register.html',
-           { 'form': form }
+           { 'form': form },
+           context_instance=RequestContext(request)
          )
 
 """
@@ -66,7 +69,8 @@ def index(request):
             'device/index.html', 
             {
                 'devices': devices
-            }
+            },
+            context_instance=RequestContext(request)
           )
 
 """
