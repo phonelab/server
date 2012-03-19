@@ -1,5 +1,4 @@
-from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from lib.helper import json_response_from
 from django.conf import settings
