@@ -2,6 +2,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from lib.helper import json_response_from
 from django.conf import settings
+from device.models import Application, DeviceApplication
+import os, errno
 
 RAW_APP_ROOT = settings.RAW_APP_ROOT
 
@@ -36,42 +38,48 @@ def get_download(request, appId):
 
 
 """
-Upload Application/Experiment Form
+Show all Application
 
-@date 03/05/2012
-
-@api public
+@date 03/19/2012
 
 @author Micheal
 """
-def new(request):
-  # define default response
-  response = { "err": "", "data": "" }
-  # create new application
-  if request.method == 'POST':
-    response['err'] = {
-      'no' : 'err0',
-      'msg': 'sorry no POST'
-    }
-    return HttpResponseRedirect('/error/')
-  else:
-    return render_to_response(
-      'application/form.html', 
-      {
+def index(request):
+  # query the database for all applications
+  apps = Application.objects.all
 
+  return render_to_response(
+      'application/index.html', 
+      {
+        apps: apps
       }
     )
 
 """
-Upload Application/Experiment Form
+Upload Experiment Form
 
-@date 03/05/2012
-
-@api public
+@date 03/19/2012
 
 @author Micheal
 """
 def new(request):
+  app = Application()
+  # query the database for all applications
+  return render_to_response(
+      'application/form.html', 
+      {
+        app: app
+      }
+    )
+
+"""
+Upload Application/Experiment Action
+
+@date 03/05/2012
+
+@author Micheal
+"""
+def create_or_update_application(request):
   # define default response
   response = { "err": "", "data": "" }
   # create new application
@@ -82,15 +90,44 @@ def new(request):
     }
     return HttpResponseRedirect('/error/')
   else:
-    destination = open(RAW_APP_ROOT, 'wb+')
-
-    for chunk in request.FILES['upload'].chunks():
-      destination.write(chunk)
-    destination.close()
-
-    return render_to_response(
-      'application/form.html', 
-      {
-
-      }
+    # post 
+    params = request.POST
+    ## First Save to database
+    app = Application(
+        name          = params['name'], 
+        package_name  = params['package_name'],
+        intent_name   = params['intent_name'],
+        description   = params['description'],
+        type          = params['type'],
+        version       = params["version"],
     )
+    app.save()
+    # Verify Filename is coming in post
+    if (request.POST):
+      filename = os.path.join(RAW_APP_ROOT, str(app.id) + ".apk")
+      filedir = os.path.dirname(filename)
+      # create folder for user if it doesn`t exist
+      try:
+        os.mkdir(filedir)
+      except OSError, e:
+        if e.errno != errno.EEXIST:
+          print "some problem in creating dir"
+          response['err'] = {
+            'no' : 'err1', 
+            'msg': 'cannot create dir, failed upload'
+          }
+          raise
+      # get file handle
+      fileHandle = open(filename, 'wb+')
+      # write it out
+      for chunk in request.FILES['upload'].chunks():
+        print chunk
+        fileHandle.write(chunk)
+      # close file handle
+      fileHandle.close()
+      # success msg
+      response['data'] = "done"
+    else:
+      response["err"] = "err1"
+    print response["err"]
+    return HttpResponseRedirect('/experiments/')
