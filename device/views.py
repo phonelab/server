@@ -17,7 +17,6 @@ import string
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
 """
-<<<<<<< HEAD
 Main page
 
 @date 03/05/2012
@@ -75,8 +74,6 @@ def index(request):
           )
 
 """
-=======
->>>>>>> 3e86c40067213efa3d8b3ff8d958e5cd0f701345
 Create New Device [POST]
 Update Device Details [POST]
 
