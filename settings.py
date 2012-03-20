@@ -5,9 +5,13 @@ import django
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+## Note: These variables are overridden
+## below if production
 # Log Path
 RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
-
+# Application Path
+RAW_APP_ROOT = os.path.join(SITE_ROOT, 'application', 'apps')
+# Env variable
 ENV = os.environ.get("ENV") or "development"
 
 ADMINS = (
@@ -153,13 +157,16 @@ LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 
 # database vars
-if ENV == "development":
-    from config_development_stub import *
-else:
+# production vars
+if ENV == "production":
     # Log Path
     RAW_LOG_ROOT = os.path.join("/mnt", 'datalogger', 'logs')
+    # Log Path
+    RAW_APP_ROOT = os.path.join("/mnt", 'apps')
     # Add gunicorn
     INSTALLED_APPS += ("gunicorn",)
     from config_production import *
+else:
+    from config_development_stub import *
 
 TEMPLATE_DEBUG = DEBUG

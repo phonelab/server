@@ -14,7 +14,6 @@ class Application(models.Model):
   type          = models.CharField(max_length=30)
   starttime     = models.DateTimeField(null=True, blank=True)
   endtime       = models.DateTimeField(null=True, blank=True)
-  download      = models.CharField(max_length=255, null=False)
   version       = models.CharField(max_length=10, null=False)
   created       = models.DateTimeField(auto_now_add=True)
   updated       = models.DateTimeField(auto_now_add=True)

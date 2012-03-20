@@ -34,31 +34,35 @@ def upload_log(request, deviceId):
     )
   # define default response
   response = {"err": "", "data": ""}
-  # filename
-  #filename = os.path.join(RAW_LOG_ROOT, deviceId, str(int(time.time())) + ".log")
-  filename = os.path.join(RAW_LOG_ROOT, deviceId, request.POST['filename'])
-  filedir = os.path.dirname(filename)
-  # create folder for user if it doesn`t exist
-  try:
-    print "trying to create dir" + str(filedir)
-    os.mkdir(filedir)
-  except OSError, e:
-    if e.errno != errno.EEXIST:
-      print "some problem in creating dir"
-      response['err'] = {
-        'no' : 'err1', 
-        'msg': 'cannot create dir, failed upload'
-      }
-      raise
-  # get file handle
-  fileHandle = open(filename, 'wb+')
-  # write it out
-  for chunk in request.FILES['file'].chunks():
-    fileHandle.write(chunk)
-  # close file handle
-  fileHandle.close()
-  # success msg
-  response['data'] = "done"
+  # Verify Filename is coming in post
+  if ("filename" in request.POST):
+    #filename = os.path.join(RAW_LOG_ROOT, deviceId, str(int(time.time())) + ".log")
+    filename = os.path.join(RAW_LOG_ROOT, deviceId, request.POST['filename'])
+    filedir = os.path.dirname(filename)
+    # create folder for user if it doesn`t exist
+    try:
+      print "trying to create dir" + str(filedir)
+      os.mkdir(filedir)
+    except OSError, e:
+      if e.errno != errno.EEXIST:
+        print "some problem in creating dir"
+        response['err'] = {
+          'no' : 'err1', 
+          'msg': 'cannot create dir, failed upload'
+        }
+        raise
+    # get file handle
+    fileHandle = open(filename, 'wb+')
+    # write it out
+    for chunk in request.FILES['file'].chunks():
+      fileHandle.write(chunk)
+    # close file handle
+    fileHandle.close()
+    # success msg
+    response['data'] = "done"
+  else:
+    response["err"] = "err1"
+
   # render json response
   return json_response_from(response)
 
@@ -98,7 +102,7 @@ def show(request, deviceId, logFilename):
 		#the file does not exist
 		else:
 			response['err'] = {
-				'no' : 'err1',
+				'no' : 'err2',
 				'msg': 'No such log file'
 			}
 	#device does not exist		
@@ -108,6 +112,7 @@ def show(request, deviceId, logFilename):
 			'msg': 'invalid device'
 		}
 	return json_response_from(response)
+
 
 """
 Log Tag filter
@@ -157,7 +162,7 @@ def show_tag(request, deviceId):
     except OSError, e:
       if e.errno != errno.EEXIST:
         response['err'] = {
-          'no' : 'err1', 
+          'no' : 'err2', 
           'msg': 'cannot change dir'
         }
     
