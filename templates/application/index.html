@@ -1,0 +1,22 @@
+<!-- Show list of devices !-->
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{% block title %}All Applications{% endblock %}</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Application ID</th>
+        <th>Application Name</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for app in apps %}
+    <tr>
+      <td><a href='/experiment/{{app.id}}'>{{ app.id }}</a></td>
+      <td>{{ app.name }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

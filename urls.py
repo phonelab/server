@@ -36,7 +36,7 @@ if settings.DEBUG:
     # All Applications [GET]
     url(r'^experiments/$', 'application.views.index'),
     # Single Application [GET]
-    url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/$', 'application.views.show'),
+    url(r'^experiment/(?P<appId>[A-Z0-9])/$', 'application.views.show'),
     # New Application Form [GET]
     url(r'^experiment/new/$', 'application.views.new'),
     # Edit Application Form [GET]

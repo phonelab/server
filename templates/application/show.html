@@ -1,0 +1,27 @@
+<!-- Single Application !-->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{% block title %}Application ID: {{app.id}} <!--(<a href='/device/{{device.id}}/edit/'>Edit</a>)-->{% endblock %}</h1>
+<table class="table table-bordered table-striped">
+  <tbody>
+    <tr>
+      <td width='20%'><strong>Name: </strong></td>
+      <td>{{ app.name }}</td>
+    </tr>
+    <tr>
+      <td><strong>Package Name: </strong></td>
+      <td>{{ app.package_name }}</td>
+    </tr>
+    <tr>
+      <td><strong>Version: </strong></td>
+      <td>{{ app.version }}<td>
+    </tr>
+    <tr>
+      <td><strong>Description: </strong></td>
+      <td>{{ app.description }}</td>
+    </tr>
+  </tbody>
+</table>
+
+{% endblock %}
