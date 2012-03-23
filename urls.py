@@ -44,9 +44,7 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status
     # url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
-<<<<<<< HEAD
     
-=======
 
     #
     ## Application
@@ -58,12 +56,11 @@ if settings.DEBUG:
     # New Application Form [GET]
     url(r'^experiment/new/$', 'application.views.new'),
     # Edit Application Form [GET]
-    url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/edit/$', 'application.views.edit'),
+    #url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/edit/$', 'application.views.edit'),
     # Create/Update Application [POST]
     url(r'^experiment/$', 'application.views.create_or_update_application'),
 
 
->>>>>>> 3e86c40067213efa3d8b3ff8d958e5cd0f701345
     #####
     ##### API Endpoints
     ##### Used by PhoneLab Application on Device

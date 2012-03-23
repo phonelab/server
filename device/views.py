@@ -17,7 +17,6 @@ import string
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
 """
-<<<<<<< HEAD
 Main page
 
 @date 03/05/2012
@@ -75,8 +74,6 @@ def index(request):
           )
 
 """
-=======
->>>>>>> 3e86c40067213efa3d8b3ff8d958e5cd0f701345
 Create New Device [POST]
 Update Device Details [POST]
 
@@ -139,24 +136,6 @@ def create_or_update_device(request):
   # render json response
   return json_response_from(response)
 
-
-"""
-List All Devices [GET]
-
-@date 02/07/2012
-
-@author Micheal
-"""
-def index(request): 
-  # get all devices
-  devices = Device.objects.all
-
-  return render_to_response(
-            'device/index.html', 
-            {
-                'devices': devices
-            }
-          )
 
 """
 Show Device Details [GET]
@@ -350,7 +329,6 @@ def status(request, deviceId, statusType):
           #Logdata = Logfile.readline()
           if re.search(tagName, line):
             temp = line.split(" ")
-            print temp
             Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
             if statusType == '1':
               Tagdata += 'Battery Level: ' + temp[9]
