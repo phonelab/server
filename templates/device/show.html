@@ -33,9 +33,9 @@
       <p>
        {% for file in filelist %}
        <a href='/device/{{device.id}}/{{file}}'>{{ file }}</a><br>
-	   {% empty %} There is no log files.
+	     {% empty %} There is no log fil.
        {% endfor %}
-	</p>
+	    </p>
     </div>
     <div class="tab-pane" id="2">
       <form method="post" action="/device/{{device.id}}/tag/">
@@ -45,8 +45,8 @@
     </div>
     <div class="tab-pane" id="3">
        <a href='/device/{{device.id}}/status/1/'>Battery Level</a><br>
-       <a href='/device/{{device.id}}/status/2'>GPS Location</a><br>
-       <a href='/device/{{device.id}}/status/3'>Signal Strength</a><br>
+       <a href='/device/{{device.id}}/status/2/'>GPS Location</a><br>
+       <a href='/device/{{device.id}}/status/3/'>Signal Strength</a><br>
     </div>
     <div class="tab-pane" id="4">
       <form method="post" action="/device/{{device.id}}/c2dm/">
@@ -54,10 +54,12 @@
         <input type='submit' value='Send' />
       </form>
     </div>
-  </div>
     <div class="tab-pane" id="5">
-
+      <p>
+       <a href='/device/{{device.id}}/list/'>Application List</a><br>
+      </p> 
     </div>
+  </div>
 </div>
 {% endblock %}
 

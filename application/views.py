@@ -1,9 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+from django.core.servers.basehttp import FileWrapper
+from django.utils.encoding import smart_str
 from django.shortcuts import render_to_response
 from lib.helper import json_response_from
 from django.conf import settings
 from device.models import Application, DeviceApplication
-import os, errno
+import os, errno, mimetypes
 
 RAW_APP_ROOT = settings.RAW_APP_ROOT
 
@@ -30,6 +34,13 @@ def get_download(request, appId):
   # Get Application/Experiment
   app = Application.objects.filter(id=appId)
   # if application exists, render download
+  path = os.path.join(RAW_APP_ROOT, str(app[0].id) + ".apk")
+  wrapper = FileWrapper(open(path, "r"))
+  content_type = mimetypes.guess_type(path)[0]
+  response = HttpResponse(wrapper, content_type = content_type) 
+  response['Content-Length'] = os.path.getsize(path)
+  response['Content-Disposition'] = 'attachment; filename=%s' %smart_str(os.path.basename(path))
+  return response
   if app.count() != 1:
     response['err'] = {
       'no' : 'err1',
@@ -44,15 +55,17 @@ Show all Application
 
 @author Micheal
 """
+@login_required
 def index(request):
   # query the database for all applications
-  apps = Application.objects.all
+  apps = Application.objects.all().order_by('-created')
 
   return render_to_response(
       'application/index.html', 
       {
         'apps': apps
-      }
+      },
+      context_instance=RequestContext(request)
     )
 
 
@@ -64,6 +77,7 @@ Show Application Details [GET]
 
 @author TKI
 """
+@login_required
 def show(request, appId): 
   # define default response
   response = { "err": "", "data": "" }
@@ -75,7 +89,8 @@ def show(request, appId):
   		'application/show.html', 
   		{
   			'app': app[0],
-  		}
+  		},
+      context_instance=RequestContext(request)
   	)
   # application does not exist
   else:
@@ -93,14 +108,16 @@ Upload Experiment Form
 
 @author Micheal
 """
+@login_required
 def new(request):
   app = Application()
   # query the database for all applications
   return render_to_response(
       'application/form.html', 
       {
-        app: app
-      }
+        'app': app
+      },
+      context_instance=RequestContext(request)
     )
 
 """

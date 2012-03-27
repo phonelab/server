@@ -3,12 +3,13 @@ from django.contrib.auth.decorators import login_required
 from device.forms import *
 from django.template import RequestContext
 #from django.contrib.auth.models import User
-
 from django.http import HttpResponse, HttpResponseRedirect
 from device.models import Device, DeviceApplication
+from application.models import Application
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
 from django.conf import settings
+from manifest.views import *
 import default
 import os, errno, re
 import datetime
@@ -131,6 +132,7 @@ def create_or_update_device(request):
     )
   # save device
   device.save()
+  
   # device
   response['data'] = device
   # render json response
@@ -145,6 +147,7 @@ Show Device Details [GET]
 
 @author Micheal
 """
+@login_required
 def show(request, deviceId): 
   # define default response
   response = { "err": "", "data": "" }
@@ -172,7 +175,8 @@ def show(request, deviceId):
   		{
   			'device': device[0],
   			'filelist': filelist
-  		}
+  		},
+      context_instance=RequestContext(request)
   	)
   # device does not exist
   else:
@@ -191,6 +195,7 @@ Edit Device Form [GET]
 
 @author Micheal
 """
+@login_required
 def edit(request, deviceId):
   # define default response
   response = { "err": "", "data": "" }
@@ -202,7 +207,8 @@ def edit(request, deviceId):
       'device/edit.html', 
         {
           'device': device[0]
-        }
+        },
+        context_instance=RequestContext(request)
       )
   # device does not exist
   else:
@@ -279,6 +285,7 @@ def c2dm(request, deviceId):
     # get device
     device = Device.objects.filter(id=deviceId)
     # if device exists, update
+    # msg = "new_manifest"
     if device.count() == 1:
       response = device[0].send_message(payload=json({"message": msg}))
     else:
@@ -295,6 +302,7 @@ Status monitor [GET]
 
 @author Taeyeon
 """
+@login_required
 def status(request, deviceId, statusType):
   # define default response
   response = { "err": "", "data": "" }
@@ -343,7 +351,8 @@ def status(request, deviceId, statusType):
           'device': device[0],
           'TagName': tagName,
           'Tagdata': Tagdata
-        }
+        },
+        context_instance=RequestContext(request)
       )
       Logfile.close()
       Tagfile.close()
@@ -354,13 +363,6 @@ def status(request, deviceId, statusType):
           'msg': 'cannot change dir'
         }
     
-    return render_to_response(
-  		'device/show.html', 
-  		{
-  			'device': device[0],
-  			'filelist': filelist
-  		}
-  	)
   # device does not exist
   else:
     response['err'] = {
@@ -368,3 +370,77 @@ def status(request, deviceId, statusType):
       'msg': 'invalid device'
     }
   return json_response_from(response)
+
+
+"""
+Application monitor [GET]
+
+@date 03/25/2012
+@param String deviceId
+
+@author TKI
+"""
+@login_required
+def list_app(request, deviceId):
+  # define default response
+  response = { "err": "", "data": "" }
+  # get device
+  device = Device.objects.filter(id=deviceId)
+  # device exists
+
+  if device.count() == 1:
+    device = device[0]
+    app_list = {}
+    apps = {}
+    unapps = {}
+    # get apps of particular device
+    for o in DeviceApplication.objects.filter(device=device.id).values('app', 'action'):
+      app_list[o['app']] = o['action']
+    # get list of apps to download
+    #for app in Application.objects.filter(id__in=app_list.keys()):
+    for app in Application.objects.all():
+      if app_list.has_key(app.id):
+        apps[app.id] = {"app_object": app, "app_status": app_list[app.id]}
+      else:
+        unapps[app.id] = {"app_object": app,}
+
+    return render_to_response(
+  	  'device/list.html', 
+  	  {
+  	    'deviceId'   : deviceId,
+  	    'apps'  : apps,
+        'unapps': unapps
+  	  },
+      context_instance=RequestContext(request)
+    )
+    
+  # device does not exist
+  else:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+    }
+  return json_response_from(response)
+
+
+"""
+Application monitor [GET]
+
+@date 03/25/2012
+@param String deviceId
+
+@author TKI
+"""
+def install_app(request, deviceId, appId):
+  # send a signal to a phone
+  device = Device.objects.filter(id=deviceId)
+  # if device exists, update
+  if device.count() == 1:
+    # msg = "new_manifest"
+    msg = "new_manifest"
+    #response = download_manifest(request, deviceId)
+    return download_manifest(request, deviceId)
+    #response = device[0].send_message(payload=json({"message": msg}))
+  else:
+    return HttpResponseRedirect('/error/')
+  return json_response_from(response)		

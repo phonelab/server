@@ -40,6 +40,10 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/tag/$', 'datalogger.views.show_tag'),
     # Phone Status [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
+    # List of Applications  [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/list/$', 'device.views.list_app'),
+    # Install Applications  [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/install/(?P<appId>\d+)/$', 'device.views.install_app'),
 	# Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status
@@ -52,7 +56,27 @@ if settings.DEBUG:
     # All Applications [GET]
     url(r'^experiments/$', 'application.views.index'),
     # Single Application [GET]
-    url(r'^experiment/(?P<appId>[A-Z0-9])/$', 'application.views.show'),
+    url(r'^experiment/(?P<appId>\d+)/$', 'application.views.show'),
+    # New Application Form [GET]
+    url(r'^experiment/new/$', 'application.views.new'),
+    # Edit Application Form [GET]
+    #url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/edit/$', 'application.views.edit'),
+    # Create/Update Application [POST]
+    url(r'^experiment/$', 'application.views.create_or_update_application'),
+
+	# Log Data [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
+	# Update Status
+    # url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
+    
+
+    #
+    ## Application
+    #
+    # All Applications [GET]
+    url(r'^experiments/$', 'application.views.index'),
+    # Single Application [GET]
+    url(r'^experiment/(?P<appId>\d+)/$', 'application.views.show'),
     # New Application Form [GET]
     url(r'^experiment/new/$', 'application.views.new'),
     # Edit Application Form [GET]
@@ -91,7 +115,7 @@ if settings.DEBUG:
     ## Application
     #
     # Download Application [GET]
-    url(r'^experiment/(?P<appId>[0-9]\w+).apk$', 'application.views.get_download'),
+    url(r'^experiment/(?P<appId>\d+).apk/$', 'application.views.get_download'),
 
     #
     ## Error
