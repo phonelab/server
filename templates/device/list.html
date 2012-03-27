@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{% block head %}DeviceID &raquo {{deviceId}}{% endblock %}</h1>
+  <table class="table table-striped">
+    <tbody>
+      <tr>
+      <td> <strong>Installed Application</strong></td>
+      <td></td><td></td><td></td><td></td><td></td>
+      </tr><tr>
+        {% for key,app in apps.items %}
+            <td> name: {{app.app_object.name}} </td>
+            <td> package_name: {{app.app_object.package_name}} </td>
+            <td> type: {{app.app_object.type}} </td>
+            <td> version: {{app.app_object.version}} </td>
+            <td> action: {{app.app_status}} </td>
+            <td></td>
+            </tr>
+        {% empty %}
+        {% endfor %}
+      <tr>
+      <td> <strong>Uninstalled Application</strong></td>
+      <td></td><td></td><td></td><td></td><td></td>
+      </tr><tr>
+        {% for key,app in unapps.items %}
+            <td> name: {{app.app_object.name}} </td>
+            <td> package_name: {{app.app_object.package_name}} </td>
+            <td> type: {{app.app_object.type}} </td>
+            <td> version: {{app.app_object.version}} </td>
+            <td></td>
+            <td><a href='/device/{{deviceId}}/install/{{app.app_object.id}}'>Install</a></td>
+            </tr>
+        {% empty %} 
+        {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+
+

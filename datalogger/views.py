@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.template import RequestContext
@@ -76,6 +77,7 @@ Show Log for Device
 
 @author Taeyeon
 """
+@login_required
 def show(request, deviceId, logFilename):
 	# define default response  
 	response = { "err": "", "data": "" }  
@@ -97,7 +99,8 @@ def show(request, deviceId, logFilename):
 					'device': device[0],
 					'logFilename': logFilename,
 					'Logdata': Logdata
-				}
+				},
+        context_instance=RequestContext(request)
 			)
 		#the file does not exist
 		else:
@@ -123,6 +126,7 @@ Log Tag filter
 
 @author Taeyeon
 """
+@login_required
 def show_tag(request, deviceId):
   # define default response
   response = { "err": "", "data": "" }
@@ -155,7 +159,8 @@ def show_tag(request, deviceId):
           'device': device[0],
           'TagName': request.POST['tagName'],
           'Tagdata': Tagdata
-        }
+        },
+        context_instance=RequestContext(request)
       )
       Logfile.close()
       Tagfile.close()
@@ -166,14 +171,6 @@ def show_tag(request, deviceId):
           'msg': 'cannot change dir'
         }
     
-    return render_to_response(
-  		'device/show.html', 
-  		{
-  			'device': device[0],
-  			'filelist': filelist
-  		}
-  	)
-  # device does not exist
   else:
     response['err'] = {
       'no' : 'err1',

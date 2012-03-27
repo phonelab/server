@@ -1,9 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
+from django.core.servers.basehttp import FileWrapper
+from django.utils.encoding import smart_str
 from django.shortcuts import render_to_response
 from lib.helper import json_response_from
 from django.conf import settings
 from device.models import Application, DeviceApplication
-import os, errno
+import os, errno, mimetypes
 
 RAW_APP_ROOT = settings.RAW_APP_ROOT
 
@@ -30,6 +34,13 @@ def get_download(request, appId):
   # Get Application/Experiment
   app = Application.objects.filter(id=appId)
   # if application exists, render download
+  path = os.path.join(RAW_APP_ROOT, str(app[0].id) + ".apk")
+  wrapper = FileWrapper(open(path, "r"))
+  content_type = mimetypes.guess_type(path)[0]
+  response = HttpResponse(wrapper, content_type = content_type) 
+  response['Content-Length'] = os.path.getsize(path)
+  response['Content-Disposition'] = 'attachment; filename=%s' %smart_str(os.path.basename(path))
+  return response
   if app.count() != 1:
     response['err'] = {
       'no' : 'err1',
@@ -44,15 +55,17 @@ Show all Application
 
 @author Micheal
 """
+@login_required
 def index(request):
   # query the database for all applications
-  apps = Application.objects.all
+  apps = Application.objects.all().order_by('-created')
 
   return render_to_response(
       'application/index.html', 
       {
         'apps': apps
-      }
+      },
+      context_instance=RequestContext(request)
     )
 
 
@@ -64,6 +77,7 @@ Show Application Details [GET]
 
 @author TKI
 """
+@login_required
 def show(request, appId): 
   # define default response
   response = { "err": "", "data": "" }
@@ -75,7 +89,8 @@ def show(request, appId):
   		'application/show.html', 
   		{
   			'app': app[0],
-  		}
+  		},
+      context_instance=RequestContext(request)
   	)
   # application does not exist
   else:
@@ -87,219 +102,22 @@ def show(request, appId):
 
 
 """
-Edit Device Form [GET]
-
-@date 02/08/2012
-@param String deviceId
-
-@author Micheal
-"""
-def edit(request, deviceId):
-  # define default response
-  response = { "err": "", "data": "" }
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-  if device.count() == 1:
-    return render_to_response(
-      'device/edit.html', 
-        {
-          'device': device[0]
-        }
-      )
-  # device does not exist
-  else:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
-    return HttpResponseRedirect('/error/')
-
-"""
-Update Device Via Form [POST]
-
-@date 02/08/2012
-@param String deviceId
-
-@author Micheal
-"""
-def update(request, deviceId):
-  # define default response
-  response = { "err": "", "data": "" }
-  # return if GET request
-  if request.method == 'GET':
-    response['err'] = {
-      'no' : 'err0',
-      'msg': 'sorry no gets'
-    }
-    return HttpResponseRedirect('/error/')
-  # get params from POST
-  params = request.POST
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # if device exists, update
-  if device.count() == 1:
-    #
-    device = device[0]
-    # email
-    if ('email' in params and device.email != params['email']):
-      device.email = params['email']
-    # reg_id
-    if ('reg_id' in params and device.reg_id != params['reg_id']):
-      device.reg_id = params['reg_id']
-    # update
-    if ('update_interval' in params and device.update_interval != params['update_interval']):
-      device.update_interval = params['update_interval']
-    # save device
-    device.save()
-    # redirect to device/<deviceId>
-    return HttpResponseRedirect('/device/' + device.id)
-  # device does not exist
-  else:
-    return HttpResponseRedirect('/error/')
-
-
-"""
-Send message to a phone using C2DM [POST]
-
-@date 02/09/2012
-@param String deviceId
-@c2dm_mag message string
-
-@author Taeyeon
-"""
-def c2dm(request, deviceId):
-  # define default response
-  response = { "err": "", "data": "" }
-  # return if GET request
-  if request.method == 'GET':
-    response['err'] = {
-      'no' : 'err0',
-      'msg': 'sorry no gets'
-    }
-  else:	
-    msg = request.POST['c2dm_msg']
-    # get device
-    device = Device.objects.filter(id=deviceId)
-    # if device exists, update
-    if device.count() == 1:
-      response = device[0].send_message(payload=json({"message": msg}))
-    else:
-      return HttpResponseRedirect('/error/')
-  return json_response_from(response)		
-
-
-"""
-Status monitor [GET]
-
-@date 02/20/2012
-@param String deviceId
-@param String statusType
-
-@author Taeyeon
-"""
-def status(request, deviceId, statusType):
-  # define default response
-  response = { "err": "", "data": "" }
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-
-  if device.count() == 1:
-    # get log data list from deviceId directory
-    path = os.path.join(RAW_LOG_ROOT, device[0].id)
-    # empty
-    filelist = {}
-    tagName = ''
-    if statusType == '1':
-      #tagName = 'Battery_level'
-      tagName = 'Battery level'
-    elif statusType == '2':
-      #tagName = 'Location_Latitude'
-      tagName = 'Location: Latitude'
-    else:
-      #tagName = 'Signal_Strength'
-      tagName = 'Signal Strength'
-    try:
-      os.chdir(path)
-      filelist = os.listdir(".")
-      default.sort_nicely(filelist)
-      Tagdata = ''
-      for file in filelist:
-        filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
-        Logfile = open(filename, 'r+')
-        for line in Logfile:
-          #Logdata = Logfile.readline()
-          if re.search(tagName, line):
-            temp = line.split(" ")
-            Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
-            if statusType == '1':
-              Tagdata += 'Battery Level: ' + temp[8]
-            elif statusType == '2':
-              Tagdata += 'GPS Latitude: ' + temp[8] + ', Longitude: ' + temp[10] + 'Accuracy: ' + temp[12]
-            else:
-              Tagdata += 'Signal Strengh: ' + temp[8] + ', asu: ' + temp[10]
-      # render respone
-      return render_to_response(
-        'device/status.html',
-        {
-          'device': device[0],
-          'TagName': tagName,
-          'Tagdata': Tagdata
-        }
-      )
-      Logfile.close()
-      Tagfile.close()
-    except OSError, e:
-      if e.errno != errno.EEXIST:
-        response['err'] = {
-          'no' : 'err1', 
-          'msg': 'cannot change dir'
-        }
-    
-    return render_to_response(
-  		'device/show.html', 
-  		{
-  			'device': device[0],
-  			'filelist': filelist
-  		}
-  	)
-  # device does not exist
-  else:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
-  return json_response_from(response)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
 Upload Experiment Form
 
 @date 03/19/2012
 
 @author Micheal
 """
+@login_required
 def new(request):
   app = Application()
   # query the database for all applications
   return render_to_response(
       'application/form.html', 
       {
-        app: app
-      }
+        'app': app
+      },
+      context_instance=RequestContext(request)
     )
 
 """
