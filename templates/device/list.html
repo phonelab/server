@@ -7,13 +7,20 @@
       <td> <strong>Installed Application</strong></td>
       <td></td><td></td><td></td><td></td><td></td>
       </tr><tr>
+            <td> name </td>
+            <td> package_name </td>
+            <td> type </td>
+            <td> version </td>
+            <td> status </td>
+            <td>        </td>
+           </tr>
         {% for key,app in apps.items %}
-            <td> name: {{app.app_object.name}} </td>
-            <td> package_name: {{app.app_object.package_name}} </td>
-            <td> type: {{app.app_object.type}} </td>
-            <td> version: {{app.app_object.version}} </td>
-            <td> action: {{app.app_status}} </td>
-            <td></td>
+            <td> {{app.app_object.name}} </td>
+            <td> {{app.app_object.package_name}} </td>
+            <td> {{app.app_object.type}} </td>
+            <td> {{app.app_object.version}} </td>
+            <td> {{app.app_status}} </td>
+            <td><a href='/device/{{deviceId}}/uninstall/{{app.app_object.id}}'>Uninstall</a></td>
             </tr>
         {% empty %}
         {% endfor %}
@@ -21,12 +28,19 @@
       <td> <strong>Uninstalled Application</strong></td>
       <td></td><td></td><td></td><td></td><td></td>
       </tr><tr>
+            <td><strong> name </strong> </td>
+            <td><strong> package_name </strong> </td>
+            <td><strong> type </strong> </td>
+            <td><strong> version </strong> </td>
+            <td><strong> status </strong> </td>
+            <td>        </td>
+           </tr>
         {% for key,app in unapps.items %}
-            <td> name: {{app.app_object.name}} </td>
-            <td> package_name: {{app.app_object.package_name}} </td>
-            <td> type: {{app.app_object.type}} </td>
-            <td> version: {{app.app_object.version}} </td>
-            <td></td>
+            <td> {{app.app_object.name}} </td>
+            <td> {{app.app_object.package_name}} </td>
+            <td> {{app.app_object.type}} </td>
+            <td> {{app.app_object.version}} </td>
+            <td> Uninstall </td>
             <td><a href='/device/{{deviceId}}/install/{{app.app_object.id}}'>Install</a></td>
             </tr>
         {% empty %} 
