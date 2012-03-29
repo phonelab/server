@@ -138,7 +138,6 @@ def show_tag(request, deviceId):
     path = os.path.join(RAW_LOG_ROOT, device[0].id)
     # empty
     filelist = {}
-
     try:
       os.chdir(path)
       filelist = os.listdir(".")
@@ -149,8 +148,13 @@ def show_tag(request, deviceId):
         Logfile = open(filename, 'r+')
         for line in Logfile:
           #Logdata = Logfile.readline()
+          #Two ways to find with string and without string
           if re.search(request.POST['tagName'], line):
-            Tagdata += line
+            if not request.POST.has_key('anti'):
+              Tagdata += line
+          else:
+            if request.POST.has_key('anti'):
+              Tagdata += line
         
       # render respone
       return render_to_response(

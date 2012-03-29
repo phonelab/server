@@ -39,6 +39,7 @@
     </div>
     <div class="tab-pane" id="2">
       <form method="post" action="/device/{{device.id}}/tag/">
+        <input type='checkbox' id='anti' name='anti' value='0' />
         <input type='text' id='tagName' name='tagName' value='PhoneLab' />
         <input type='submit' value='Send' />
       </form>
