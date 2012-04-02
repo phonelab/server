@@ -169,7 +169,7 @@ def create_or_update_application(request):
       fileHandle = open(filename, 'wb+')
       # write it out
       for chunk in request.FILES['upload'].chunks():
-        print chunk
+#        print chunk
         fileHandle.write(chunk)
       # close file handle
       fileHandle.close()
@@ -177,5 +177,5 @@ def create_or_update_application(request):
       response['data'] = "done"
     else:
       response["err"] = "err1"
-    print response["err"]
+#    print response["err"]
     return HttpResponseRedirect('/experiments/')

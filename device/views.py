@@ -443,4 +443,98 @@ def install_app(request, deviceId, appId):
     #response = device[0].send_message(payload=json({"message": msg}))
   else:
     return HttpResponseRedirect('/error/')
-  return json_response_from(response)		
+  return json_response_from(response)	
+
+
+
+"""
+Insert DeviceApplication DB[POST]
+Update DeviceApplication DB [POST]
+
+@date 03/30/2012
+
+@param dev_id
+@param app_id
+@param action (install, uninstall, update, fail)
+
+# Insert DeviceApplication DB using POST method
+# curl -X POST -d "device_id=123&application_id=123&action=install" http://107.20.190.88/deviceapplication/
+# curl -X POST -d "dev_id=123&app_id=123&action=install" http://localhost:8000/deviceapplication/
+
+@api public
+
+@author TKI
+"""
+def create_or_update_deviceapplication(request): 
+  # define default response
+  response = { "error": "", "data": "" }
+  # return if GET request
+  if request.method == 'GET':
+    response['error'] = {
+      'no' : 'err0',
+      'msg': 'sorry no gets'
+    }
+    return json_response_from(response)
+  # error checking
+  if not (request.POST.has_key('dev_id') or request.POST.has_key('app_id') or request.POST.has_key('action')):
+    response['error'] = {
+      'no' : 'err1',
+      'msg': 'missing mandatory params'
+    }
+  # get params from POST
+  params = request.POST
+  # get device
+  device = Device.objects.filter(id=params['dev_id'])
+  # if device exists, update
+  if device.count() == 1:
+    device = device[0]
+    for o in DeviceApplication.objects.filter(device=device.id)
+
+
+---------------
+    # dev_id
+    if ('email' in params and device.email != params['email']):
+      device.email = params['email']
+    # app_id
+    if ('reg_id' in params and device.reg_id != params['reg_id']):
+      device.reg_id = params['reg_id']
+    # action
+    if ('update_interval' in params and device.update_interval != params['update_interval']):
+      device.update_interval = params['update_interval']
+    # device does not exist, insert
+    else:
+      device = Device(
+          id     = params['device_id'], 
+          email  = "phonelab@gmail.com", #params['email'] 
+          reg_id = params['reg_id']
+      )
+-------------
+  # device does not exist
+  else:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+    }
+  # save device
+  deviceapplication.save()
+  
+  # device
+  response['data'] = device
+  # render json response
+  return json_response_from(response)
+	
+  if device.count() == 1:
+    device = device[0]
+    app_list = {}
+    apps = {}
+    unapps = {}
+    # get apps of particular device
+    for o in DeviceApplication.objects.filter(device=device.id).values('app', 'action'):
+      app_list[o['app']] = o['action']
+    # get list of apps to download
+    #for app in Application.objects.filter(id__in=app_list.keys()):
+    for app in Application.objects.all():
+      if app_list.has_key(app.id):
+        apps[app.id] = {"app_object": app, "app_status": app_list[app.id]}
+      else:
+        unapps[app.id] = {"app_object": app,}

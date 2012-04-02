@@ -95,6 +95,9 @@ if settings.DEBUG:
     # New device registration [POST]
     # Update Previous device registration [POST]
     url(r'^device/$', 'device.views.create_or_update_device'),
+    # Insert DeviceApplication DB [POST]
+    # Update Previous DeviceApplication DB [POST]
+    url(r'^deviceapplication/$', 'device.views.create_or_update_deviceapplication'),
     # Device Status [POST]
     #url(r'^devicestatus/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.device_status'),
 
