@@ -459,7 +459,6 @@ Delete DeviceApplication DB [POST]
 
 # Insert DeviceApplication DB using POST method
 # curl -X POST -d "device_id=123&application_id=123&action=install" http://107.20.190.88/deviceapplication/
-# curl -X POST -d "dev_id=123&app_id=123&action=install" http://localhost:8000/deviceapplication/
 
 @api public
 
