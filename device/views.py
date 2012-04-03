@@ -9,6 +9,7 @@ from application.models import Application
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from manifest.views import *
 import default
 import os, errno, re
@@ -397,7 +398,6 @@ def list_app(request, deviceId):
     for o in DeviceApplication.objects.filter(device=device.id).values('app', 'action'):
       app_list[o['app']] = o['action']
     # get list of apps to download
-    #for app in Application.objects.filter(id__in=app_list.keys()):
     for app in Application.objects.all():
       if app_list.has_key(app.id):
         apps[app.id] = {"app_object": app, "app_status": app_list[app.id]}
@@ -448,9 +448,9 @@ def install_app(request, deviceId, appId):
 
 
 """
-Insert DeviceApplication DB[POST]
+Insert DeviceApplication DB [POST]
 Update DeviceApplication DB [POST]
-
+Delete DeviceApplication DB [POST]
 @date 03/30/2012
 
 @param dev_id
@@ -465,7 +465,7 @@ Update DeviceApplication DB [POST]
 
 @author TKI
 """
-def create_or_update_deviceapplication(request): 
+def insert_or_update_deviceapplication(request): 
   # define default response
   response = { "error": "", "data": "" }
   # return if GET request
@@ -476,65 +476,70 @@ def create_or_update_deviceapplication(request):
     }
     return json_response_from(response)
   # error checking
-  if not (request.POST.has_key('dev_id') or request.POST.has_key('app_id') or request.POST.has_key('action')):
+  if not (request.POST.has_key('dev_id') and request.POST.has_key('app_id') and request.POST.has_key('action')):
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
     }
+    return json_response_from(response)
   # get params from POST
   params = request.POST
   # get device
-  device = Device.objects.filter(id=params['dev_id'])
-  # if device exists, update
-  if device.count() == 1:
-    device = device[0]
-    for o in DeviceApplication.objects.filter(device=device.id)
-
-
----------------
-    # dev_id
-    if ('email' in params and device.email != params['email']):
-      device.email = params['email']
-    # app_id
-    if ('reg_id' in params and device.reg_id != params['reg_id']):
-      device.reg_id = params['reg_id']
-    # action
-    if ('update_interval' in params and device.update_interval != params['update_interval']):
-      device.update_interval = params['update_interval']
-    # device does not exist, insert
-    else:
-      device = Device(
-          id     = params['device_id'], 
-          email  = "phonelab@gmail.com", #params['email'] 
-          reg_id = params['reg_id']
-      )
--------------
+  try:
+    # if device exists
+    device = Device.objects.get(id=params['dev_id'])
+    devapp = DeviceApplication.objects.filter(device=params['dev_id'])
+    if devapp.count() > 0:
+      try:
+        Duplicate = True
+        app = Application.objects.get(id=params['app_id'])
+        #Todo: improve this part
+        #if there is same data, update action element
+        for o in devapp:
+          if app.id == o.app.id:
+            if params['action'] == "uninstall":
+              o.delete()
+            else:  
+              o.action = params['action']
+              o.save()
+            Duplicate = False
+        if Duplicate: 
+            deviceapp = DeviceApplication()
+            devapp = devapp[0]
+            deviceapp.device = devapp.device
+            deviceapp.app = app
+            deviceapp.action = params['action']
+            deviceapp.save()
+      except Application.DoesNotExist:
+        # application does not exist
+        response['err'] = {
+          'no' : 'err1',
+          'msg': 'invalid application'
+        }
+        return json_response_from(response)
+    else:  
+      try:
+        deviceapp = DeviceApplication()
+        deviceapp.app = Application.objects.get(id=params['app_id'])
+        #deviceapp.device = device
+        deviceapp.device = Device.objects.get(id=params['dev_id'])
+        deviceapp.action = params['action']
+        deviceapp.save()
+      except Application.DoesNotExist: 
+      # application does not exist
+        response['err'] = {
+          'no' : 'err1',
+          'msg': 'invalid application'
+        }
+        return json_response_from(response)
+        
   # device does not exist
-  else:
+  except Device.DoesNotExist:
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid device'
     }
-  # save device
-  deviceapplication.save()
   
-  # device
-  response['data'] = device
+#  response['data'] = deviceapp
   # render json response
   return json_response_from(response)
-	
-  if device.count() == 1:
-    device = device[0]
-    app_list = {}
-    apps = {}
-    unapps = {}
-    # get apps of particular device
-    for o in DeviceApplication.objects.filter(device=device.id).values('app', 'action'):
-      app_list[o['app']] = o['action']
-    # get list of apps to download
-    #for app in Application.objects.filter(id__in=app_list.keys()):
-    for app in Application.objects.all():
-      if app_list.has_key(app.id):
-        apps[app.id] = {"app_object": app, "app_status": app_list[app.id]}
-      else:
-        unapps[app.id] = {"app_object": app,}
