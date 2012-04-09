@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'datalogger', # datalogger
     'device', # device
     'error', # error
+    'transaction', # transaction
 )
 
 # A sample logging configuration. The only tangible logging

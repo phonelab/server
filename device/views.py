@@ -163,7 +163,7 @@ def show(request, deviceId):
     try:
       os.chdir(path)
       filelist = os.listdir(".")
-      default.sort_nicely(filelist)
+      default.re_sort_nicely(filelist)
     except OSError, e:
       if e.errno != errno.EEXIST:
         response['err'] = {
@@ -424,15 +424,44 @@ def list_app(request, deviceId):
 
 
 """
-Application monitor [GET]
-
+Install Application [GET]
+Uninstall Application [GET]
 @date 03/25/2012
+@update 04/03/2012
 @param String deviceId
+@param String appId
+@param String status
 
 @author TKI
 """
-def install_app(request, deviceId, appId):
+def control_app(request, deviceId, appId, status):
   # send a signal to a phone
+  print "app"
+  device = Device.objects.filter(id=deviceId)
+  # if device exists, update
+  if device.count() == 1:
+    # msg = "new_manifest"
+    msg = "new_manifest"
+    #response = download_manifest(request, deviceId)
+    return download_manifest(request, deviceId)
+    #response = device[0].send_message(payload=json({"message": msg}))
+  else:
+    return HttpResponseRedirect('/error/')
+  return json_response_from(response)	
+
+"""
+Install all Applications [GET]
+Uninstall all Applications [GET]
+@date 03/25/2012
+@update 04/03/2012
+@param String deviceId
+@param String status
+
+@author TKI
+"""
+def control_apps(request, deviceId, status):
+  # send a signal to a phone
+  print "apps"
   device = Device.objects.filter(id=deviceId)
   # if device exists, update
   if device.count() == 1:
@@ -446,7 +475,6 @@ def install_app(request, deviceId, appId):
   return json_response_from(response)	
 
 
-
 """
 Insert DeviceApplication DB [POST]
 Update DeviceApplication DB [POST]
@@ -455,10 +483,10 @@ Delete DeviceApplication DB [POST]
 
 @param dev_id
 @param app_id
-@param action (install, uninstall, update, fail)
+@param action (install, uninstall, update)
 
 # Insert DeviceApplication DB using POST method
-# curl -X POST -d "device_id=123&application_id=123&action=install" http://107.20.190.88/deviceapplication/
+# curl -X POST -d "dev_id=123&app_id=123&action=install" http://107.20.190.88/deviceapplication/
 
 @api public
 
@@ -475,7 +503,7 @@ def insert_or_update_deviceapplication(request):
     }
     return json_response_from(response)
   # error checking
-  if not (request.POST.has_key('dev_id') and request.POST.has_key('app_id') and request.POST.has_key('action')):
+  if not (request.POST.has_key('dev_id') and request.POST.has_key('app_id')):
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
@@ -483,6 +511,7 @@ def insert_or_update_deviceapplication(request):
     return json_response_from(response)
   # get params from POST
   params = request.POST
+  app_ids = request.POST.getlist('app_id')
   # get device
   try:
     # if device exists

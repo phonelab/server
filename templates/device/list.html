@@ -5,7 +5,8 @@
     <tbody>
       <tr>
       <td> <strong>Installed Application</strong></td>
-      <td></td><td></td><td></td><td></td><td></td>
+      <td></td><td></td><td></td><td></td>
+      <td>(<a href='/device/{{deviceId}}/1/'><strong>All</strong></a>)</td>
       </tr><tr>
             <td><strong> name </strong> </td>
             <td><strong> package_name </strong> </td>
@@ -20,14 +21,14 @@
             <td> {{app.app_object.type}} </td>
             <td> {{app.app_object.version}} </td>
             <td> {{app.app_status}} </td>
-            <td><a href='/device/{{deviceId}}/uninstall/{{app.app_object.id}}'>Uninstall</a></td>
+            <td><a href='/device/{{deviceId}}/{{app.app_object.id}}/1/'>Uninstall</a></td>
             </tr>
         {% empty %}
         {% endfor %}
       <tr>
       <td> <strong>Uninstalled Application</strong></td>
       <td></td><td></td><td></td><td></td>
-      <td>(<a href='/device/{{deviceId}}/all/{{app.app_object.id}}'><strong>All</strong></a>)</td>
+      <td>(<a href='/device/{{deviceId}}/2/'><strong>All</strong></a>)</td>
       </tr><tr>
             <td><strong> name </strong> </td>
             <td><strong> package_name </strong> </td>
@@ -42,7 +43,7 @@
             <td> {{app.app_object.type}} </td>
             <td> {{app.app_object.version}} </td>
             <td> Uninstall </td>
-            <td><a href='/device/{{deviceId}}/install/{{app.app_object.id}}'>Install</a></td>
+            <td><a href='/device/{{deviceId}}/{{app.app_object.id}}/2/'>Install</a></td>
             </tr>
         {% empty %} 
         {% endfor %}

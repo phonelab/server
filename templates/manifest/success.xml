@@ -14,6 +14,7 @@
 
     {% for key,app in apps.items %}
     <application
+      id="{{app.app_object.id}}"
       name="{{app.app_object.name}}"
       package_name="{{app.app_object.package_name}}"
       intent_name="{{app.app_object.intent_name}}"

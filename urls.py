@@ -42,8 +42,10 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
     # List of Applications  [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/list/$', 'device.views.list_app'),
-    # Install Applications  [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/install/(?P<appId>\d+)/$', 'device.views.install_app'),
+    # Install or uninstall Application  [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<appId>\d+)/(?P<status>\d{1})/$', 'device.views.control_app'),
+    # Install or uninstall all Applications  [GET]
+    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<status>\d{1})/$', 'device.views.control_apps'),
 	# Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status
