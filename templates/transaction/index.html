@@ -21,7 +21,7 @@
          <td></td><td></td><td></td><td></td>
          </tr><tr>
          {% endif %}
-         <td><input type='checkbox' id='dev' name='dev' value='{{dev.id}}' /> {{dev.id}}</td>
+         <td><input type='checkbox' id='dev' name='dev' value='{{dev.id}}' {{ dev.get_active_display }} /> {{dev.id}}</td>
          {% if forloop.counter|divisibleby:"5" %}
            </tr><tr>
          {% endif %}
@@ -35,7 +35,7 @@
          <td></td><td></td><td></td><td></td>
          </tr><tr>
          {% endif %}
-         <td><input type='checkbox' id='app' name='app' value='{{app.id}}' /> {{app.name}}</td>
+         <td><input type='checkbox' id='app' name='app' value='{{app.id}}' {{ app.get_active_display }}/> {{app.name}}</td>
          {% if forloop.counter|divisibleby:"5" %}
            </tr><tr>
          {% endif %}

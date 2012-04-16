@@ -514,6 +514,8 @@ def insert_or_update_deviceapplication(request):
               trans.end = datetime.datetime.now()
             trans.progress += count     #progress/ total
             trans.save()
+            Device.objects.filter(id=dev).update(active="E")
+#            Application.objects.filter(id=app).update(active="E")
          # TransactionDevApp does not exist
         except TransactionDevApp.DoesNotExist:
           response['err'] = {

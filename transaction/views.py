@@ -51,7 +51,16 @@ ex) <QueryDict: {u'action': [u'0'], u'app': [u'1', u'2'], u'dev': [u'A000002A280
 #@permission_required
 def create(request):
   # define default response
+  # params checking
+  if not (request.POST.has_key('dev') and request.POST.has_key('app') \
+          and request.POST.has_key('action')):
+    response['error'] = {
+      'no' : 'err1',
+      'msg': 'missing mandatory params'
+    }
+    return json_response_from(response)
   response = { "err": "", "data": "" }
+
   dev_ids = request.POST.getlist('dev')
   app_ids = request.POST.getlist('app')
 #To do: check same transaction
@@ -74,6 +83,8 @@ def create(request):
       else:
         trndevapp.result = "N" # N is N/A
       trndevapp.save()
+      Device.objects.filter(id=dev_id).update(active="D")
+#      Application.objects.filter(id=app_id).update(active="D")
   #send "new_manifest" message to phones via C2DM
   msg = "new_manifest"
   for dev_id in dev_ids:

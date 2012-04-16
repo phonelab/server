@@ -14,6 +14,10 @@ Class Device
 @date 01/24/2012
 """
 class Device(models.Model):
+  ACTIVE_CHOICES = (
+    (u'E', u'ENABLED'),
+    (u'D', u'DISABLED'),
+  )
   id              = models.CharField(max_length=15, null=False, primary_key=True)
   email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=300, null=False)
@@ -21,6 +25,7 @@ class Device(models.Model):
   last_messaged   = models.DateTimeField(blank=True, null=True)
   failed_push     = models.BooleanField(default=False)
   update_interval = models.CharField(max_length=5, null=False, default=10)
+  active          = models.CharField(max_length=1, choices=ACTIVE_CHOICES, null=False)
   created         = models.DateTimeField(auto_now_add=True)
   updated         = models.DateTimeField(auto_now_add=True)
 
@@ -86,7 +91,6 @@ Send Message to multiple devices
 def send_multiple_messages(device_list, **kwargs):
 	for device in device_list:
 		device.send_message(kwargs)
-
 
 """
 Class DeviceApplication
