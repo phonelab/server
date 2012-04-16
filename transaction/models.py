@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from application.models import Application
 from device.models import Device
 
@@ -8,34 +9,40 @@ Class Transaction
 @date 04/06/2012
 """
 class Transaction(models.Model):
-  STATUS_CHOICES = (
-    (u'S', u'Start'),
-    (u'P', u'Progress'),
-    (u'C', u'Complete'),
-  )
+#  STATUS_CHOICES = (
+#    (u'P', u'Progress'),
+#    (u'C', u'Complete'),
+#  )
   user               = models.ForeignKey(User)
+  total              = models.IntegerField(null=False) 
+  progress           = models.IntegerField(null=False)
   # status: start, progress and complete
-  status             = models.CharField(max_length=1, choices=STATUS_CHOICES, null=False)
-  start              = models.DataTimeField(auto_now_add=True)
-  end                = models.DataTimeField()
-# last_manifest_send = models.DataTimeField()
-
+#  status             = models.CharField(max_length=1, choices=STATUS_CHOICES, null=False)
+  start              = models.DateTimeField(auto_now_add=True)
+  end                = models.DateTimeField(blank=True, null=True)
+# last_manifest_send = models.DateTimeField()
 
 """
 Class Transaction
 
 @date 04/06/2012
 """
-class Transaction(models.Model):
+class TransactionDevApp(models.Model):
 #Do To: change name
-  STATUS_CHOICES = (
-    (u'Y', u'Install'),
-    (u'N', u'Uninstall'),
+  ACTION_CHOICES = (
+    (u'I', u'Install'),
+    (u'U', u'Uninstall'),
   )
-  device = models.ForeignKey(Device)
-  app    = models.ForeignKey(Application)
-  # status: Y or N, defalut is N, which means uninstall
-  status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="N", null=False)
-#  class Meta:
-#    unique_together= (('device', 'app'),)
-
+  RESULT_CHOICES = (
+    (u'N', u'N/A'),
+    (u'S', u'Success'),
+    (u'F', u'Failure'),
+  )
+  tid      = models.ForeignKey(Transaction)
+  dev      = models.ForeignKey(Device)
+  app      = models.ForeignKey(Application)
+  # action: I or U, I means uninstall, U means uninstall
+  action   = models.CharField(max_length=1, choices=ACTION_CHOICES, null=False)
+  result   = models.CharField(max_length=1, choices=RESULT_CHOICES, default="N" , null=False)
+  class Meta:
+    unique_together= (('tid', 'dev', 'app'),)

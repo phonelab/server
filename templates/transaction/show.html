@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{% block head %}Transaction View ( {{ id }} ) {% endblock %}</h1>
+  <table class="table table-striped">
+    <tbody>
+      <tr> 
+      <td><strong> Transaction ID </strong> </td>
+      <td><strong> Device ID </strong> </td>
+      <td><strong> Application ID </strong> </td>
+      <td><strong> Action </strong> </td>
+      <td><strong> Result </strong> </td>
+      </tr>
+      {% for transdevapp in transdevapps %}
+      <tr>
+        <td>{{ transdevapp.tid_id }}</td>
+        <td>{{ transdevapp.dev_id }}</td>
+        <td>{{ transdevapp.app_id }}</td>
+        <td>{{ transdevapp.get_action_display }}</td>
+        <td>{{ transdevapp.get_result_display }}</td>
+      </tr>
+      {% empty %} There is no Transaction
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

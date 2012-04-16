@@ -42,10 +42,6 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
     # List of Applications  [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/list/$', 'device.views.list_app'),
-    # Install or uninstall Application  [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<appId>\d+)/(?P<status>\d{1})/$', 'device.views.control_app'),
-    # Install or uninstall all Applications  [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<status>\d{1})/$', 'device.views.control_apps'),
 	# Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status
@@ -66,6 +62,19 @@ if settings.DEBUG:
     url(r'^experiment/$', 'application.views.create_or_update_application'),
 
     
+    #
+    ## Transaction
+    #
+    # Get Transaction info [GET]
+    url(r'^transactions/$', 'transaction.views.index'),
+    # Get Transaction create [POST]
+    url(r'^transaction/create/$', 'transaction.views.create'),
+    # Get Transaction view [GET]
+    url(r'^transaction/(?P<Id>\w+)/(?P<Type>\d)/$', 'transaction.views.show'),
+
+
+
+    # Single Application [GET]
     #####
     ##### API Endpoints
     ##### Used by PhoneLab Application on Device

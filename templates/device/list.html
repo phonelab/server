@@ -3,53 +3,48 @@
   <h1>{% block head %}DeviceID &raquo {{deviceId}}{% endblock %}</h1>
   <table class="table table-striped">
     <tbody>
-      <tr>
-      <td> <strong>Installed Application</strong></td>
-      <td></td><td></td><td></td><td></td>
-      <td>(<a href='/device/{{deviceId}}/all/{{app.app_object.id}}'><strong>All</strong></a>)</td>
-      </tr><tr>
-            <td><strong> name </strong> </td>
-            <td><strong> package_name </strong> </td>
-            <td><strong> type </strong> </td>
-            <td><strong> version </strong> </td>
-            <td><strong> status </strong> </td>
-            <td>        </td>
-           </tr>
-        {% for key,app in apps.items %}
-            <td> {{app.app_object.name}} </td>
-            <td> {{app.app_object.package_name}} </td>
-            <td> {{app.app_object.type}} </td>
-            <td> {{app.app_object.version}} </td>
-            <td> {{app.app_status}} </td>
-            <td><a href='/device/{{deviceId}}/{{app.app_object.id}}/1/'>Uninstall</a></td>
-            </tr>
-        {% empty %}
-        {% endfor %}
-      <tr>
-      <td> <strong>Uninstalled Application</strong></td>
-      <td></td><td></td><td></td><td></td>
-      <td>(<a href='/device/{{deviceId}}/2/'><strong>All</strong></a>)</td>
-      </tr><tr>
-            <td><strong> name </strong> </td>
-            <td><strong> package_name </strong> </td>
-            <td><strong> type </strong> </td>
-            <td><strong> version </strong> </td>
-            <td><strong> status </strong> </td>
-            <td>        </td>
-           </tr>
-        {% for key,app in unapps.items %}
-            <td> {{app.app_object.name}} </td>
-            <td> {{app.app_object.package_name}} </td>
-            <td> {{app.app_object.type}} </td>
-            <td> {{app.app_object.version}} </td>
-            <td> Uninstall </td>
-            <td><a href='/device/{{deviceId}}/{{app.app_object.id}}/2/'>Install</a></td>
-            </tr>
+      {% for key,app in apps.items %}
+        {% if forloop.first %}
+          <tr>
+          <td><strong>Installed Applications</strong></td>
+          <td></td><td></td><td></td>
+          </tr>
+          <tr>
+          <td><strong> name </strong> </td>
+          <td><strong> package_name </strong> </td>
+          <td><strong> type </strong> </td>
+          <td><strong> version </strong> </td>
+          </tr>
+        {% endif %}
+        <tr>
+        <td> {{app.app_object.name}} </td>
+        <td> {{app.app_object.package_name}} </td>
+        <td> {{app.app_object.type}} </td>
+        <td> {{app.app_object.version}} </td>
+        </tr>
+      {% empty %}
+      {% endfor %}
+      {% for key,app in unapps.items %}
+        {% if forloop.first %}
+          <tr>
+          <td><strong>Uninstalled Applications</strong></td>
+          <td></td><td></td><td></td>
+          </tr>
+          <tr>
+          <td><strong> name </strong> </td>
+          <td><strong> package_name </strong> </td>
+          <td><strong> type </strong> </td>
+          <td><strong> version </strong> </td>
+          </tr>
+        {% endif %}
+        <tr>
+        <td> {{app.app_object.name}} </td>
+        <td> {{app.app_object.package_name}} </td>
+        <td> {{app.app_object.type}} </td>
+        <td> {{app.app_object.version}} </td>
+        </tr>
         {% empty %} 
         {% endfor %}
     </tbody>
   </table>
 {% endblock %}
-
-
-

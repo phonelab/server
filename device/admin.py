@@ -1,6 +1,7 @@
 from django.contrib import admin
 from device.models import Device, DeviceApplication
 from application.models import Application
+from transaction.models import Transaction, TransactionDevApp
 
 class DeviceAdmin(admin.ModelAdmin):
 #  pass	
@@ -16,6 +17,17 @@ admin.site.register(Application, ApplicationAdmin)
 
 #Todo: add function to change object name
 class DeviceApplicationAdmin(admin.ModelAdmin):
-#  list_display = ('id', 'device_id', 'app_id')
-  pass
+  list_display = ('id', 'dev', 'app')
+#  pass
 admin.site.register(DeviceApplication, DeviceApplicationAdmin)
+
+
+class TransactionAdmin(admin.ModelAdmin):
+  list_display = ('id', 'user', 'total', 'progress')
+#  pass
+admin.site.register(Transaction, TransactionAdmin)
+
+class TransactionDevAppAdmin(admin.ModelAdmin):
+  list_display = ('id', 'dev', 'app', 'action', 'result')
+#  pass
+admin.site.register(TransactionDevApp, TransactionDevAppAdmin)

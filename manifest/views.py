@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from application.models import Application
 from device.models import Device, DeviceApplication
+from transaction.models import TransactionDevApp
 from django.shortcuts import render
+from lib.helper import json_response_from, json
 
 """
 Generate Manifest based on deviceId
@@ -24,32 +26,33 @@ Generate Manifest based on deviceId
 #
 """
 def download_manifest(request, deviceId): 
-  # get device
-  device = Device.objects.filter(id=deviceId) 
-  # device exists
-  if device.count() == 1:
-    device = device[0]
+  # define default response
+  response = { "error": "", "data": "" }
+  try:
+    #if device exists
+    dev = Device.objects.get(id=deviceId) 
     app_list = {}
     apps = {}
     # get apps of particular device
-    for o in DeviceApplication.objects.filter(device=device.id).values('app', 'action'):
-      app_list[o['app']] = o['action']
+    for o in TransactionDevApp.objects.filter(dev=dev.id).filter(result="N").values('app', 'action'):
     # get list of apps to download
-    for app in Application.objects.filter(id__in=app_list.keys()):
-      apps[app.id] = {"app_object": app, "app_status": app_list[app.id]}
-    
+      for app in Application.objects.filter(id=o['app']):
+        if o['action'] == "I":
+          apps[app.id] = {"app_object": app, "app_status": "install"}
+        else:  
+          apps[app.id] = {"app_object": app, "app_status": "uninstall"}
     return render(
       request,
       'manifest/success.xml', 
       {
           'deviceId'                    : deviceId
-        , 'status_monitor_update_value' : device.update_interval
+        , 'status_monitor_update_value' : dev.update_interval
         , 'apps'                        : apps
       },
       content_type="application/xml"
     )
   # device does not exist
-  else :
+  except Device.DoesNotExist :
     return render(
       request,
         'manifest/fail.xml', 
@@ -59,3 +62,4 @@ def download_manifest(request, deviceId):
         },
         content_type="application/xml"
       )
+  return json_response_from(response)

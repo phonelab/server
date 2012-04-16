@@ -2,8 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 
+from django.contrib.auth.models import User
 from device.models import Device, DeviceApplication
 from application.models import Application
+from transaction.models import Transaction, TransactionDevApp
 
 from django.http import HttpResponse, HttpResponseRedirect
 from lib.helper import json_response_from, json
@@ -19,33 +21,66 @@ Index Transaction
 @login_required
 #@permission_required
 def index(request): 
-  # get all users
-  users = Transaction.objects.all
-
+  # get all transacts, devs, apps
+  transacts = Transaction.objects.all()
+  devs = Device.objects.all()
+  apps = Application.objects.all()
   return render_to_response(
             'transaction/index.html', 
             {
-                'users': users
+                'transacts': transacts,
+                'devs'     : devs,
+                'apps'     : apps
             },
             context_instance=RequestContext(request)
           )
-
-
 
 """
 Index Transact Creation [POST]
 
 @date 04/09/2012
 
-@param device.id
+@param dev.id
 @param app.id
+@param action  0=install, 1=uninstall
+ex) <QueryDict: {u'action': [u'0'], u'app': [u'1', u'2'], u'dev': [u'A000002A28021D', u'A000002A000000']}>
 
 @author TKI
 """
 @login_required
 #@permission_required
 def create(request):
-
+  # define default response
+  response = { "err": "", "data": "" }
+  dev_ids = request.POST.getlist('dev')
+  app_ids = request.POST.getlist('app')
+#To do: check same transaction
+  transact = Transaction()
+  transact.user = User.objects.get(id=request.POST['user'])
+  transact.total = len(dev_ids) * len(app_ids)
+  transact.progress = 0
+  #transact.end = null
+  transact.save()
+  t_id = transact.id
+  for dev_id in dev_ids:
+    for app_id in app_ids:
+      trndevapp = TransactionDevApp()
+      trndevapp.tid = Transaction.objects.get(id=t_id)
+      trndevapp.dev = Device.objects.get(id=dev_id)
+      trndevapp.app = Application.objects.get(id=app_id)
+      trndevapp.action = request.POST['action']
+      if DeviceApplication.objects.filter(dev=dev_id).filter(app=app_id):
+        trndevapp.result = "S" #S is success
+      else:
+        trndevapp.result = "N" # N is N/A
+      trndevapp.save()
+  #send "new_manifest" message to phones via C2DM
+  msg = "new_manifest"
+  for dev_id in dev_ids:
+    Device.objects.get(id=dev_id).send_message(payload=json({"message": msg}))
+  return HttpResponseRedirect('/transaction/' + str(t_id) + '/1/')
+  
+  return json_response_from(response)
 
 
 """
@@ -55,42 +90,33 @@ Index Transact history
 
 @author TKI
 """
+
 @login_required
 #@permission_required
-def show(request, deviceId): 
+#Id is userId or transId
+def show(request, Id, Type): 
   # define default response
   response = { "err": "", "data": "" }
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-  if device.count() == 1:
-    # get log data list from deviceId directory
-    path = os.path.join(RAW_LOG_ROOT, device[0].id)
-    # empty
-    filelist = {}
-    try:
-      os.chdir(path)
-      filelist = os.listdir(".")
-      default.sort_nicely(filelist)
-    except OSError, e:
-      if e.errno != errno.EEXIST:
-        response['err'] = {
-          'no' : 'err1', 
-          'msg': 'cannot change dir, failed upload'
-        }
-    
-    return render_to_response(
-  		'device/show.html', 
-  		{
-  			'device': device[0],
-  			'filelist': filelist
-  		},
-      context_instance=RequestContext(request)
-  	)
-  # device does not exist
-  else:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
+  # get transaction using userId or transId
+  # get transactionDevapp using tid
+  trans_list = {}
+  if Type == "1":
+    for o in Transaction.objects.filter(id=Id).values('id', 'user_id'):
+      trans_list[o['id']] = o['user_id']
+    id = Id
+  else: 
+    for o in Transaction.objects.filter(user=Id).values('id', 'user_id'):
+      trans_list[o['id']] = o['user_id']
+    id = User.objects.get(id=Id)
+  
+  transdevapps = TransactionDevApp.objects.filter(tid__in=trans_list.keys())
+  return render_to_response(
+    'transaction/show.html', 
+    {
+      'id'      : id,
+      'transdevapps': transdevapps
+    },
+    context_instance=RequestContext(request)
+  )
+
   return json_response_from(response)

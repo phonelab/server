@@ -94,9 +94,9 @@ Class DeviceApplication
 @date 01/24/2012
 """
 class DeviceApplication(models.Model):
-  device    = models.ForeignKey(Device)
-  app       = models.ForeignKey(Application)
+  dev    = models.ForeignKey(Device)
+  app    = models.ForeignKey(Application)
 #  action    = models.CharField(max_length=30, null=False)
   class Meta:
 #    unique_together= (('app', 'action'),)
-    unique_together= (('device', 'app'),)
+    unique_together= (('dev', 'app'),)

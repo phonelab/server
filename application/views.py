@@ -6,7 +6,8 @@ from django.utils.encoding import smart_str
 from django.shortcuts import render_to_response
 from lib.helper import json_response_from
 from django.conf import settings
-from device.models import Application, DeviceApplication
+from device.models import Device, DeviceApplication
+from application.models import Application
 import os, errno, mimetypes
 
 RAW_APP_ROOT = settings.RAW_APP_ROOT
@@ -82,18 +83,23 @@ def show(request, appId):
   # define default response
   response = { "err": "", "data": "" }
   # get application
-  app = Application.objects.filter(id=appId)
-  # application exists
-  if app.count() == 1:
+  devs = {}
+  try:
+    app = Application.objects.get(id=appId)
+    # application exists
+    for o in DeviceApplication.objects.filter(app=app):
+      devs = Device.objects.filter(id=o.dev.id)
+    
     return render_to_response(
   		'application/show.html', 
   		{
-  			'app': app[0],
+  			'app' : app,
+        'devs': devs
   		},
       context_instance=RequestContext(request)
   	)
   # application does not exist
-  else:
+  except Application.DoesNotExist:
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid application'
