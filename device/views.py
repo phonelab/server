@@ -17,6 +17,8 @@ import default
 import os, errno, re
 import datetime
 import string
+
+from itertools import chain
 # Log Dir
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
@@ -436,7 +438,7 @@ Delete DeviceApplication DB [POST]
 
 # Insert DeviceApplication DB using POST method
 # curl -X POST -d "dev_id=A000002A000000&app_id=2&app_id=3&action=I&result=S" http://107.20.190.88/deviceapplication/
-# curl -X POST -d "dev_id=A000002A000000&app_id=1&app_id=2&action=U&result=S" http://localhost:8000/deviceapplication/
+# curl -X POST -d "dev_id=A000002A000000&app_id=1&app_id=2&action=I&action=U&result=S&result=F" http://localhost:8000/deviceapplication/
 
 @author TKI
 """
@@ -460,6 +462,9 @@ def insert_or_update_deviceapplication(request):
     return json_response_from(response)
 
   app_ids = request.POST.getlist('app_id')
+  actions = request.POST.getlist('action')
+  results = request.POST.getlist('result')
+  num = 0
   # data check
   try:
     dev = Device.objects.get(id=request.POST['dev_id'])
@@ -467,9 +472,13 @@ def insert_or_update_deviceapplication(request):
       try:
         app = Application.objects.get(id=app_id)
         #if result is Success
-        if request.POST['result'] == "S":
+#        if request.POST['result'] == "S":
+        print results[num]
+        print actions[num]
+        if results[num] == "S":
           #if action is install
-          if request.POST['action'] == "I":
+#          if request.POST['action'] == "I":
+          if actions[num] == "I":
             devapp = DeviceApplication()
             if DeviceApplication.objects.filter(dev=dev).filter(app=app):
               response['err'] = {
@@ -496,21 +505,23 @@ def insert_or_update_deviceapplication(request):
         #update the result in TransactionDevApp table
         #update the status in Transaction
         try:
-          count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).update(result=request.POST['result'])
-          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=request.POST['action']):
+          count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).update(result=results[num])
+          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=actions[num]):
+#          count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).update(result=request.POST['result'])
+#          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=request.POST['action']):
             trans = Transaction.objects.get(id=i.tid.id)
             if trans.total == trans.progress + count:
               trans.end = datetime.datetime.now()
-            trans.progress += count
+            trans.progress += count     #progress/ total
             trans.save()
-          # TransactionDevApp does not exist
+         # TransactionDevApp does not exist
         except TransactionDevApp.DoesNotExist:
           response['err'] = {
             'no' : 'err1',
             'msg': 'invalid TransactionDevApp'
           }
-          return json_response_from(response)
-
+          return json_response_from(response) 
+        num = num + 1
       # application does not exist
       except Application.DoesNotExist:
         response['err'] = {

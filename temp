@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="robots" content="NONE,NOARCHIVE">
-  <title>AttributeError at /deviceapplication/</title>
+  <title>UnboundLocalError at /deviceapplication/</title>
   <style type="text/css">
     html * { padding:0; margin:0; }
     body * { padding:10px 20px; }
@@ -114,8 +114,8 @@
 </head>
 <body>
 <div id="summary">
-  <h1>AttributeError at /deviceapplication/</h1>
-  <pre class="exception_value">&#39;module&#39; object has no attribute &#39;now&#39;</pre>
+  <h1>UnboundLocalError at /deviceapplication/</h1>
+  <pre class="exception_value">local variable &#39;i&#39; referenced before assignment</pre>
   <table class="meta">
 
     <tr>
@@ -134,19 +134,19 @@
 
     <tr>
       <th>Exception Type:</th>
-      <td>AttributeError</td>
+      <td>UnboundLocalError</td>
     </tr>
 
 
     <tr>
       <th>Exception Value:</th>
-      <td><pre>&#39;module&#39; object has no attribute &#39;now&#39;</pre></td>
+      <td><pre>local variable &#39;i&#39; referenced before assignment</pre></td>
     </tr>
 
 
     <tr>
       <th>Exception Location:</th>
-      <td>/home/tki/Workspace/PhoneLab/Github/Test/server/device/views.py in insert_or_update_deviceapplication, line 503</td>
+      <td>/home/tki/Workspace/PhoneLab/Github/Test/server/device/views.py in insert_or_update_deviceapplication, line 478</td>
     </tr>
 
     <tr>
@@ -180,7 +180,7 @@
     </tr>
     <tr>
       <th>Server time:</th>
-      <td>Fri, 13 Apr 2012 13:43:21 -0500</td>
+      <td>Mon, 16 Apr 2012 12:49:35 -0500</td>
     </tr>
   </table>
 </div>
@@ -198,13 +198,13 @@
           <code>/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py</code> in <code>get_response</code>
 
           
-            <div class="context" id="c29261552">
+            <div class="context" id="c54562896">
               
-                <ol start="104" class="pre-context" id="pre29261552"><li onclick="toggle('pre29261552', 'post29261552')"><pre>                    for middleware_method in self._view_middleware:</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                        response = middleware_method(request, callback, callback_args, callback_kwargs)</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                        if response:</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                            break</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre></pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                if response is None:</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                    try:</pre></li></ol>
+                <ol start="104" class="pre-context" id="pre54562896"><li onclick="toggle('pre54562896', 'post54562896')"><pre>                    for middleware_method in self._view_middleware:</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                        response = middleware_method(request, callback, callback_args, callback_kwargs)</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                        if response:</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                            break</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre></pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                if response is None:</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                    try:</pre></li></ol>
               
-              <ol start="111" class="context-line"><li onclick="toggle('pre29261552', 'post29261552')"><pre>                        response = callback(request, *callback_args, **callback_kwargs)</pre> <span>...</span></li></ol>
+              <ol start="111" class="context-line"><li onclick="toggle('pre54562896', 'post54562896')"><pre>                        response = callback(request, *callback_args, **callback_kwargs)</pre> <span>...</span></li></ol>
               
-                <ol start='112' class="post-context" id="post29261552"><li onclick="toggle('pre29261552', 'post29261552')"><pre>                    except Exception, e:</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                        # If the view raised an exception, run it through exception</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                        # middleware, and if the exception middleware returns a</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                        # response, use that. Otherwise, reraise the exception.</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                        for middleware_method in self._exception_middleware:</pre></li><li onclick="toggle('pre29261552', 'post29261552')"><pre>                            response = middleware_method(request, e)</pre></li></ol>
+                <ol start='112' class="post-context" id="post54562896"><li onclick="toggle('pre54562896', 'post54562896')"><pre>                    except Exception, e:</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                        # If the view raised an exception, run it through exception</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                        # middleware, and if the exception middleware returns a</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                        # response, use that. Otherwise, reraise the exception.</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                        for middleware_method in self._exception_middleware:</pre></li><li onclick="toggle('pre54562896', 'post54562896')"><pre>                            response = middleware_method(request, e)</pre></li></ol>
               
             </div>
           
@@ -212,10 +212,10 @@
           
             <div class="commands">
                 
-                    <a href="#" onclick="return varToggle(this, '29261552')"><span>&#x25b6;</span> Local vars</a>
+                    <a href="#" onclick="return varToggle(this, '54562896')"><span>&#x25b6;</span> Local vars</a>
                 
             </div>
-            <table class="vars" id="v29261552">
+            <table class="vars" id="v54562896">
               <thead>
                 <tr>
                   <th>Variable</th>
@@ -231,7 +231,7 @@
                 
                   <tr>
                     <td>e</td>
-                    <td class="code"><pre>AttributeError(&quot;&#39;module&#39; object has no attribute &#39;now&#39;&quot;,)</pre></td>
+                    <td class="code"><pre>UnboundLocalError(&quot;local variable &#39;i&#39; referenced before assignment&quot;,)</pre></td>
                   </tr>
                 
                   <tr>
@@ -241,35 +241,35 @@
                 
                   <tr>
                     <td>receivers</td>
-                    <td class="code"><pre>[(&lt;function _rollback_on_exception at 0x16e3140&gt;, None)]</pre></td>
+                    <td class="code"><pre>[(&lt;function _rollback_on_exception at 0x2ebd500&gt;, None)]</pre></td>
                   </tr>
                 
                   <tr>
                     <td>middleware_method</td>
-                    <td class="code"><pre>&lt;bound method MessageMiddleware.process_request of &lt;django.contrib.messages.middleware.MessageMiddleware object at 0x1b38250&gt;&gt;</pre></td>
+                    <td class="code"><pre>&lt;bound method MessageMiddleware.process_request of &lt;django.contrib.messages.middleware.MessageMiddleware object at 0x3315210&gt;&gt;</pre></td>
                   </tr>
                 
                   <tr>
                     <td>self</td>
-                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x1901390&gt;</pre></td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x30dd610&gt;</pre></td>
                   </tr>
                 
                   <tr>
                     <td>settings</td>
-                    <td class="code"><pre>&lt;django.conf.LazySettings object at 0x10c8c10&gt;</pre></td>
+                    <td class="code"><pre>&lt;django.conf.LazySettings object at 0x28a0c50&gt;</pre></td>
                   </tr>
                 
                   <tr>
                     <td>request</td>
                     <td class="code"><pre>&lt;WSGIRequest
 GET:&lt;QueryDict: {}&gt;,
-POST:&lt;QueryDict: {u&#39;action&#39;: [u&#39;I&#39;], u&#39;dev_id&#39;: [u&#39;A000002A000000&#39;], u&#39;app_id&#39;: [u&#39;1&#39;, u&#39;2&#39;], u&#39;result&#39;: [u&#39;S&#39;]}&gt;,
+POST:&lt;QueryDict: {u&#39;action&#39;: [u&#39;I&#39;, u&#39;U&#39;], u&#39;dev_id&#39;: [u&#39;A000002A000000&#39;], u&#39;app_id&#39;: [u&#39;1&#39;, u&#39;2&#39;], u&#39;result&#39;: [u&#39;S&#39;, u&#39;F&#39;]}&gt;,
 COOKIES:{},
 META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
  &#39;COMPIZ_CONFIG_PROFILE&#39;: &#39;ubuntu&#39;,
- &#39;CONTENT_LENGTH&#39;: &#39;57&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;75&#39;,
  &#39;CONTENT_TYPE&#39;: &#39;application/x-www-form-urlencoded&#39;,
- &#39;DBUS_SESSION_BUS_ADDRESS&#39;: &#39;unix:abstract=/tmp/dbus-xEW7GoovTX,guid=33d887ac839e4ae578a306d400000a84&#39;,
+ &#39;DBUS_SESSION_BUS_ADDRESS&#39;: &#39;unix:abstract=/tmp/dbus-Pa5gl0zrK7,guid=09230df649cf1edba2731d0e00000021&#39;,
  &#39;DEFAULTS_PATH&#39;: &#39;/usr/share/gconf/ubuntu.default.path&#39;,
  &#39;DESKTOP_SESSION&#39;: &#39;ubuntu&#39;,
  &#39;DISPLAY&#39;: &#39;:0&#39;,
@@ -277,15 +277,16 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
  &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
  &#39;GDMSESSION&#39;: &#39;ubuntu&#39;,
  &#39;GNOME_DESKTOP_SESSION_ID&#39;: &#39;this-is-deprecated&#39;,
- &#39;GNOME_KEYRING_CONTROL&#39;: &#39;/tmp/keyring-7pzhHa&#39;,
- &#39;GNOME_KEYRING_PID&#39;: &#39;2845&#39;,
- &#39;GPG_AGENT_INFO&#39;: &#39;/tmp/keyring-7pzhHa/gpg:0:1&#39;,
+ &#39;GNOME_KEYRING_CONTROL&#39;: &#39;/tmp/keyring-wuzQzf&#39;,
+ &#39;GNOME_KEYRING_PID&#39;: &#39;1710&#39;,
+ &#39;GPG_AGENT_INFO&#39;: &#39;/tmp/keyring-wuzQzf/gpg:0:1&#39;,
  &#39;GTK_IM_MODULE&#39;: &#39;xim&#39;,
  &#39;GTK_MODULES&#39;: &#39;canberra-gtk-module:canberra-gtk-module&#39;,
  &#39;HOME&#39;: &#39;/home/tki&#39;,
  &#39;HTTP_ACCEPT&#39;: &#39;*/*&#39;,
  &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
  &#39;HTTP_USER_AGENT&#39;: &#39;curl/7.21.6 (x86_64-pc-linux-gnu) libcurl/7.21.6 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 librtmp/2.3&#39;,
+ &#39;IBUS_ENABLE_SYNC_MODE&#39;: &#39;1&#39;,
  &#39;LANG&#39;: &#39;en_US.UTF-8&#39;,
  &#39;LANGUAGE&#39;: &#39;en_US:en&#39;,
  &#39;LC_COLLATE&#39;: &#39;en_US.UTF-8&#39;,
@@ -309,30 +310,30 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
  &#39;SERVER_PORT&#39;: &#39;8000&#39;,
  &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
  &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.2+&#39;,
- &#39;SESSION_MANAGER&#39;: &#39;local/Ubuntu:@/tmp/.ICE-unix/2854,unix/Ubuntu:/tmp/.ICE-unix/2854&#39;,
+ &#39;SESSION_MANAGER&#39;: &#39;local/Ubuntu:@/tmp/.ICE-unix/1719,unix/Ubuntu:/tmp/.ICE-unix/1719&#39;,
  &#39;SHELL&#39;: &#39;/bin/bash&#39;,
  &#39;SHLVL&#39;: &#39;1&#39;,
- &#39;SSH_AGENT_PID&#39;: &#39;2888&#39;,
- &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/keyring-7pzhHa/ssh&#39;,
+ &#39;SSH_AGENT_PID&#39;: &#39;1753&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/keyring-wuzQzf/ssh&#39;,
  &#39;TERM&#39;: &#39;xterm&#39;,
  &#39;TZ&#39;: &#39;America/Chicago&#39;,
  &#39;UBUNTU_MENUPROXY&#39;: &#39;libappmenu.so&#39;,
  &#39;USER&#39;: &#39;tki&#39;,
  &#39;USERNAME&#39;: &#39;tki&#39;,
  &#39;USE_CCACHE&#39;: &#39;1&#39;,
- &#39;WINDOWID&#39;: &#39;41943046&#39;,
+ &#39;WINDOWID&#39;: &#39;58720262&#39;,
  &#39;XAUTHORITY&#39;: &#39;/home/tki/.Xauthority&#39;,
  &#39;XDG_CONFIG_DIRS&#39;: &#39;/etc/xdg/xdg-ubuntu:/etc/xdg&#39;,
  &#39;XDG_CURRENT_DESKTOP&#39;: &#39;Unity&#39;,
  &#39;XDG_DATA_DIRS&#39;: &#39;/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/&#39;,
  &#39;XDG_SEAT_PATH&#39;: &#39;/org/freedesktop/DisplayManager/Seat0&#39;,
- &#39;XDG_SESSION_COOKIE&#39;: &#39;2c41f6b3cc86313ef40c84680000000a-1333997890.874874-1379899066&#39;,
+ &#39;XDG_SESSION_COOKIE&#39;: &#39;2c41f6b3cc86313ef40c84680000000a-1334596446.97288-1726985973&#39;,
  &#39;XDG_SESSION_PATH&#39;: &#39;/org/freedesktop/DisplayManager/Session0&#39;,
  &#39;XMODIFIERS&#39;: &#39;@im=nabi&#39;,
  &#39;_&#39;: &#39;/usr/bin/python&#39;,
- &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x7ffd6056f270&gt;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x7f74705f9270&gt;,
  &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
- &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x1c05f50&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x34a9ed0&gt;,
  &#39;wsgi.multiprocess&#39;: False,
  &#39;wsgi.multithread&#39;: True,
  &#39;wsgi.run_once&#39;: False,
@@ -342,7 +343,7 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
                 
                   <tr>
                     <td>callback</td>
-                    <td class="code"><pre>&lt;function insert_or_update_deviceapplication at 0x1ca7aa0&gt;</pre></td>
+                    <td class="code"><pre>&lt;function insert_or_update_deviceapplication at 0x34a1758&gt;</pre></td>
                   </tr>
                 
                   <tr>
@@ -379,13 +380,13 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
           <code>/home/tki/Workspace/PhoneLab/Github/Test/server/device/views.py</code> in <code>insert_or_update_deviceapplication</code>
 
           
-            <div class="context" id="c29435304">
+            <div class="context" id="c52924216">
               
-                <ol start="496" class="pre-context" id="pre29435304"><li onclick="toggle('pre29435304', 'post29435304')"><pre>        #update the result in TransactionDevApp table</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>        #update the status in Transaction</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>        try:</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>          count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).update(result=request.POST[&#39;result&#39;])</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=request.POST[&#39;action&#39;]):</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>            trans = Transaction.objects.get(id=i.tid.id)</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>            if trans.total == trans.progress + count:</pre></li></ol>
+                <ol start="471" class="pre-context" id="pre52924216"><li onclick="toggle('pre52924216', 'post52924216')"><pre>    for app_id in app_ids:</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>      try:</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>        app = Application.objects.get(id=app_id)</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>        #if result is Success</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>#        if request.POST[&#39;result&#39;] == &quot;S&quot;:</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>        print results[num]</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>        print actions[num]</pre></li></ol>
               
-              <ol start="503" class="context-line"><li onclick="toggle('pre29435304', 'post29435304')"><pre>              trans.end = datetime.now()</pre> <span>...</span></li></ol>
+              <ol start="478" class="context-line"><li onclick="toggle('pre52924216', 'post52924216')"><pre>        if results[i] == &quot;S&quot;:</pre> <span>...</span></li></ol>
               
-                <ol start='504' class="post-context" id="post29435304"><li onclick="toggle('pre29435304', 'post29435304')"><pre>            trans.progress += count</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>            trans.save()</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>          # TransactionDevApp does not exist</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>        except TransactionDevApp.DoesNotExist:</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>          response[&#39;err&#39;] = {</pre></li><li onclick="toggle('pre29435304', 'post29435304')"><pre>            &#39;no&#39; : &#39;err1&#39;,</pre></li></ol>
+                <ol start='479' class="post-context" id="post52924216"><li onclick="toggle('pre52924216', 'post52924216')"><pre>          #if action is install</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>#          if request.POST[&#39;action&#39;] == &quot;I&quot;:</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>          if actions[i] == &quot;I&quot;:</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>            devapp = DeviceApplication()</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>            if DeviceApplication.objects.filter(dev=dev).filter(app=app):</pre></li><li onclick="toggle('pre52924216', 'post52924216')"><pre>              response[&#39;err&#39;] = {</pre></li></ol>
               
             </div>
           
@@ -393,10 +394,10 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
           
             <div class="commands">
                 
-                    <a href="#" onclick="return varToggle(this, '29435304')"><span>&#x25b6;</span> Local vars</a>
+                    <a href="#" onclick="return varToggle(this, '52924216')"><span>&#x25b6;</span> Local vars</a>
                 
             </div>
-            <table class="vars" id="v29435304">
+            <table class="vars" id="v52924216">
               <thead>
                 <tr>
                   <th>Variable</th>
@@ -404,16 +405,6 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
                 </tr>
               </thead>
               <tbody>
-                
-                  <tr>
-                    <td>count</td>
-                    <td class="code"><pre>1L</pre></td>
-                  </tr>
-                
-                  <tr>
-                    <td>i</td>
-                    <td class="code"><pre>&lt;TransactionDevApp: TransactionDevApp object&gt;</pre></td>
-                  </tr>
                 
                   <tr>
                     <td>app</td>
@@ -424,13 +415,13 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
                     <td>request</td>
                     <td class="code"><pre>&lt;WSGIRequest
 GET:&lt;QueryDict: {}&gt;,
-POST:&lt;QueryDict: {u&#39;action&#39;: [u&#39;I&#39;], u&#39;dev_id&#39;: [u&#39;A000002A000000&#39;], u&#39;app_id&#39;: [u&#39;1&#39;, u&#39;2&#39;], u&#39;result&#39;: [u&#39;S&#39;]}&gt;,
+POST:&lt;QueryDict: {u&#39;action&#39;: [u&#39;I&#39;, u&#39;U&#39;], u&#39;dev_id&#39;: [u&#39;A000002A000000&#39;], u&#39;app_id&#39;: [u&#39;1&#39;, u&#39;2&#39;], u&#39;result&#39;: [u&#39;S&#39;, u&#39;F&#39;]}&gt;,
 COOKIES:{},
 META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
  &#39;COMPIZ_CONFIG_PROFILE&#39;: &#39;ubuntu&#39;,
- &#39;CONTENT_LENGTH&#39;: &#39;57&#39;,
+ &#39;CONTENT_LENGTH&#39;: &#39;75&#39;,
  &#39;CONTENT_TYPE&#39;: &#39;application/x-www-form-urlencoded&#39;,
- &#39;DBUS_SESSION_BUS_ADDRESS&#39;: &#39;unix:abstract=/tmp/dbus-xEW7GoovTX,guid=33d887ac839e4ae578a306d400000a84&#39;,
+ &#39;DBUS_SESSION_BUS_ADDRESS&#39;: &#39;unix:abstract=/tmp/dbus-Pa5gl0zrK7,guid=09230df649cf1edba2731d0e00000021&#39;,
  &#39;DEFAULTS_PATH&#39;: &#39;/usr/share/gconf/ubuntu.default.path&#39;,
  &#39;DESKTOP_SESSION&#39;: &#39;ubuntu&#39;,
  &#39;DISPLAY&#39;: &#39;:0&#39;,
@@ -438,15 +429,16 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
  &#39;GATEWAY_INTERFACE&#39;: &#39;CGI/1.1&#39;,
  &#39;GDMSESSION&#39;: &#39;ubuntu&#39;,
  &#39;GNOME_DESKTOP_SESSION_ID&#39;: &#39;this-is-deprecated&#39;,
- &#39;GNOME_KEYRING_CONTROL&#39;: &#39;/tmp/keyring-7pzhHa&#39;,
- &#39;GNOME_KEYRING_PID&#39;: &#39;2845&#39;,
- &#39;GPG_AGENT_INFO&#39;: &#39;/tmp/keyring-7pzhHa/gpg:0:1&#39;,
+ &#39;GNOME_KEYRING_CONTROL&#39;: &#39;/tmp/keyring-wuzQzf&#39;,
+ &#39;GNOME_KEYRING_PID&#39;: &#39;1710&#39;,
+ &#39;GPG_AGENT_INFO&#39;: &#39;/tmp/keyring-wuzQzf/gpg:0:1&#39;,
  &#39;GTK_IM_MODULE&#39;: &#39;xim&#39;,
  &#39;GTK_MODULES&#39;: &#39;canberra-gtk-module:canberra-gtk-module&#39;,
  &#39;HOME&#39;: &#39;/home/tki&#39;,
  &#39;HTTP_ACCEPT&#39;: &#39;*/*&#39;,
  &#39;HTTP_HOST&#39;: &#39;localhost:8000&#39;,
  &#39;HTTP_USER_AGENT&#39;: &#39;curl/7.21.6 (x86_64-pc-linux-gnu) libcurl/7.21.6 OpenSSL/1.0.0e zlib/1.2.3.4 libidn/1.22 librtmp/2.3&#39;,
+ &#39;IBUS_ENABLE_SYNC_MODE&#39;: &#39;1&#39;,
  &#39;LANG&#39;: &#39;en_US.UTF-8&#39;,
  &#39;LANGUAGE&#39;: &#39;en_US:en&#39;,
  &#39;LC_COLLATE&#39;: &#39;en_US.UTF-8&#39;,
@@ -470,30 +462,30 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
  &#39;SERVER_PORT&#39;: &#39;8000&#39;,
  &#39;SERVER_PROTOCOL&#39;: &#39;HTTP/1.1&#39;,
  &#39;SERVER_SOFTWARE&#39;: &#39;WSGIServer/0.1 Python/2.7.2+&#39;,
- &#39;SESSION_MANAGER&#39;: &#39;local/Ubuntu:@/tmp/.ICE-unix/2854,unix/Ubuntu:/tmp/.ICE-unix/2854&#39;,
+ &#39;SESSION_MANAGER&#39;: &#39;local/Ubuntu:@/tmp/.ICE-unix/1719,unix/Ubuntu:/tmp/.ICE-unix/1719&#39;,
  &#39;SHELL&#39;: &#39;/bin/bash&#39;,
  &#39;SHLVL&#39;: &#39;1&#39;,
- &#39;SSH_AGENT_PID&#39;: &#39;2888&#39;,
- &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/keyring-7pzhHa/ssh&#39;,
+ &#39;SSH_AGENT_PID&#39;: &#39;1753&#39;,
+ &#39;SSH_AUTH_SOCK&#39;: &#39;/tmp/keyring-wuzQzf/ssh&#39;,
  &#39;TERM&#39;: &#39;xterm&#39;,
  &#39;TZ&#39;: &#39;America/Chicago&#39;,
  &#39;UBUNTU_MENUPROXY&#39;: &#39;libappmenu.so&#39;,
  &#39;USER&#39;: &#39;tki&#39;,
  &#39;USERNAME&#39;: &#39;tki&#39;,
  &#39;USE_CCACHE&#39;: &#39;1&#39;,
- &#39;WINDOWID&#39;: &#39;41943046&#39;,
+ &#39;WINDOWID&#39;: &#39;58720262&#39;,
  &#39;XAUTHORITY&#39;: &#39;/home/tki/.Xauthority&#39;,
  &#39;XDG_CONFIG_DIRS&#39;: &#39;/etc/xdg/xdg-ubuntu:/etc/xdg&#39;,
  &#39;XDG_CURRENT_DESKTOP&#39;: &#39;Unity&#39;,
  &#39;XDG_DATA_DIRS&#39;: &#39;/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/&#39;,
  &#39;XDG_SEAT_PATH&#39;: &#39;/org/freedesktop/DisplayManager/Seat0&#39;,
- &#39;XDG_SESSION_COOKIE&#39;: &#39;2c41f6b3cc86313ef40c84680000000a-1333997890.874874-1379899066&#39;,
+ &#39;XDG_SESSION_COOKIE&#39;: &#39;2c41f6b3cc86313ef40c84680000000a-1334596446.97288-1726985973&#39;,
  &#39;XDG_SESSION_PATH&#39;: &#39;/org/freedesktop/DisplayManager/Session0&#39;,
  &#39;XMODIFIERS&#39;: &#39;@im=nabi&#39;,
  &#39;_&#39;: &#39;/usr/bin/python&#39;,
- &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x7ffd6056f270&gt;,
+ &#39;wsgi.errors&#39;: &lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x7f74705f9270&gt;,
  &#39;wsgi.file_wrapper&#39;: &lt;class &#39;django.core.servers.basehttp.FileWrapper&#39;&gt;,
- &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x1c05f50&gt;,
+ &#39;wsgi.input&#39;: &lt;socket._fileobject object at 0x34a9ed0&gt;,
  &#39;wsgi.multiprocess&#39;: False,
  &#39;wsgi.multithread&#39;: True,
  &#39;wsgi.run_once&#39;: False,
@@ -503,7 +495,22 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
                 
                   <tr>
                     <td>app_id</td>
-                    <td class="code"><pre>u&#39;2&#39;</pre></td>
+                    <td class="code"><pre>u&#39;1&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>actions</td>
+                    <td class="code"><pre>[u&#39;I&#39;, u&#39;U&#39;]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>results</td>
+                    <td class="code"><pre>[u&#39;S&#39;, u&#39;F&#39;]</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>num</td>
+                    <td class="code"><pre>0</pre></td>
                   </tr>
                 
                   <tr>
@@ -512,23 +519,13 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
                   </tr>
                 
                   <tr>
-                    <td>devapp</td>
-                    <td class="code"><pre>&lt;DeviceApplication: DeviceApplication object&gt;</pre></td>
+                    <td>response</td>
+                    <td class="code"><pre>{&#39;data&#39;: &#39;&#39;, &#39;error&#39;: &#39;&#39;}</pre></td>
                   </tr>
                 
                   <tr>
                     <td>app_ids</td>
                     <td class="code"><pre>[u&#39;1&#39;, u&#39;2&#39;]</pre></td>
-                  </tr>
-                
-                  <tr>
-                    <td>trans</td>
-                    <td class="code"><pre>&lt;Transaction: Transaction object&gt;</pre></td>
-                  </tr>
-                
-                  <tr>
-                    <td>response</td>
-                    <td class="code"><pre>{&#39;data&#39;: &#39;&#39;, &#39;error&#39;: &#39;&#39;}</pre></td>
                   </tr>
                 
               </tbody>
@@ -543,7 +540,7 @@ META:{&#39;COLORTERM&#39;: &#39;gnome-terminal&#39;,
 
   <div id="pastebinTraceback" class="pastebin">
     <input type="hidden" name="language" value="PythonConsole">
-    <input type="hidden" name="title" value="AttributeError at /deviceapplication/">
+    <input type="hidden" name="title" value="UnboundLocalError at /deviceapplication/">
     <input type="hidden" name="source" value="Django Dpaste Agent">
     <input type="hidden" name="poster" value="Django">
     <textarea name="content" id="traceback_area" cols="140" rows="25">
@@ -580,10 +577,10 @@ Traceback:
 File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py" in get_response
   111.                         response = callback(request, *callback_args, **callback_kwargs)
 File "/home/tki/Workspace/PhoneLab/Github/Test/server/device/views.py" in insert_or_update_deviceapplication
-  503.               trans.end = datetime.now()
+  478.         if results[i] == &quot;S&quot;:
 
-Exception Type: AttributeError at /deviceapplication/
-Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
+Exception Type: UnboundLocalError at /deviceapplication/
+Exception Value: local variable &#39;i&#39; referenced before assignment
 </textarea>
   <br><br>
   <input type="submit" value="Share this traceback on a public Web site">
@@ -615,7 +612,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
         
           <tr>
             <td>action</td>
-            <td class="code"><pre>u&#39;I&#39;</pre></td>
+            <td class="code"><pre>u&#39;U&#39;</pre></td>
           </tr>
         
           <tr>
@@ -630,7 +627,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
         
           <tr>
             <td>result</td>
-            <td class="code"><pre>u&#39;S&#39;</pre></td>
+            <td class="code"><pre>u&#39;F&#39;</pre></td>
           </tr>
         
       </tbody>
@@ -729,7 +726,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>GNOME_KEYRING_CONTROL</td>
-          <td class="code"><pre>&#39;/tmp/keyring-7pzhHa&#39;</pre></td>
+          <td class="code"><pre>&#39;/tmp/keyring-wuzQzf&#39;</pre></td>
         </tr>
       
         <tr>
@@ -739,7 +736,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>SSH_AGENT_PID</td>
-          <td class="code"><pre>&#39;2888&#39;</pre></td>
+          <td class="code"><pre>&#39;1753&#39;</pre></td>
         </tr>
       
         <tr>
@@ -774,7 +771,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>SESSION_MANAGER</td>
-          <td class="code"><pre>&#39;local/Ubuntu:@/tmp/.ICE-unix/2854,unix/Ubuntu:/tmp/.ICE-unix/2854&#39;</pre></td>
+          <td class="code"><pre>&#39;local/Ubuntu:@/tmp/.ICE-unix/1719,unix/Ubuntu:/tmp/.ICE-unix/1719&#39;</pre></td>
         </tr>
       
         <tr>
@@ -804,7 +801,12 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>WINDOWID</td>
-          <td class="code"><pre>&#39;41943046&#39;</pre></td>
+          <td class="code"><pre>&#39;58720262&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>IBUS_ENABLE_SYNC_MODE</td>
+          <td class="code"><pre>&#39;1&#39;</pre></td>
         </tr>
       
         <tr>
@@ -819,7 +821,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>GPG_AGENT_INFO</td>
-          <td class="code"><pre>&#39;/tmp/keyring-7pzhHa/gpg:0:1&#39;</pre></td>
+          <td class="code"><pre>&#39;/tmp/keyring-wuzQzf/gpg:0:1&#39;</pre></td>
         </tr>
       
         <tr>
@@ -834,7 +836,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>CONTENT_LENGTH</td>
-          <td class="code"><pre>&#39;57&#39;</pre></td>
+          <td class="code"><pre>&#39;75&#39;</pre></td>
         </tr>
       
         <tr>
@@ -849,7 +851,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>SSH_AUTH_SOCK</td>
-          <td class="code"><pre>&#39;/tmp/keyring-7pzhHa/ssh&#39;</pre></td>
+          <td class="code"><pre>&#39;/tmp/keyring-wuzQzf/ssh&#39;</pre></td>
         </tr>
       
         <tr>
@@ -879,7 +881,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>GNOME_KEYRING_PID</td>
-          <td class="code"><pre>&#39;2845&#39;</pre></td>
+          <td class="code"><pre>&#39;1710&#39;</pre></td>
         </tr>
       
         <tr>
@@ -889,7 +891,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>XDG_SESSION_COOKIE</td>
-          <td class="code"><pre>&#39;2c41f6b3cc86313ef40c84680000000a-1333997890.874874-1379899066&#39;</pre></td>
+          <td class="code"><pre>&#39;2c41f6b3cc86313ef40c84680000000a-1334596446.97288-1726985973&#39;</pre></td>
         </tr>
       
         <tr>
@@ -899,7 +901,7 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>DBUS_SESSION_BUS_ADDRESS</td>
-          <td class="code"><pre>&#39;unix:abstract=/tmp/dbus-xEW7GoovTX,guid=33d887ac839e4ae578a306d400000a84&#39;</pre></td>
+          <td class="code"><pre>&#39;unix:abstract=/tmp/dbus-Pa5gl0zrK7,guid=09230df649cf1edba2731d0e00000021&#39;</pre></td>
         </tr>
       
         <tr>
@@ -964,12 +966,12 @@ Exception Value: &#39;module&#39; object has no attribute &#39;now&#39;
       
         <tr>
           <td>wsgi.input</td>
-          <td class="code"><pre>&lt;socket._fileobject object at 0x1c05f50&gt;</pre></td>
+          <td class="code"><pre>&lt;socket._fileobject object at 0x34a9ed0&gt;</pre></td>
         </tr>
       
         <tr>
           <td>wsgi.errors</td>
-          <td class="code"><pre>&lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x7ffd6056f270&gt;</pre></td>
+          <td class="code"><pre>&lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x7f74705f9270&gt;</pre></td>
         </tr>
       
         <tr>
