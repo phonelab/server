@@ -170,7 +170,7 @@ if ENV == "production":
     # Add gunicorn
     INSTALLED_APPS += ("gunicorn",)
     from config_production import *
-else:
+elif ENV == "staging":
     # Log Path
     RAW_LOG_ROOT = os.path.join("/mnt", 'datalogger', 'logs')
     # Log Path
