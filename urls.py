@@ -74,7 +74,6 @@ if settings.DEBUG:
 
 
 
-    # Single Application [GET]
     #####
     ##### API Endpoints
     ##### Used by PhoneLab Application on Device
@@ -82,13 +81,20 @@ if settings.DEBUG:
 
     #
     ## Device
+    
     #
     # New device registration [POST]
     # Update Previous device registration [POST]
+    # Accepts: {}
+    # Response : {}
     url(r'^device/$', 'device.views.create_or_update_device'),
-    # Insert DeviceApplication DB [POST]
-    # Update Previous DeviceApplication DB [POST]
+    
+    # Insert transaction related [POST]
+    # Update transaction related [POST]
+    # Accepts: {}
+    # Response : {}
     url(r'^deviceapplication/$', 'device.views.insert_or_update_deviceapplication'),
+    
     # Device Status [POST]
     #url(r'^devicestatus/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.device_status'),
 

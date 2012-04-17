@@ -6,7 +6,7 @@ import django
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 ## Note: These variables are overridden
-## below if production
+## below if production and staging
 # Log Path
 RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 # Application Path
@@ -160,6 +160,9 @@ LOGOUT_URL = '/logout/'
 # database vars
 # production vars
 if ENV == "production":
+    # TODO
+    # need to move all this stuff to S3
+    
     # Log Path
     RAW_LOG_ROOT = os.path.join("/mnt", 'datalogger', 'logs')
     # Log Path
@@ -168,6 +171,14 @@ if ENV == "production":
     INSTALLED_APPS += ("gunicorn",)
     from config_production import *
 else:
-    from config_development_stub import *
+    # Log Path
+    RAW_LOG_ROOT = os.path.join("/mnt", 'datalogger', 'logs')
+    # Log Path
+    RAW_APP_ROOT = os.path.join("/mnt", 'apps')
+    # Add gunicorn
+    INSTALLED_APPS += ("gunicorn",)
+    from config_staging import *
+else:
+    from config_development import *
 
 TEMPLATE_DEBUG = DEBUG
