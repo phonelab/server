@@ -1,3 +1,5 @@
+import os
+
 DATABASE_ENGINE = 'django.db.backends.sqlite3'
 DATABASE_NAME = os.path.join(SITE_ROOT) + '/server.sqlite3'
 
