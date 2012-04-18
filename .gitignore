@@ -2,7 +2,6 @@
 *.log
 *.pot
 *.pyc
-fabfile.py
 server.sqlite3
 config_development.py
 config_production.py
