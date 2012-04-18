@@ -472,12 +472,8 @@ def insert_or_update_deviceapplication(request):
       try:
         app = Application.objects.get(id=app_id)
         #if result is Success
-#        if request.POST['result'] == "S":
-        print results[num]
-        print actions[num]
         if results[num] == "S":
           #if action is install
-#          if request.POST['action'] == "I":
           if actions[num] == "I":
             devapp = DeviceApplication()
             if DeviceApplication.objects.filter(dev=dev).filter(app=app):
@@ -505,18 +501,16 @@ def insert_or_update_deviceapplication(request):
         #update the result in TransactionDevApp table
         #update the status in Transaction
         try:
-          count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).update(result=results[num])
-          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=actions[num]):
-#          count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).update(result=request.POST['result'])
-#          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=request.POST['action']):
+          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N"):
+            count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N").update(result=results[num])
             trans = Transaction.objects.get(id=i.tid.id)
-            if trans.total == trans.progress + count:
+            if trans.total ==  trans.progress + count:
               trans.end = datetime.datetime.now()
             trans.progress += count     #progress/ total
             trans.save()
             Device.objects.filter(id=dev).update(active="E")
 #            Application.objects.filter(id=app).update(active="E")
-         # TransactionDevApp does not exist
+        # TransactionDevApp does not exist
         except TransactionDevApp.DoesNotExist:
           response['err'] = {
             'no' : 'err1',

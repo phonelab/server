@@ -59,7 +59,7 @@ if settings.DEBUG:
     # Edit Application Form [GET]
     #url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/edit/$', 'application.views.edit'),
     # Create/Update Application [POST]
-    url(r'^experiment/up/$', 'application.views.create_or_update_application'),
+    url(r'^experiment/$', 'application.views.create_or_update_application'),
 
     
     #

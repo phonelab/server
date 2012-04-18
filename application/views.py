@@ -160,6 +160,8 @@ def create_or_update_application(request):
     if (request.POST):
       filename = os.path.join(RAW_APP_ROOT, str(app.id) + ".apk")
       filedir = os.path.dirname(filename)
+      print filename
+      print filedir
       # create folder for user if it doesn`t exist
       try:
         os.mkdir(filedir)

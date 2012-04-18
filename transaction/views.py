@@ -51,6 +51,14 @@ ex) <QueryDict: {u'action': [u'0'], u'app': [u'1', u'2'], u'dev': [u'A000002A280
 #@permission_required
 def create(request):
   # define default response
+  response = { "err": "", "data": "" }
+  # return if GET request
+  if request.method == 'GET':
+    response['err'] = {
+      'no' : 'err0',
+      'msg': 'sorry no gets'
+    }
+    return HttpResponseRedirect('/error/')
   # params checking
   if not (request.POST.has_key('dev') and request.POST.has_key('app') \
           and request.POST.has_key('action')):
@@ -59,7 +67,6 @@ def create(request):
       'msg': 'missing mandatory params'
     }
     return json_response_from(response)
-  response = { "err": "", "data": "" }
 
   dev_ids = request.POST.getlist('dev')
   app_ids = request.POST.getlist('app')
@@ -78,10 +85,7 @@ def create(request):
       trndevapp.dev = Device.objects.get(id=dev_id)
       trndevapp.app = Application.objects.get(id=app_id)
       trndevapp.action = request.POST['action']
-      if DeviceApplication.objects.filter(dev=dev_id).filter(app=app_id):
-        trndevapp.result = "S" #S is success
-      else:
-        trndevapp.result = "N" # N is N/A
+      trndevapp.result = "N" # N is N/A
       trndevapp.save()
       Device.objects.filter(id=dev_id).update(active="D")
 #      Application.objects.filter(id=app_id).update(active="D")
@@ -131,3 +135,9 @@ def show(request, Id, Type):
   )
 
   return json_response_from(response)
+
+
+
+
+
+
