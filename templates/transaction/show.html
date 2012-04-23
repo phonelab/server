@@ -9,17 +9,22 @@
       <td><strong> Application ID </strong> </td>
       <td><strong> Action </strong> </td>
       <td><strong> Result </strong> </td>
+      <td><strong> Start Time </strong> </td>
+      <td><strong> End Time </strong> </td>
       </tr>
       {% for transdevapp in transdevapps %}
       <tr>
         <td>{{ transdevapp.tid_id }}</td>
-        <td>{{ transdevapp.dev_id }}</td>
-        <td>{{ transdevapp.app_id }}</td>
+        <td><a href="/device/{{ transdevapp.dev_id }}">{{ transdevapp.dev_id }}</a></td>
+        <td><a href="/experiment/{{ transdevapp.app_id }}">{{ transdevapp.app_id }}</a></td>
         <td>{{ transdevapp.get_action_display }}</td>
         <td>{{ transdevapp.get_result_display }}</td>
+        <td>{{ transdevapp.start }}</td>
+        <td>{{ transdevapp.end }}</td>
       </tr>
       {% empty %} There is no Transaction
       {% endfor %}
     </tbody>
   </table>
 {% endblock %}
+

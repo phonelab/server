@@ -70,7 +70,6 @@ def create(request):
 
   dev_ids = request.POST.getlist('dev')
   app_ids = request.POST.getlist('app')
-#To do: check same transaction
   transact = Transaction()
   transact.user = User.objects.get(id=request.POST['user'])
   transact.total = len(dev_ids) * len(app_ids)
@@ -80,6 +79,26 @@ def create(request):
   t_id = transact.id
   for dev_id in dev_ids:
     for app_id in app_ids:
+      #TODO: change logic
+      #check FailureAlready(F1)
+      if DeviceApplication.objects.filter(dev=dev).filter(app=app) \
+         and request.POST['action'] == "I":
+        print "F1"
+        response['err'] = {
+          'no' : 'err1',
+          'msg': 'The application is already installed'
+        }
+        return json_response_from(response)
+       
+      #check FailureNoSuchApplication(F2)
+      if not DeviceApplication.objects.filter(dev=dev).filter(app=app) \
+         and request.POST['action'] == "U":
+        print "F2"
+        response['err'] = {
+          'no' : 'err1',
+          'msg': 'The phone does not have the application to uninstall'
+        }
+        return json_response_from(response)
       trndevapp = TransactionDevApp()
       trndevapp.tid = Transaction.objects.get(id=t_id)
       trndevapp.dev = Device.objects.get(id=dev_id)
@@ -141,3 +160,56 @@ def show(request, Id, Type):
 
 
 
+            devapp.app = app  
+            devapp.dev = dev
+            devapp.save()
+          else: 
+          #if action is uninstall
+            try:
+              devapp = DeviceApplication.objects.filter(dev=dev).filter(app=app)
+              devapp.delete()
+            # deviceapplication does not exist
+            except DeviceApplication.DoesNotExist:
+              response['err'] = {
+                'no' : 'err1',
+                'msg': 'invalid deviceapplication'
+              }
+              return json_response_from(response)
+           
+        #update the result in TransactionDevApp table
+        #update the status in Transaction
+        try:
+          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N"):
+            count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N").update(result=results[num])
+            trans = Transaction.objects.get(id=i.tid.id)
+            if trans.total ==  trans.progress + count:
+              trans.end = datetime.datetime.now()
+            trans.progress += count     #progress/ total
+            trans.save()
+            if not TransactionDevApp.objects.filter(dev=dev).filter(result="N"):
+              Device.objects.filter(id=dev).update(active="E")
+#            Application.objects.filter(id=app).update(active="E")
+        # TransactionDevApp does not exist
+        except TransactionDevApp.DoesNotExist:
+          response['err'] = {
+            'no' : 'err1',
+            'msg': 'invalid TransactionDevApp'
+          }
+          return json_response_from(response) 
+        num = num + 1
+      # application does not exist
+      except Application.DoesNotExist:
+        response['err'] = {
+          'no' : 'err1',
+          'msg': 'invalid application'
+        }
+        return json_response_from(response)
+  # device does not exist
+  except Device.DoesNotExist:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+      }
+    return json_response_from(response)
+  
+  return json_response_from(response)

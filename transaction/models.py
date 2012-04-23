@@ -37,12 +37,16 @@ class TransactionDevApp(models.Model):
     (u'N', u'N/A'),
     (u'S', u'Success'),
     (u'F', u'Failure'),
+    (u'F1', u'FailureAlreadyInstalled'),
+    (u'F2', u'FailureNoSuchApplication'),
   )
   tid      = models.ForeignKey(Transaction)
   dev      = models.ForeignKey(Device)
   app      = models.ForeignKey(Application)
   # action: I or U, I means uninstall, U means uninstall
   action   = models.CharField(max_length=1, choices=ACTION_CHOICES, null=False)
-  result   = models.CharField(max_length=1, choices=RESULT_CHOICES, default="N" , null=False)
+  result   = models.CharField(max_length=2, choices=RESULT_CHOICES, default="N" , null=False)
+  start              = models.DateTimeField(auto_now_add=True)
+  end                = models.DateTimeField(blank=True, null=True)
   class Meta:
     unique_together= (('tid', 'dev', 'app'),)
