@@ -75,30 +75,32 @@ def create(request):
   transact.total = len(dev_ids) * len(app_ids)
   transact.progress = 0
   #transact.end = null
-  transact.save()
-  t_id = transact.id
+
+  #Check Data Validation
   for dev_id in dev_ids:
     for app_id in app_ids:
-      #TODO: change logic
       #check FailureAlready(F1)
-      if DeviceApplication.objects.filter(dev=dev).filter(app=app) \
-         and request.POST['action'] == "I":
-        print "F1"
-        response['err'] = {
-          'no' : 'err1',
-          'msg': 'The application is already installed'
-        }
-        return json_response_from(response)
-       
+      if DeviceApplication.objects.filter(dev=dev_id).filter(app=app_id):
+        if request.POST['action'] == "I":
+          response['err'] = {
+            'no' : 'err1',
+            'msg': 'The application is already installed'
+          }
+          return json_response_from(response)
       #check FailureNoSuchApplication(F2)
-      if not DeviceApplication.objects.filter(dev=dev).filter(app=app) \
-         and request.POST['action'] == "U":
-        print "F2"
-        response['err'] = {
-          'no' : 'err1',
-          'msg': 'The phone does not have the application to uninstall'
-        }
-        return json_response_from(response)
+      else:
+        if request.POST['action'] == "U":  
+          response['err'] = {
+            'no' : 'err1',
+            'msg': 'The phone does not have the application to uninstall'
+          }
+          return json_response_from(response)
+    
+  #insert the data from POST method
+  for dev_id in dev_ids:
+    for app_id in app_ids:
+      transact.save()
+      t_id = transact.id
       trndevapp = TransactionDevApp()
       trndevapp.tid = Transaction.objects.get(id=t_id)
       trndevapp.dev = Device.objects.get(id=dev_id)

@@ -500,9 +500,11 @@ def insert_or_update_deviceapplication(request):
            
         #update the result in TransactionDevApp table
         #update the status in Transaction
+        #TODO: improve this logic
         try:
           for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N"):
-            count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N").update(result=results[num])
+#            count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N").update(result=results[num])
+            count = TransactionDevApp.objects.filter(id=i.id).update(result=results[num], end=datetime.datetime.now())
             trans = Transaction.objects.get(id=i.tid.id)
             if trans.total ==  trans.progress + count:
               trans.end = datetime.datetime.now()
