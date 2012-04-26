@@ -67,7 +67,8 @@ if settings.DEBUG:
     #
     # Get Transaction info [GET]
     url(r'^transactions/$', 'transaction.views.index'),
-    # Get Transaction create [POST]
+    # Transaction create [POST]
+    # TransactionDevapp create
     url(r'^transaction/create/$', 'transaction.views.create'),
     # Get Transaction view [GET]
     url(r'^transaction/(?P<Id>\w+)/(?P<Type>\d)/$', 'transaction.views.show'),

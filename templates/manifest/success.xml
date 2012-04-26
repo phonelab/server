@@ -22,7 +22,7 @@
       type="{{app.app_object.type}}"
       startime="{{app.app_object.starttime}}"
       endtime="{{app.app_object.endtime}}"
-      download="{{app.app_object.download}}" 
+{% comment %}      download="{{app.app_object.download}}" {% endcomment %}
       version="{{app.app_object.version}}"
       action="{{app.app_status}}">
     </application>

@@ -341,14 +341,14 @@ def status(request, deviceId, statusType):
         for line in Logfile:
           #Logdata = Logfile.readline()
           if re.search(tagName, line):
-            temp = line.split(" ")
+            temp = line.split()
             Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
             if statusType == '1':
-              Tagdata += 'Battery Level: ' + temp[9]
+              Tagdata += 'Battery Level: ' + temp[7]
             elif statusType == '2':
-              Tagdata += 'GPS Latitude: ' + temp[9] + ', Longitude: ' + temp[11] + 'Accuracy: ' + temp[13]
+              Tagdata += 'GPS Latitude: ' + temp[7] + ', Longitude: ' + temp[9] + 'Accuracy: ' + temp[11]
             else:
-              Tagdata += 'Signal Strengh: ' + temp[9] + ', asu: ' + temp[11]
+              Tagdata += 'Signal Strengh: ' + temp[7] + ', asu: ' + temp[9]
       # render respone
       return render_to_response(
         'device/status.html',
