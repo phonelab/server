@@ -2,4 +2,4 @@
 Hello, {{ user }}, and thank you for signing up for an phone-lab.org account!
 
 To activate your account, click this link within 48 hours:
-http://localhost:8000/accounts/confirm/{{ key }}
+http://backend.phone-lab.org/accounts/confirm/{{ key }}
