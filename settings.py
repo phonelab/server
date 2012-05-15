@@ -19,13 +19,8 @@ ENV = os.environ.get("ENV") or "development"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 
-<<<<<<< HEAD
 EMAIL_HOST_USER = 'phonelab.activation'
 EMAIL_HOST_PASSWORD = 'phonelab2012'
-=======
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
->>>>>>> e14a38bf115e8f21592510478fc5174ac88a4850
 
 EMAIL_PORT = 587
 FROM_EMAIL = EMAIL_HOST_USER
