@@ -19,8 +19,8 @@ ENV = os.environ.get("ENV") or "development"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 
-EMAIL_HOST_USER = 'taeyeon.ki'
-EMAIL_HOST_PASSWORD = 'Dnfldjaak&9'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 EMAIL_PORT = 587
 FROM_EMAIL = EMAIL_HOST_USER
