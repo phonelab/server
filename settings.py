@@ -14,9 +14,20 @@ RAW_APP_ROOT = os.path.join(SITE_ROOT, 'application', 'apps')
 # Env variable
 ENV = os.environ.get("ENV") or "development"
 
+# Email setting;
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = 'taeyeon.ki'
+EMAIL_HOST_PASSWORD = 'Dnfldjaak&9'
+
+EMAIL_PORT = 587
+FROM_EMAIL = EMAIL_HOST_USER
+
 ADMINS = (
-    ('Micheal Benedict', 'micheala@buffalo.edu'),
-    ('Tae', 'tki@buffalo.edu'),
+#    ('Micheal Benedict', 'micheala@buffalo.edu'),
+    ('Taeyeon Ki', 'tki@buffalo.edu'),
 )
 
 # C2DM Auth Token
@@ -76,6 +87,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    (os.path.join(SITE_ROOT, 'static')),
 )
 
 # List of finder classes that know how to find static files in
@@ -111,6 +123,8 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(SITE_ROOT, 'templates'),
+    os.path.join(SITE_ROOT, 'templates/admin'),
+
 )
 
 INSTALLED_APPS = (
@@ -128,6 +142,7 @@ INSTALLED_APPS = (
     'device', # device
     'error', # error
     'transaction', # transaction
+    'users', #users
 )
 
 # A sample logging configuration. The only tangible logging
@@ -152,10 +167,12 @@ LOGGING = {
         },
     }
 }
-# Session 
+# Session and the settings for User processes;
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
+AUTH_PROFILE_MODULE = 'users.UserProfile'
 
 # database vars
 # production vars

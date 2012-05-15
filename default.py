@@ -1,4 +1,8 @@
 import re
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.generic import View
+from django.core.urlresolvers import reverse
 
 """
 Human Sorting
@@ -37,15 +41,20 @@ def re_sort_nicely(l):
 """
 Login and Logout function to control session
 
-@date 03/05/2012
+@date 05/08/2012
 
 @author Taeyeon Ki
 """
-
-def login(request):
-  request.session[' ']
-  return HttpResponse
-
-def logout(request):
-  del request.session[' ']
-  return 
+class ProtectedView(View):
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedView, self).dispatch(*args, **kwargs)
+    
+class AuthorProtectedView(ProtectedView):
+    def dispatch(self, *args, **kwargs):
+        post = self.get_queryset()
+        
+        if not post.author != self.request.user:
+            return redirect('access_denied')
+        
+        return super(AuthorProtectedView, self).dispatch(*args, **kwargs)

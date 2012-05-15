@@ -1,24 +1,23 @@
-from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from device.forms import *
 from django.template import RequestContext
+
 #from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-from device.models import Device, DeviceApplication
-from application.models import Application
-from transaction.models import Transaction, TransactionDevApp
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
-from manifest.views import *
+
+#from manifest.views import *
+from device.models import Device, DeviceApplication
+from application.models import Application
+from transaction.models import Transaction, TransactionDevApp
 import default
 import os, errno, re
 import datetime
 import string
 
-from itertools import chain
 # Log Dir
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 
@@ -32,29 +31,7 @@ Main page
 def main_page(request):
   return render_to_response(
            'main_page.html',
-           { 'user': request.user},
-           context_instance=RequestContext(request)
-         )
-
-def logout_page(request):
-  logout(request)
-  return HttpResponseRedirect('/')
-
-def register_page(request):
-  if request.method == 'POST':
-    form = RegistrationForm(request.POST)
-    if form.is_valid():
-      user = User.objects.create_user(
-        username=form.cleaned_data['username'],
-        password=form.cleaned_data['password1'],
-        email=form.cleaned_data['email']
-      )
-      return HttpResponseRedirect('/')
-  else:
-    form = RegistrationForm()
-  return render_to_response(
-           'registration/register.html',
-           { 'form': form },
+           { 'user': request.user },
            context_instance=RequestContext(request)
          )
 
@@ -502,8 +479,8 @@ def insert_or_update_deviceapplication(request):
         #update the status in Transaction
         #TODO: improve this logic
         try:
+#          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=actions[num]).filter(result="N"):
           for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N"):
-#            count = TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N").update(result=results[num])
             count = TransactionDevApp.objects.filter(id=i.id).update(result=results[num], end=datetime.datetime.now())
             trans = Transaction.objects.get(id=i.tid.id)
             if trans.total ==  trans.progress + count:

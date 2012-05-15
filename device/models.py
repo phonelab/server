@@ -104,3 +104,32 @@ class DeviceApplication(models.Model):
   class Meta:
 #    unique_together= (('app', 'action'),)
     unique_together= (('dev', 'app'),)
+
+"""
+Class DeviceProfile
+
+@data 05/10/2012
+@author TKI
+"""
+class DeviceProfile(models.Model):
+  WORKING_CHOICES = (
+    (u'Y', u'Working'),
+    (u'N', u'not Working'),
+  )
+  PURPOSE_CHOICES = (
+    (u'C', u'CSE622'),
+    (u'F', u'Faculty'),
+    (u'O', u'Other'),
+    (u'P', u'PhoneLab'),
+    (u'R', u'Research'),
+  )
+  TYPE_CHOICES = (
+    (u'3', u'3G'),
+    (u'4', u'4G'),
+  )
+  dev           = models.ForeignKey(Device, unique=True)
+  phone_no      = models.CharField(max_length=13)
+  working       = models.CharField(max_length=1, choices=WORKING_CHOICES)
+  plan          = models.CharField(max_length=45)
+  phone_purpose = models.CharField(max_length=1, choices=PURPOSE_CHOICES)
+  service_type  = models.CharField(max_length=1, choices=TYPE_CHOICES)

@@ -1,9 +1,14 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
+from django.contrib.auth.views import login, logout, password_change
 
 #admin interface
 from django.contrib import admin
 admin.autodiscover()
+PASSWORD_CHANGE_DICT = {
+                    'template_name': 'users/password_change.html',
+                    'post_change_redirect': '/accounts/settings/'
+}
 
 if settings.DEBUG:
   urlpatterns = patterns('',
@@ -16,12 +21,15 @@ if settings.DEBUG:
     #Admin interface for django version 1.3
     url(r'^admin/', include(admin.site.urls)),
     #login page
-    url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^login/$', login, {'template_name': 'users/login.html'}, name='login'),
     #logout page
-    url(r'^logout/$', 'device.views.logout_page'),
-    #register page
-    url(r'^register/$', 'device.views.register_page'),
-
+    url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
+    #sign up page
+    url(r'^register/$', 'users.views.register'),
+    #confirm page
+    url(r'^accounts/confirm/(?P<activation_key>[A-Z0-9]\w+)/$', 'users.views.confirm'),
+    #change password
+    url(r'^password_change/$', password_change, PASSWORD_CHANGE_DICT, name='password_change'),
 
     #
     ## Device

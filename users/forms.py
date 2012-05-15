@@ -1,9 +1,9 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
-
+ 
 """
-Main page
+RigistrationForm
 
 @date 03/07/2012
 
@@ -29,7 +29,7 @@ class RegistrationForm(forms.Form):
       User.objects.get(username=username)
     except User.DoesNotExist:
       return username
-    raise forms.ValidationError('Username is already taken.')
+    raise forms.ValidationError('The username "%s" is already taken.' % username)
   
   def clean_password2(self):
     if 'password1' in self.cleaned_data:
@@ -37,3 +37,11 @@ class RegistrationForm(forms.Form):
       password2 = self.cleaned_data['password2']
       if password1 == password2:
         return password2
+      else:
+        raise forms.ValidationError('Passwords do not match.')
+
+  def save(self, new):
+    u = User.objects.create_user(new.cleaned_data['username'], new.cleaned_data['email'], new.cleaned_data['password1'])
+    u.is_active = False
+    u.save()
+    return u

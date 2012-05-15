@@ -1,54 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>PhoneLab {% block title %}Main{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <head>
+		{% block head %}{% endblock %}
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title> {% block title %}
+            PhoneLab : World's Largest Smartphone Testbed
+            {% endblock %}
+    </title>
 
-  <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-  <!-- Le Awesome Twitter Bootstrap CSS -->
-  <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <style>
-    body {
-      padding-top:60px;
-    }
-  </style>
-</head>
+    <!-- Le styles -->
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+<!--    <link href="{{ STATIC_URL }}css/prettify.css" rel="stylesheet"> -->
 
-<body>
-  <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <a class="brand" href="#">PhoneLab</a>
-        <div class="nav-collapse">
-          <ul class="nav">
-            <li><a href="/">Home</a></li>
-            {% if user.is_authenticated %}
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0; 
+      }
+    </style>
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="Shortcut Icon" href="{{ STATIC_URL }}img/phonelab_logo_black.ico">
+    <!--
+    <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}img/apple-touch-icon-57-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}img/apple-touch-icon-144-precomposed.png">
+    -->
+
+	<!-- TinyMCE -->
+  <!--
+	<script type="text/javascript" src="{{ STATIC_URL }}tiny_mce/tiny_mce_dev.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/tinymce_options.js"></script>
+  -->
+	<!-- /TinyMCE -->
+  </head>
+
+<!--  <body onLoad="prettyPrint()"> -->
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" title='PhoneLab' href="/">
+            <img style="margin:1px; float: left;" src="{{ STATIC_URL }}img/phonelab_logo_black.png" alt="PhoneLab Log" border="0" height="20" width="20"> PhoneLab
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/">Home</a></li>
+              <li><a href="/">About</a></li>
+              {% if user.is_authenticated %}
               <li><a href="/devices">Devices</a></li>
               <li><a href="/experiments">Applications</a></li>
               <li><a href="/transactions">Transactions</a></li>
-              <li><a href="/account">{{user.username}}</a></li> 
-              <li><a href="/logout">Logout</a></li>
+			        <form class="navbar-search pull-left" method="get" action="/">
+        		  <input type="text" value="{{ q }}" name="q" class="search-query" placeholder="Search">
+        	    </form>
+              {% endif %}
+            </ul> <!--class nav -->
+
+            {% if user.is_authenticated %}
+            <div class="btn-group pull-right">
+					    <a class="btn btn-primary" href="/">{{ user.username }}</a>
+					    <a class="btn btn-primary dropdown-toggle" href="#" data-toggle="dropdown">
+						    <span class="caret"></span>
+					    </a>
+					    <ul class="dropdown-menu">
+						    <li>
+							    <a href="/">
+								    <i class="icon-user"></i> Profile
+							    </a>
+						    </li>
+						    <li>
+							    <a href="/">
+								    <i class="icon-cog"></i> Settings
+							    </a>
+						    </li>					
+
+						    <li class="divider"></li>
+						    <li>
+							    <a href="/logout">
+								    <i class="icon-off"></i> Logout
+							    </a>
+						    </li>
+					    </ul>
+            </div>
             {% else %}
-              <li><a href="/login">Sign In</a></li>  
-              <li><a href="/register">Sign Up</a></li>
+				    <div class="btn-group pull-right">
+					    <a class="btn btn-primary" href="#">Visitor</a>
+					    <a class="btn btn-primary dropdown-toggle" href="#" data-toggle="dropdown">
+					 	    <span class="caret"></span>
+					    </a>
+					    <ul class="dropdown-menu">
+						    <li>
+							    <a href="/login">
+								    <i class="icon-ok"></i> Log In
+							    </a>
+						    </li>
+						    <li>
+							    <a href="/register">
+								    <i class="icon-user"></i> Sign Up
+							    </a>
+						    </li>
+						    <li class="divider"></li>
+						    <li>
+							    <a href="/accounts/password_reset/">
+								    <i class="icon-lock"></i> Password Reset
+							    </a>
+						    </li>
+					    </ul>
+            </div>
             {% endif %}
-          </ul>
-        </div><!--/.nav-collapse -->
+           
+          </div><!--/.nav-collapse -->
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="container">
-    {% block content %}{% endblock %}
-  </div> 
 
-<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-{% block js %}{% endblock %}
-</body>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+      <hr>
+      <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+      	<center>
+        	<p>
+          &copy; PhoneLab at UB
+        	</p>
+       </center>
+      </footer>
+    </div> <!-- container -->
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-alert.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-scrollspy.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-popover.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-button.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
+    <script src="{{ STATIC_URL }}js/simple-confirm.js"></script>
+    <script src="{{ STATIC_URL }}js/prettify.js"></script>    
+    {% block js %}{% endblock %}
+  </body>
 </html>

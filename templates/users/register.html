@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}User Registration{% endblock %}
+    {% block content %}
+      <div class="page-header">
+        <h1>User Registration</h1>
+      </div>
+   
+     <div class="div8">
+     {% if has_account %}
+       <div class="alert alert-info">
+       <a class="close" data-dismiss="alert">&times;</a>
+       You already have an account. Your username is "{{ user.username }}"
+     {% elif created %}
+       <div class="alert alert-success">
+       <a class="close" data-dismiss="alert">&times;</a>
+       <p><strong>Verify Your Email Address</strong><br><br>
+       
+       We now need to verify your email address.<br>
+       We have sent an email to {{ mail }} to verify your address.<br>
+       <a href="/" class="btn btn-success">Home</a>
+       <a href="/" class="btn"><i class=" "></i>Home</a>
+       </p>
+     {% else %}
+       <form method="post" action=".">
+       {% csrf_token %}
+       <table class = "table table-striped">
+       <tbody>
+       {{ form.as_table }}
+       </tbody>
+       </table>
+       <input type="submit" value="Sign Up" />
+       </form>
+     {% endif %}
+     </div>
+  
+{% endblock %}
