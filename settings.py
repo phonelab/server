@@ -19,8 +19,8 @@ ENV = os.environ.get("ENV") or "development"
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 
-EMAIL_HOST_USER = 'taeyeon.ki'
-EMAIL_HOST_PASSWORD = 'Dnfldjaak&9'
+EMAIL_HOST_USER = 'phonelab.activation'
+EMAIL_HOST_PASSWORD = 'phonelab2012'
 
 EMAIL_PORT = 587
 FROM_EMAIL = EMAIL_HOST_USER
@@ -80,7 +80,7 @@ STATIC_URL = '/static/'
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = '/static/admin/'
+#ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
