@@ -3,11 +3,13 @@
 {% block title %}DeviceID: {{device.id}}{% endblock %}
 {% block content %}
 <h1>DeviceID: <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ TagName }}</h1>
+<div class="well">
   <p>
     {% if Tagdata %}
-		  <pre>{{ Tagdata }}</pre>
+		  {{ Tagdata|linebreaksbr }}
     {% else %}
       "<strong>{{ TagName }}</strong>" have not been updeated yet
     {% endif %}
   </p>
+</div>
 {% endblock %}
