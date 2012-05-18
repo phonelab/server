@@ -7,7 +7,7 @@ from django.utils import  simplejson as json
 from device.models import Device
 from lib.helper import json_response_from
 
-import default
+from default import sort_nicely
 import time
 import os, errno, re
 # Log Dir
@@ -141,7 +141,7 @@ def show_tag(request, deviceId):
     try:
       os.chdir(path)
       filelist = os.listdir(".")
-      default.sort_nicely(filelist)
+      sort_nicely(filelist)
       Tagdata = ''
       for file in filelist:
         filename = os.path.join(RAW_LOG_ROOT, deviceId, file)

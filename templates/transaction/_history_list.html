@@ -1,0 +1,26 @@
+<div class="span11 well">
+  <h3><strong>Transaction History</strong></h3>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Transaction ID</th>
+        <th>User ID</th>
+        <th>Status</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for transact in transacts %}
+        <tr>
+			   <td><a href='/transaction/{{ transact.id }}/1/'>{{ transact.id }}</a></td>
+         <td><a href='/transaction/{{ transact.user.id }}/2/'>{{ transact.user.username }}</a></td>
+         <td>{{ transact.progress }}/{{ transact.total }}</td>
+         <td>{{ transact.start }}</td>
+         <td>{{ transact.end }}</td>
+        </tr>
+      {% empty %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

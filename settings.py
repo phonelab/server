@@ -26,7 +26,7 @@ EMAIL_PORT = 587
 FROM_EMAIL = EMAIL_HOST_USER
 
 ADMINS = (
-#    ('Micheal Benedict', 'micheala@buffalo.edu'),
+    ('Micheal Benedict', 'micheala@buffalo.edu'),
     ('Taeyeon Ki', 'tki@buffalo.edu'),
 )
 

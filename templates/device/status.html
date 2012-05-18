@@ -1,16 +1,13 @@
 <!-- Show list of devices !-->
 {% extends "base.html" %}
-
+{% block title %}DeviceID: {{device.id}}{% endblock %}
 {% block content %}
-  <h1>{% block title %}DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ TagName }}{% endblock %}</h1>
-  <table class="table table-striped">
-    <tbody>
-    <tr>
-      {% if Tagdata %}
-			<td><pre>{{ Tagdata }}</pre></td>
-      {% else %}<td> "<strong>{{ TagName }}</strong>" have not been updeated yet</td>
-      {% endif %}
-    </tr>
-    </tbody>
-  </table>
+<h1>DeviceID: <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ TagName }}</h1>
+  <p>
+    {% if Tagdata %}
+		  <pre>{{ Tagdata }}</pre>
+    {% else %}
+      "<strong>{{ TagName }}</strong>" have not been updeated yet
+    {% endif %}
+  </p>
 {% endblock %}

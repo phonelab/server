@@ -1,8 +1,8 @@
 <!-- Single Application !-->
 {% extends "base.html" %}
-
+{% block title %}Application ID: {{app.id}} {% endblock %}
 {% block content %}
-<h1>{% block title %}Application ID: {{app.id}} <!--(<a href='/device/{{device.id}}/edit/'>Edit</a>)-->{% endblock %}</h1>
+<h1>Application ID: {{app.id}} (<a href="/experiments/">All APP</a>)</h1>
 <table class="table table-bordered table-striped">
   <tbody>
     <tr>
@@ -15,7 +15,7 @@
     </tr>
     <tr>
       <td><strong>Version: </strong></td>
-      <td>{{ app.version }}<td>
+      <td>{{ app.version }}</td>
     </tr>
     <tr>
       <td><strong>Description: </strong></td>
@@ -24,7 +24,7 @@
     <tr>
       <td>(<a href='/experiment/{{app.id}}.apk/'><strong>Download</strong></a>)</td>
       <td></td>
-      </tr>
+    </tr>
   </tbody>
 </table>
 
@@ -33,27 +33,14 @@
     <li class="active"><a href="#1" data-toggle="tab">Installed Devices</a></li>
     <li><a href="#2" data-toggle="tab">Log</a></li>
   </ul>
+
   <div class="tab-content">
     <div class="tab-pane active" id="1">
-  <table class="table table-striped">
-    <tbody>
-{% comment %}
-      <tr> 
-      <td><strong> Device ID </strong> </td>
-      </tr>
-{% endcomment %}
-      {% for dev in devs %}
-      <tr>
-        <td><strong><a href='/device/{{ dev.id }}/'>{{ dev.id }}</strong></a></td>
-      </tr>
-      {% empty %} There is no device to install this application.
-      {% endfor %}
-    </tbody>
-  </table>
+      {% include 'application/_list.html' %}
     </div>
-    <div class="tab-pane" id="2">
-      <strong>Coming Soon</strong>
-    </div>
+    
+  <div class="tab-pane" id="2">
+    <strong>Coming Soon</strong>
   </div>
 </div>
 {% endblock %}

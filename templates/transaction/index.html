@@ -1,8 +1,8 @@
 <!-- Transaction !-->
 {% extends "base.html" %}
-
+{% block title %}Transaction{% endblock %}
 {% block content %}
-<h1>{% block title %}Transaction{% endblock %}</h1>
+<h1>Transaction</h1>
 
 <div class="tabbable">
   <ul class="nav nav-tabs">
@@ -11,77 +11,10 @@
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="1">
-      <form method="post" action="/transaction/create/">
-      <table class="table table-striped">
-      <tbody>
-       {% for dev in devs %}
-         {% if forloop.first %}
-         <tr>
-         <td><strong>Devices</strong></td>
-         <td></td><td></td><td></td><td></td>
-         </tr><tr>
-         {% endif %}
-         <td><input type='checkbox' id='dev' name='dev' value='{{dev.id}}' {{ dev.get_active_display }} /> 
-         <a href="/device/{{dev.id}}">{{dev.id}}</a></td>
-         {% if forloop.counter|divisibleby:"5" %}
-           </tr><tr>
-         {% endif %}
-	     {% empty %} There is no device.
-       {% endfor %}
-       </tr>
-       {% for app in apps %}
-         {% if forloop.first %}
-         <tr>
-         <td><strong>Applications</strong></td>
-         <td></td><td></td><td></td><td></td>
-         </tr><tr>
-         {% endif %}
-         <td><input type='checkbox' id='app' name='app' value='{{app.id}}' {{ app.get_active_display }}/>
-         <a href="/experiment/{{app.id}}">{{app.name}}</a></td>
-         {% if forloop.counter|divisibleby:"5" %}
-           </tr><tr>
-         {% endif %}
-	     {% empty %} There is no app.
-       {% endfor %}
-       </tr><tr>
-       <td><strong>Action</strong></td>
-       <td></td><td></td><td></td><td></td>
-       </tr><tr>
-       <td><input type='radio' id='install' name='action' value='I' /> Install</td>
-       <td><input type='radio' id='uninstall' name='action' value='U' /> Uninstall</td>
-       <td></td><td></td><td></td>
-       </tbody>
-       </table>
-       <input type='hidden' name='user' value='{{ user.id }}' />
-       <input type='submit' value='Submit' />
-       </form>
-	    </p>
+      {% include 'transaction/_create_transaction.html' %}
     </div>
     <div class="tab-pane" id="2">
-      <table class="table table-striped">
-      <tbody>
-      {% for transact in transacts %}
-         {% if forloop.first %}
-           <tr> 
-           <td><strong> Transaction ID </strong> </td>
-           <td><strong> User ID </strong> </td>
-           <td><strong> Status </strong> </td>
-           <td><strong> Start Time </strong> </td>
-           <td><strong> End Time </strong> </td>
-           </tr>
-         {% endif %}
-         <tr>
-			   <td><strong><a href='/transaction/{{ transact.id }}/1/'>{{ transact.id }}</strong></a></td>
-         <td><strong><a href='/transaction/{{ transact.user.id }}/2/'>{{ transact.user.username }}</strong></a></td>
-{% comment %}         <td>{{ transact.get_status_display }}</td> {% endcomment %}
-         <td>{{ transact.progress }}/{{ transact.total }}</td>
-         <td>{{ transact.start }}</td>
-         <td>{{ transact.end }}</td>
-         </tr>
-	    {% empty %} There is no transact information.
-      {% endfor %}
-      </tbody>
-    </table>
+      {% include 'transaction/_history_list.html' %}
     </div>
   </div>
 </div>

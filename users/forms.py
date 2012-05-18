@@ -38,7 +38,7 @@ class RegistrationForm(forms.Form):
       if password1 == password2:
         return password2
       else:
-        raise forms.ValidationError('Passwords do not match.')
+        raise forms.ValidationError('The two password fields did not match.')
 
   def save(self, new):
     u = User.objects.create_user(new.cleaned_data['username'], new.cleaned_data['email'], new.cleaned_data['password1'])

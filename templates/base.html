@@ -14,7 +14,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
 <!--    <link href="{{ STATIC_URL }}css/prettify.css" rel="stylesheet"> -->
 
     <style type="text/css">
@@ -27,6 +27,7 @@
       }
     </style>
     <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/docs.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -51,7 +52,7 @@
   </head>
 
 <!--  <body onLoad="prettyPrint()"> -->
-  <body>
+  <body data-spy="scroll" data-target=".subnav" data-offset="50">
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -85,12 +86,12 @@
 					    </a>
 					    <ul class="dropdown-menu">
 						    <li>
-							    <a href="/">
+							    <a href="/accounts/profile">
 								    <i class="icon-user"></i> Profile
 							    </a>
 						    </li>
 						    <li>
-							    <a href="/">
+							    <a href="/accounts/password_change">
 								    <i class="icon-cog"></i> Settings
 							    </a>
 						    </li>					
@@ -123,7 +124,7 @@
 						    <li class="divider"></li>
 						    <li>
 							    <a href="/accounts/password_reset/">
-								    <i class="icon-lock"></i> Password Reset
+								    <i class="icon-lock"></i> Forgot Password
 							    </a>
 						    </li>
 					    </ul>
@@ -138,8 +139,7 @@
 
 
     <div class="container">
-        {% block content %}{% endblock %}
-      <hr>
+      {% block content %}{% endblock %}
       <footer class="footer">
         <p class="pull-right"><a href="#">Back to top</a></p>
       	<center>
@@ -166,8 +166,8 @@
     <script src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script>
-    <script src="{{ STATIC_URL }}js/simple-confirm.js"></script>
-    <script src="{{ STATIC_URL }}js/prettify.js"></script>    
+<!--    <script src="{{ STATIC_URL }}js/simple-confirm.js"></script>
+    <script src="{{ STATIC_URL }}js/prettify.js"></script>    -->
     {% block js %}{% endblock %}
   </body>
 </html>

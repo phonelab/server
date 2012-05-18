@@ -1,9 +1,9 @@
 <!-- Show list of devices !-->
 {% extends "base.html" %}
-
+{% block title %}All Applications{% endblock %}
 {% block content %}
-  <h1>{% block title %}All Applications{% endblock %} (<a href='/experiment/new'>add</a>)</h1>
-  <table class="table table-striped">
+  <h1>All Applications (<a href='/experiment/new'>Add</a>)</h1>
+  <table class="table table-striped table-bordered">
     <thead>
       <tr>
         <th>Application ID</th>

@@ -1,22 +1,20 @@
 {% extends "base.html" %}
-{% load url from future %}
-{% block title %}PhoneLab Testbed - User Logins{% endblock %}
-    {% block content %}
-      <div class="page-header">
-        <h1>User Login</h1>
-      </div>
+{% block title %}User Login{% endblock %}
+  {% block content %}
+    <div class="page-header">
+      <h1>User Login</h1>
+    </div>
    
-     <div class="div8">
-   
-     {% if form.errors %}
-          <div class="alert alert-error">
+    <div class="div8">
+      {% if form.errors %}
+        <div class="alert alert-error">
           <a class="close" data-dismiss="alert">&times;</a>
           Username and Password do not match.
      </div>
      {% endif %}
    
-     {% include '_form.html' %}
-  
-     </div>
-   {% endblock %}
+     {% include '_form.html' with button="Log In" option="Ture" %}
+     
+    </div>
+{% endblock %}
 

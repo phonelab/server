@@ -13,7 +13,7 @@ from datetime import datetime
 from device.models import Device, DeviceApplication
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
-import default
+from default import re_sort_nicely, sort_nicely
 import os, errno, re
 import datetime
 import string
@@ -122,52 +122,67 @@ def create_or_update_device(request):
 
 
 """
-Show Device Details [GET]
+Show Device Details and Application monitor [GET]
 
-@date 01/29/2012
+@date 05/17/2012
 @param String deviceId
 
-@author Micheal
+@author TKI, Micheal
 """
 @login_required
-def show(request, deviceId): 
+def show(request, deviceId):
   # define default response
   response = { "err": "", "data": "" }
   # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-  if device.count() == 1:
+  try:
+    dev = Device.objects.get(id=deviceId)
+    # device exists
+    app_list = {}
+    apps = {}
+    unapps = {}
+    # get apps of particular device
+    for o in DeviceApplication.objects.filter(dev=dev.id).values('app', 'dev'):
+      app_list[o['app']] = o['dev']
+    # get list of apps to download
+    for app in Application.objects.all():
+      if app_list.has_key(app.id):
+        apps[app.id] = {"app_object": app,}
+      else:
+        unapps[app.id] = {"app_object": app,}
+
     # get log data list from deviceId directory
-    path = os.path.join(RAW_LOG_ROOT, device[0].id)
+    path = os.path.join(RAW_LOG_ROOT, dev.id)
     # empty
     filelist = {}
     try:
       os.chdir(path)
       filelist = os.listdir(".")
-      default.re_sort_nicely(filelist)
+      re_sort_nicely(filelist)
+
     except OSError, e:
       if e.errno != errno.EEXIST:
         response['err'] = {
           'no' : 'err1', 
           'msg': 'cannot change dir, failed upload'
         }
-    
     return render_to_response(
-  		'device/show.html', 
-  		{
-  			'device': device[0],
-  			'filelist': filelist
-  		},
+  	  'device/show.html', 
+  	  {
+  	    'device' : dev,
+  	    'apps'     : apps,
+        'unapps'   : unapps,
+        'filelist' : filelist
+  	  },
       context_instance=RequestContext(request)
-  	)
+    )
+    
   # device does not exist
-  else:
+  except Device.DoesNotExist: 
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid device'
     }
   return json_response_from(response)
-
 
 """
 Edit Device Form [GET]
@@ -265,15 +280,17 @@ def c2dm(request, deviceId):
   else:	
     msg = request.POST['c2dm_msg']
     # get device
-    device = Device.objects.filter(id=deviceId)
-    # if device exists, update
-    # msg = "new_manifest"
-    if device.count() == 1:
-      response = device[0].send_message(payload=json({"message": msg}))
-    else:
-      return HttpResponseRedirect('/error/')
-  return json_response_from(response)		
-
+    try:
+      dev = Device.objects.get(id=deviceId)
+      # msg = "new_manifest"
+      #TODO: Implement other messages.
+      response = dev.send_message(payload=json({"message": msg}))
+    except Device.DoesNotExist: 
+      response['err'] = {
+        'no' : 'err1',
+        'msg': 'invalid device'
+      }
+    return json_response_from(response)		
 
 """
 Status monitor [GET]
@@ -310,7 +327,7 @@ def status(request, deviceId, statusType):
     try:
       os.chdir(path)
       filelist = os.listdir(".")
-      default.sort_nicely(filelist)
+      sort_nicely(filelist)
       Tagdata = ''
       for file in filelist:
         filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
@@ -321,11 +338,12 @@ def status(request, deviceId, statusType):
             temp = line.split()
             Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
             if statusType == '1':
-              Tagdata += 'Battery Level: ' + temp[7]
+              Tagdata += 'Battery Level: ' + temp[7] + '\n'
             elif statusType == '2':
-              Tagdata += 'GPS Latitude: ' + temp[7] + ', Longitude: ' + temp[9] + 'Accuracy: ' + temp[11]
+              Tagdata += 'GPS Latitude: ' + temp[7] + ', Longitude: ' + temp[9] + 'Accuracy: ' + temp[11] + '\n'
             else:
-              Tagdata += 'Signal Strengh: ' + temp[7] + ', asu: ' + temp[9]
+              Tagdata += 'Signal Strengh: ' + temp[7] + ', asu: ' + temp[9] + '\n'
+
       # render respone
       return render_to_response(
         'device/status.html',
@@ -347,54 +365,6 @@ def status(request, deviceId, statusType):
     
   # device does not exist
   else:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
-  return json_response_from(response)
-
-
-"""
-Application monitor [GET]
-
-@date 03/25/2012
-@param String deviceId
-
-@author TKI
-"""
-@login_required
-def list_app(request, deviceId):
-  # define default response
-  response = { "err": "", "data": "" }
-  # get device
-  try:
-    dev = Device.objects.get(id=deviceId)
-    # device exists
-    app_list = {}
-    apps = {}
-    unapps = {}
-    # get apps of particular device
-    for o in DeviceApplication.objects.filter(dev=dev.id).values('app', 'dev'):
-      app_list[o['app']] = o['dev']
-    # get list of apps to download
-    for app in Application.objects.all():
-      if app_list.has_key(app.id):
-        apps[app.id] = {"app_object": app,}
-      else:
-        unapps[app.id] = {"app_object": app,}
-
-    return render_to_response(
-  	  'device/list.html', 
-  	  {
-  	    'deviceId': deviceId,
-  	    'apps'    : apps,
-        'unapps'  : unapps
-  	  },
-      context_instance=RequestContext(request)
-    )
-    
-  # device does not exist
-  except Device.DoesNotExist: 
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid device'

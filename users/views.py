@@ -47,7 +47,7 @@ def register(request):
       # Send an email with the confirmation link                                                                                                                      
       EMAIL_SUBJECT = 'The signup information you requested'
       c = Context({'user': user.username, 'key': new_profile.activation_key})
-      EMAIL_BODY = (loader.get_template('users/user_signed_up.txt')).render(c)
+      EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
 
       send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, [user.email])
 

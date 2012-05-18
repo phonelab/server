@@ -16,11 +16,14 @@
 				</div>
 			</div>
 		{% endfor %}
-		
-		<div class="form-actions">
-			<input type="hidden" name="next" value="{{ next }}" />
-			<button class="btn btn-primary" type="submit">Log In</button>
-			<a onclick="history.back()" class="btn">Back</a>
-		</div>
+    {% if option %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="/accounts/password_reset">forget password</a>
+    {% endif %}
+      <div class="form-actions">
+        <input type="hidden" name="next" value="{{ next }}" />
+        <button class="btn btn-primary" type="submit"> {{ button }}</button>
+        <a onclick="history.back()" class="btn">Cancel</a>
+      </div>
 	</fieldset>
 </form>

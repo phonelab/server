@@ -5,9 +5,20 @@ from django.contrib.auth.views import login, logout, password_change
 #admin interface
 from django.contrib import admin
 admin.autodiscover()
+
 PASSWORD_CHANGE_DICT = {
-                    'template_name': 'users/password_change.html',
-                    'post_change_redirect': '/accounts/settings/'
+                       'template_name': 'users/password_change.html',
+                       'post_change_redirect': '/accounts/settings/'
+}
+PASSWORD_RESET_DICT = {
+                      'post_reset_redirect': '/accounts/password_reset/done/',
+                      'email_template_name': 'users/mails/password_reset.html',
+                      'template_name': 'users/password_reset.html'
+}
+
+PASSWORD_RESET_CONFIRM_DICT = {
+                              'post_reset_redirect': '/accounts/password_reset/complete/',
+                              'template_name': 'users/password_reset_confirm.html',
 }
 
 if settings.DEBUG:
@@ -24,12 +35,23 @@ if settings.DEBUG:
     url(r'^login/$', login, {'template_name': 'users/login.html'}, name='login'),
     #logout page
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
-    #sign up page
+    #signup page
     url(r'^register/$', 'users.views.register'),
-    #confirm page
+    #profile page
+#    url(r'^accounts/profile/$', 'users.views.profile'),
+    #signup confirm page
     url(r'^accounts/confirm/(?P<activation_key>[A-Z0-9]\w+)/$', 'users.views.confirm'),
     #change password
-    url(r'^password_change/$', password_change, PASSWORD_CHANGE_DICT, name='password_change'),
+    url(r'^accounts/password_change/$', password_change, PASSWORD_CHANGE_DICT, name='password_change'),
+    #Password Reset
+    url(r'^accounts/password_reset/$', 'django.contrib.auth.views.password_reset', PASSWORD_RESET_DICT),
+    #Password Reset Done
+    url(r'^accounts/password_reset/done/$', 'django.contrib.auth.views.password_reset_done', {'template_name': 'users/password_reset_done.html'}),
+    #Password Reset Confirm
+    url(r'^accounts/password_reset/confirm/(?P<uidb36>[A-Z0-9]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', PASSWORD_RESET_CONFIRM_DICT),
+    #Password Reset Complete
+    url(r'^accounts/password_reset/complete/$', 'django.contrib.auth.views.password_reset_complete', {'template_name': 'users/password_reset_complete.html'}),
+
 
     #
     ## Device
@@ -49,7 +71,7 @@ if settings.DEBUG:
     # Phone Status [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
     # List of Applications  [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/list/$', 'device.views.list_app'),
+#    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/list/$', 'device.views.list_app'),
 	# Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status
