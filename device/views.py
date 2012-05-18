@@ -340,7 +340,7 @@ def status(request, deviceId, statusType):
             if statusType == '1':
               Tagdata += 'Battery Level: ' + temp[7] + '\n'
             elif statusType == '2':
-              Tagdata += 'GPS Latitude: ' + temp[7] + ', Longitude: ' + temp[9] + 'Accuracy: ' + temp[11] + '\n'
+              Tagdata += 'GPS Latitude: ' + temp[7] + ', Longitude: ' + temp[9] + ', Accuracy: ' + temp[11] + '\n'
             else:
               Tagdata += 'Signal Strengh: ' + temp[7] + ', asu: ' + temp[9] + '\n'
 

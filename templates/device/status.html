@@ -4,12 +4,10 @@
 {% block content %}
 <h1>DeviceID: <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ TagName }}</h1>
 <div class="well">
-  <p>
     {% if Tagdata %}
-		  {{ Tagdata|linebreaksbr }}
+		  {{ Tagdata|linebreaks }}
     {% else %}
       "<strong>{{ TagName }}</strong>" have not been updeated yet
     {% endif %}
-  </p>
 </div>
 {% endblock %}
