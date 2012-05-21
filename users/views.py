@@ -2,12 +2,13 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.mail import send_mail
 from django.template import RequestContext, Context, loader
 from django.http import HttpResponseRedirect
+from django.contrib.sites.models import Site
 
 from settings import FROM_EMAIL, ADMINS
 from users.models import UserProfile
 from users.forms import RegistrationForm
 import datetime, random, sha
- 
+
 #TO = [ email for name, email in ADMINS ]
 """
 Register New User with activation
@@ -43,10 +44,12 @@ def register(request):
       # Create and save their profile                                                                                                                                 
       new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires)
       new_profile.save()
-
       # Send an email with the confirmation link                                                                                                                      
       EMAIL_SUBJECT = 'The signup information you requested'
-      c = Context({'user': user.username, 'key': new_profile.activation_key})
+      #TODO: remove the following two lines
+      current_site = Site.objects.get_current()
+      c = Context({'user': user.username, 'key': new_profile.activation_key, 'site_name': current_site.domain})
+#      c = Context({'user': user.username, 'key': new_profile.activation_key})
       EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
 
       send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, [user.email])
