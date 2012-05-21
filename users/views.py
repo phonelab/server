@@ -7,7 +7,7 @@ from django.contrib.sites.models import Site
 from settings import FROM_EMAIL, ADMINS
 from users.models import UserProfile
 from users.forms import RegistrationForm
-import datetime, random, sha
+import datetime, random, hashlib
 
 #TO = [ email for name, email in ADMINS ]
 """
@@ -37,8 +37,8 @@ def register(request):
 #      Profile.objects.create(user = user)
      
       # Build the activation key for their account                                                                                                                    
-      salt = sha.new(str(random.random())).hexdigest()[:5]
-      activation_key = sha.new(salt+user.username).hexdigest()
+      salt = hashlib.md5(str(random.random())).hexdigest()[:5]
+      activation_key = hashlib.md5(salt+user.username).hexdigest()
       key_expires = datetime.datetime.today() + datetime.timedelta(2)
 
       # Create and save their profile                                                                                                                                 
