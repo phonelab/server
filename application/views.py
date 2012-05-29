@@ -88,8 +88,9 @@ def show(request, appId):
     app = Application.objects.get(id=appId)
     # application exists
     for o in DeviceApplication.objects.filter(app=app):
-      devs = Device.objects.filter(id=o.dev.id)
-    
+      for dev in Device.objects.filter(id=o.dev.id):
+        devs[dev] = dev
+
     return render_to_response(
   		'application/show.html', 
   		{
