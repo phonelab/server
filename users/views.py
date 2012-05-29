@@ -7,7 +7,7 @@ from django.contrib.sites.models import Site
 
 from settings import FROM_EMAIL, ADMINS
 #from django.utils import  simplejson as json
-#from lib.helper import json_response_from, json
+from lib.helper import json_response_from, json
 from django.contrib.auth.models import User
 from users.models import UserProfile
 from device.models import Device, DeviceProfile
@@ -126,7 +126,7 @@ def profile(request, userId):
              context_instance=RequestContext(request)
              )
   # User does not exist
-  except Device.DoesNotExist: 
+  except UserProfile.DoesNotExist: 
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid user'
@@ -198,9 +198,6 @@ def update(request, userId):
     # ub_id
     if ('ub_id' in params and userprofile.ub_id != params['ub_id']):
       userprofile.ub_id = params['ub_id']
-    # update
-#    if ('update_interval' in params and device.update_interval != params['update_interval']):
-#      device.update_interval = params['update_interval']
     # save User and UserProfile
     user.save()
     userprofile.save()

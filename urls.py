@@ -45,7 +45,7 @@ if settings.DEBUG:
     # Update User Profile Form [POST]
     url(r'^accounts/(?P<userId>\d+)/update/$', 'users.views.update'),
     #signup confirm page
-    url(r'^accounts/confirm/(?P<activation_key>[A-Z0-9]\w+)/$', 'users.views.confirm'),
+    url(r'^accounts/confirm/(?P<activation_key>[a-z0-9]\w+)/$', 'users.views.confirm'),
     #change password
     url(r'^accounts/password_change/$', password_change, PASSWORD_CHANGE_DICT, name='password_change'),
     #change password
