@@ -21,6 +21,8 @@ class Transaction(models.Model):
   start              = models.DateTimeField(auto_now_add=True)
   end                = models.DateTimeField(blank=True, null=True)
 # last_manifest_send = models.DateTimeField()
+  def __unicode__(self):
+    return str(self.id)
 
 """
 Class Transaction

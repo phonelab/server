@@ -3,7 +3,7 @@
 {% if cl.search_fields %}
 <div id="toolbar"><form id="changelist-search" action="" method="get" style="margin-bottom: 0;">
 <div><!-- DIV needed for valid HTML -->
-<label for="searchbar" style="float: none; padding: 0;"><img src="{% admin_media_prefix %}img/admin/icon_searchbox.png" alt="Search" /></label>
+<label for="searchbar" style="float: none; padding: 0;"><img src="/static/admin/img/icon_searchbox.png" alt="Search" /></label>
 <input type="text" size="40" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" />
 <input type="submit" class="btn small" value="{% trans 'Search' %}" />
 {% if show_result_count %}

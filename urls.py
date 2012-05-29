@@ -8,7 +8,8 @@ admin.autodiscover()
 
 PASSWORD_CHANGE_DICT = {
                        'template_name': 'users/password_change.html',
-                       'post_change_redirect': '/accounts/settings/'
+                       'post_change_redirect': '/accounts/password_change/done/'
+#                       'post_change_redirect': '/accounts/settings/'
 }
 PASSWORD_RESET_DICT = {
                       'post_reset_redirect': '/accounts/password_reset/done/',
@@ -38,11 +39,17 @@ if settings.DEBUG:
     #signup page
     url(r'^register/$', 'users.views.register'),
     #profile page
-#    url(r'^accounts/profile/$', 'users.views.profile'),
+    url(r'^accounts/profile/(?P<userId>\d+)/$', 'users.views.profile'),
+    # Edit User Profile Form [GET]
+    url(r'^accounts/(?P<userId>\d+)/edit/$', 'users.views.edit'),
+    # Update User Profile Form [POST]
+    url(r'^accounts/(?P<userId>\d+)/update/$', 'users.views.update'),
     #signup confirm page
     url(r'^accounts/confirm/(?P<activation_key>[A-Z0-9]\w+)/$', 'users.views.confirm'),
     #change password
     url(r'^accounts/password_change/$', password_change, PASSWORD_CHANGE_DICT, name='password_change'),
+    #change password
+    url(r'^accounts/password_change/done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'users/password_change_done.html'}),
     #Password Reset
     url(r'^accounts/password_reset/$', 'django.contrib.auth.views.password_reset', PASSWORD_RESET_DICT),
     #Password Reset Done
@@ -70,8 +77,6 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/tag/$', 'datalogger.views.show_tag'),
     # Phone Status [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
-    # List of Applications  [GET]
-#    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/list/$', 'device.views.list_app'),
 	# Log Data [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status

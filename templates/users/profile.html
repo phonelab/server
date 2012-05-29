@@ -1,0 +1,76 @@
+<!-- User Profile !-->
+{% extends "base.html" %}
+{% block title %}User Profile: {{user.username}} {% endblock %}
+{% block content %}
+<h1>User Profile: {{userprofile.user.username}} (<a href='/accounts/{{userprofile.user.id}}/edit/'>Edit</a>)</h1>
+<table class="table table-bordered table-striped">
+  <tbody>
+    <tr>
+      <td width='20%'><strong>First Name: </strong></td>
+      <td>{{ userprofile.user.first_name }}</td>
+    </tr>
+    <tr>
+      <td><strong>Last Name: </strong></td>
+      <td>{{ userprofile.user.last_name }}</td>
+    </tr>
+    <tr>
+      <td><strong>Email: </strong></td>
+      <td>{{ user.email }}</td>
+    </tr>
+    <tr>
+      <td><strong>UB ID: </strong></td>
+      <td>{{ userprofile.ub_id }}</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<hr>
+<h1>Device Profile:</h1>
+<ul class="nav nav-tabs">
+  {% for devprofile in devprofiles %}
+    {% if forloop.first %}
+      <li class="active"><a href="#{{forloop.counter}}" data-toggle="tab">Device #{{forloop.counter}}</a></li>
+    {% else %}
+      <li><a href="#{{forloop.counter}}" data-toggle="tab">Device #{{forloop.counter}}</a></li>
+    {% endif %}
+  {% empty %}
+    <strong>You do not have a device.</strong>
+  {% endfor %}
+</ul>
+<div class="tab-content">
+  {% for devprofile in devprofiles %}
+    {% if forloop.first %}
+      <div class="tab-pane active" id="{{forloop.counter}}">
+    {% else %}
+      <div class="tab-pane" id="{{forloop.counter}}">
+    {% endif %}
+        <div class="well">
+          <table class="table table-bordered table-striped">
+            <tbody>
+              <tr>
+                <td width='20%'><strong>Device ID: </strong></td>
+                <td><a href='/device/{{devprofile.dev}}/'>{{devprofile.dev}}</a></td>
+              </tr>
+              <tr>
+                <td><strong>Phone No.: </strong></td>
+                <td>{{devprofile.phone_no}}</td>
+              </tr>
+              <tr>
+                <td><strong>Working: </strong></td>
+                <td>{{devprofile.get_working_display}}</td>
+              </tr>
+              <tr>
+                <td><strong>Phone Purpose: </strong></td>
+                <td>{{devprofile.get_phone_purpose_display}}</td>
+              </tr>
+              <tr>
+                <td><strong>Service Type: </strong></td>
+                <td>{{devprofile.get_service_type_display}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  {% endfor %}
+</div>
+{% endblock %}

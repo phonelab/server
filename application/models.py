@@ -22,3 +22,5 @@ class Application(models.Model):
   active          = models.CharField(max_length=1, choices=ACTIVE_CHOICES, null=False)
   created       = models.DateTimeField(auto_now_add=True)
   updated       = models.DateTimeField(auto_now_add=True)
+  def __unicode__(self):
+    return self.name

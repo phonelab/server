@@ -80,6 +80,7 @@ STATIC_URL = '/static/'
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
+#Deprecated in Django 1.4: This setting has been obsoleted by the django.contrib.staticfiles app integration.
 #ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files

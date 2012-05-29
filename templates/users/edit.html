@@ -1,0 +1,33 @@
+<!-- Edit User !-->
+{% extends "base.html" %}
+{% block title %}Edit User Profile: {{userprofile.user.username}}{% endblock %}
+{% block content %}
+<h1>Edit User Profile: <a href='/accounts/profile/{{userprofile.user.id}}'>{{userprofile.user.username}}</a></h1>
+<table class="table">
+  <tbody>
+    <form method="post" action="/accounts/{{userprofile.user.id}}/update/">
+    <tr>
+      <td width='20%'><strong>First Name: </strong></td>
+      <td><input type='text' name='fname' id='fname' value='{{userprofile.user.first_name}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Last Name: </strong></td>
+      <td><input type='text' name='lname' id='lname' value='{{userprofile.user.last_name}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Email: </strong></td>
+      <td><input type='text' name='email' id='email' value='{{userprofile.user.email}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>UB ID: </strong></td>
+      <td><input type='text' name='ub_id' id='ub_id' value='{{userprofile.ub_id}}' /></td>
+    </tr>
+      <td colspan='2'>
+        <input type="submit" class='btn btn-primary' value="Save" />
+        <a onclick="history.back()" class="btn">Cancel</a>
+      </td>
+    </tr>
+  </form>
+  </tbody>
+</table>
+{% endblock %}

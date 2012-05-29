@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 from application.models import Application
+from django.contrib.auth.models import User
 from django.conf import settings
 
 ## other includes
@@ -128,6 +129,7 @@ class DeviceProfile(models.Model):
     (u'4', u'4G'),
   )
   dev           = models.ForeignKey(Device, unique=True)
+  user          = models.ForeignKey(User, blank=True, null=True)
   phone_no      = models.CharField(max_length=13)
   working       = models.CharField(max_length=1, choices=WORKING_CHOICES)
   plan          = models.CharField(max_length=45)
