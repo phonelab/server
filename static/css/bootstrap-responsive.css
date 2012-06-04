@@ -752,8 +752,8 @@
     position: static;
     top: auto;
     left: auto;
-/* for mobile */
-/*    display: none;*/
+/* remove the following line for mobile */
+/*    display: block;*/
     float: none;
     max-width: none;
     padding: 0;
@@ -789,12 +789,20 @@
     float: none;
     margin-left: 0;
   }
+/* modify for mobile dropdown-menu
   .nav-collapse,
   .nav-collapse.collapse {
-/* for mobile */
-/*    height: 0;*/
-    height: auto;
+    height: 0;
     overflow: hidden;
+  }
+*/
+  .nav-collapse{
+    height: 0;
+    overflow: hidden;
+  }
+  .nav-collapse.collapse {
+    height: auto;
+    overflow: visible;
   }
   .navbar .btn-navbar {
     display: block;
