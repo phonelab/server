@@ -7,7 +7,7 @@ from django.utils import  simplejson as json
 from device.models import Device
 from lib.helper import json_response_from
 
-from default import sort_nicely
+from utils import sort_nicely
 import time
 import os, errno, re
 # Log Dir

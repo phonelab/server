@@ -13,7 +13,7 @@ from datetime import datetime
 from device.models import Device, DeviceApplication
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
-from default import re_sort_nicely, sort_nicely
+from utils import re_sort_nicely, sort_nicely
 import os, errno, re
 import datetime
 import string
@@ -30,7 +30,7 @@ Main page
 """
 def main_page(request):
   return render_to_response(
-           'main_page.html',
+           'index.html',
            { 'user': request.user },
            context_instance=RequestContext(request)
          )

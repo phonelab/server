@@ -129,6 +129,7 @@ class DeviceProfile(models.Model):
     (u'4', u'4G'),
   )
   dev           = models.ForeignKey(Device, unique=True)
+#TODO: before user, current user for the future
   user          = models.ForeignKey(User, blank=True, null=True)
   phone_no      = models.CharField(max_length=13, blank=True, null=True)
   working       = models.CharField(max_length=1, choices=WORKING_CHOICES)

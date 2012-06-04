@@ -14,11 +14,9 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-<!--<link href="{{ STATIC_URL }}css/prettify.css" rel="stylesheet"> -->
-    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/docs.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/theme.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}mobile/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}mobile/css/jquery.mobile.structure-1.1.0.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}mobile/css/jqm-icon-pack-1.1.1-fa.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -43,7 +41,8 @@
   </head>
 
 <!--  <body onLoad="prettyPrint()"> -->
-  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+  <body>
+
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -133,13 +132,13 @@
     <div class="container">
       {% block content %}{% endblock %}
       <footer class="footer">
-        <center>
+        <p>
           <ul class="responsive-utilities-test">
             <li>Phone<span class="visible-phone">&#10004; Phone</span></li>
             <li>Tablet<span class="visible-tablet">&#10004; Tablet</span></li>
             <li>Desktop<span class="visible-desktop">&#10004; Desktop</span></li>
           </ul>
-        </center>
+        </p>
         <p class="pull-right"><a href="#">Back to top</a></p>
       	<center>
         	<p>
@@ -152,22 +151,8 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ STATIC_URL }}js/jquery.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-<!--<script src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-alert.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-modal.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-dropdown.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-scrollspy.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-popover.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-button.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-collapse.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-carousel.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap-typeahead.js"></script> 
-    <script src="{{ STATIC_URL }}js/simple-confirm.js"></script>
-    <script src="{{ STATIC_URL }}js/prettify.js"></script>    -->
+    <script src="{{ STATIC_URL }}mobile/js/jquery-1.7.1.min.js"></script>
+    <script src="{{ STATIC_URL }}mobile/js/jquery.mobile-1.1.0.min.js"></script>
     {% block js %}{% endblock %}
   </body>
 </html>
