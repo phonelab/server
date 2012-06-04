@@ -89,7 +89,9 @@
 
 @media (max-width: 480px) {
   .nav-collapse {
-    -webkit-transform: translate3d(0, 0, 0);
+/* To fix bug for 2.3 android */
+/*    -webkit-transform: translate3d(0, 0, 0); */
+    -webkit-transform: none !important;
   }
   .page-header h1 small {
     display: block;
@@ -750,7 +752,8 @@
     position: static;
     top: auto;
     left: auto;
-    display: block;
+/* for mobile */
+/*    display: none;*/
     float: none;
     max-width: none;
     padding: 0;
@@ -788,7 +791,9 @@
   }
   .nav-collapse,
   .nav-collapse.collapse {
-    height: 0;
+/* for mobile */
+/*    height: 0;*/
+    height: auto;
     overflow: hidden;
   }
   .navbar .btn-navbar {

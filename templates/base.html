@@ -16,7 +16,7 @@
     <!-- Le styles -->
 <!--<link href="{{ STATIC_URL }}css/prettify.css" rel="stylesheet"> -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/docs.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/theme.css" rel="stylesheet">
 
@@ -43,7 +43,7 @@
   </head>
 
 <!--  <body onLoad="prettyPrint()"> -->
-  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+<body data-spy="scroll" data-target=".subnav" data-offset="50"> 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -63,9 +63,9 @@
               <li><a href="/devices">Devices</a></li>
               <li><a href="/experiments">Applications</a></li>
               <li><a href="/transactions">Transactions</a></li>
-			        <form class="navbar-search pull-left" method="get" action="/">
+<!--			        <form class="navbar-search pull-left" method="get" action="/"> 
         		  <input type="text" value="{{ q }}" name="q" class="search-query" placeholder="Search">
-        	    </form>
+        	    </form> -->
               {% endif %}
             </ul> <!--class nav -->
 
@@ -133,13 +133,6 @@
     <div class="container">
       {% block content %}{% endblock %}
       <footer class="footer">
-        <center>
-          <ul class="responsive-utilities-test">
-            <li>Phone<span class="visible-phone">&#10004; Phone</span></li>
-            <li>Tablet<span class="visible-tablet">&#10004; Tablet</span></li>
-            <li>Desktop<span class="visible-desktop">&#10004; Desktop</span></li>
-          </ul>
-        </center>
         <p class="pull-right"><a href="#">Back to top</a></p>
       	<center>
         	<p>
