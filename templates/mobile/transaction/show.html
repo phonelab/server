@@ -15,21 +15,23 @@
        {% for transdevapp in transdevapps %}
        <tr>
          <td rowspan="4">{{ transdevapp.tid_id }}</td>
-         <td colspan="2"><strong>D_ID</strong></td>
+         <td colspan="3"><strong>D_ID</strong></td>
          <td><strong>A_ID</strong></td>
        </tr>
        <tr>
-         <td colspan="2"><a href="/device/{{ transdevapp.dev_id }}">{{ transdevapp.dev_id }}</a></td>
+         <td colspan="3"><a href="/device/{{ transdevapp.dev_id }}">{{ transdevapp.dev_id }}</a></td>
          <td><a href="/experiment/{{ transdevapp.app_id }}">{{ transdevapp.app_id }}</a></td>
        </tr>
        <tr>
-         <td><strong>Action</strong></td>
-         <td><strong>Result</strong></td>
+         <td><strong>Act</strong></td>
+         <td><strong>Res</strong></td>
+         <td><strong>S_Time</strong></td>
          <td><strong>E_Time</strong></td>
        </tr>
        <tr>
          <td>{{ transdevapp.action }}</td>
          <td>{{ transdevapp.result }}</td>
+         <td>{{ transdevapp.start }}</td>
          <td>{{ transdevapp.end }}</td>
        </tr>
       {% empty %}
@@ -39,8 +41,9 @@
   T_ID  : Transaction ID<br>
   D_ID  : Device ID<br>
   A_ID  : Application ID<br>
-  Action: I, install and U, uninstall<br>
-  Result: S, success and F, failure<br>
+  Act: I, install and U, uninstall<br>
+  Res: S, success and F, failure<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N, Not available<br>
   S_Time: Start time of transaction<br>
   E_Time: End time of transaction<br>
 </div>

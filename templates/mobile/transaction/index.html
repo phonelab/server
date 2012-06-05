@@ -19,3 +19,21 @@
   </div>
 </div>
 {% endblock %}
+{% block js %}
+    <script type="text/javascript">
+    window.onload = function() {
+    var table = document.getElementById('expandable_table');
+      if (table) {
+        var trs = table.getElementsByTagName('tr');
+        for(var i = 0; i < trs.length; i++) {
+          var a = trs[i].getElementsByTagName('td')[0].getElementsByTagName('a')[0];
+          a.onclick = function() {
+          var span = this.parentNode.getElementsByTagName('span')[0];
+          span.style.display = span.style.display == 'none' ? 'block' : 'none';
+          this.firstChild.nodeValue = span.style.display == 'none' ? 'More' : 'Less';
+          };
+        }
+      }
+    };
+    </script>
+{% endblock %}

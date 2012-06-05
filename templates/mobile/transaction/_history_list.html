@@ -5,9 +5,7 @@
       <tr>
         <th>T_ID</th>
         <th>U_ID</th>
-        <th>Stat</th>
-        <th>S_Time</th>
-        <th>E_Time</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -16,8 +14,6 @@
 			   <td><a href='/transaction/{{ transact.id }}/1/'>{{ transact.id }}</a></td>
          <td><a href='/transaction/{{ transact.user.id }}/2/'>{{ transact.user.username }}</a></td>
          <td>{{ transact.progress }}/{{ transact.total }}</td>
-         <td>{{ transact.start }}</td>
-         <td>{{ transact.end }}</td>
         </tr>
       {% empty %}
       {% endfor %}
@@ -25,7 +21,5 @@
   </table>
   T_ID  : Transaction ID<br>
   U_ID  : User ID<br>
-  Stat  : Progress count/total count<br>
-  S_Time: Start time of transaction<br>
-  E_Time: End time of transaction<br>
+  Status: Progress count/Trasact count<br>
 </div>
