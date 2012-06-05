@@ -1,0 +1,30 @@
+<!-- Single Device !-->
+{% extends "base.html" %}
+{% block title %}Edit Device: {{device.id}} {% endblock %}
+{% block content %}
+<h2>DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a></h2>
+<table class="table">
+  <tbody>
+    <form method="post" action="/device/{{device.id}}/update/">
+    <tr>
+      <td width='20%'><strong>Email: </strong></td>
+      <td><input type='text' name='email' id='email' value='{{device.email}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Registration ID: </strong></td>
+      <td><input type='text' name='reg_id' id='reg_id' value='{{device.reg_id}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Status Interval: </strong></td>
+      <td><input type='text' name='update_interval' id='update_interval' value='{{device.update_interval}}' /></td>
+    </tr>
+    <tr>
+      <td colspan='2'>
+        <input type="submit" class='btn btn-primary' value="Save" />
+        <a onclick="history.back()" class="btn">Cancel</a>
+      </td>
+    </tr>
+  </form>
+  </tbody>
+</table>
+{% endblock %}

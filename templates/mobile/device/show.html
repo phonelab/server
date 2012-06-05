@@ -1,0 +1,92 @@
+<!-- Single Device !-->
+{% extends "base.html" %}
+{% block title %}DeviceID: {{device.id}} {% endblock %}
+{% block content %}
+<h2>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a> (<a href='/device/{{device.id}}/edit/'>Edit</a>)</h2>
+<table class="span4 table table-bordered table-striped">
+  <tbody>
+    <tr>
+      <td width='20%'><strong>Email: </strong></td>
+      <td>{{ device.email }}</td>
+    </tr>
+    <tr>
+      <td><strong>Registration ID: </strong></td>
+      <td>{{ device.reg_id }}</td>
+    </tr>
+    <tr>
+      <td><strong>Status Interval: </strong></td>
+      <td>{{ device.update_interval }} mins</td>
+    </tr>
+  </tbody>
+</table>
+
+<!--<dddiv class="subnav">-->
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#1" data-toggle="tab">Log</a></li>
+    <li><a href="#2" data-toggle="tab">Log Tag Filter</a></li>
+    <li><a href="#3" data-toggle="tab">Send C2DM</a></li>
+    <li><a href="#4" data-toggle="tab">Applications</a></li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">Status Updates<b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        <li><a href="/device/{{device.id}}/status/1/">Battery Level</a></li>
+        <li><a href="/device/{{device.id}}/status/2/">GPS Location</a></li>
+        <li><a href="/device/{{device.id}}/status/3/">Signal Strength</a></li>
+      </ul>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="1">
+      <div class="well">
+        <p>
+        {% for file in filelist %}
+        <a href="/device/{{device.id}}/{{file}}">{{ file }}</a><br>
+	      {% empty %} There is no log file.
+        {% endfor %}
+	      </p>
+      </div>
+    </div>
+    <div class="tab-pane" id="2">
+	    <form class="well form-search" method="post" action="/device/{{device.id}}/tag/">
+        {% if filelist %}
+          <input type="checkbox" class="input-small" id="anti" name="anti" value="0">
+	        <input type="text" class="input-small search-query" id="tagName" name="tagName" value="" />
+	        <button type="submit" class="btn">Search</button>
+        {% else %}
+          There is no log file.<br><br>
+          <input type="checkbox" id="anti" name="anti" value="0" disabled>
+	        <input type="text" class="input-small search-query" id="tagName" name="tagName" value="" disabled/>
+	        <button type="submit" class="btn" disabled>Search</button>
+        {% endif %}
+	    </form>
+    </div>
+    <div class="tab-pane" id="3">
+	    <form class="well form-search" method="post" action="/device/{{device.id}}/c2dm/">
+<!--	        <input type="text" class="input-medium search-query" id="c2dm_msg" name="c2dm_msg" value="" />-->
+        <select class="input-small" id="c2dm_msg" name="c2dm_msg">
+          <option>new_manifest</option>
+          <option>get_device_info</option>
+          <option>uninstall_all_apps</option>
+          <option>remove_manifest</option>
+          <option>start_status_monitoring</option>
+          <option>stop_status_monitoring</option>
+          <option>start_periodic_checking</option>
+          <option>stop_periodic_checking</option>
+          <option>remove_logcat_pid</option>
+          <option>set_status_monitor_location_provider</option>
+        </select>
+	      <button type="submit" class="btn">Send Message</button>
+	    </form>
+    </div>
+    <div class="tab-pane" id="4">
+      {% include 'device/_list.html' %}
+    </div>
+    <div class="tab-pane" id="5">
+       <a href='/device/{{device.id}}/status/1/'>Battery Level</a><br>
+       <a href='/device/{{device.id}}/status/2/'>GPS Location</a><br>
+       <a href='/device/{{device.id}}/status/3/'>Signal Strength</a><br>
+    </div>
+  </div>
+<!--</div>-->
+
+{% endblock %}
