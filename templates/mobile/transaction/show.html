@@ -21,7 +21,7 @@
      <tbody>
        {% for transdevapp in transdevapps %}
        <tr>
-         <td rowspan="4">{{ transdevapp.tid_id }}</td>
+         <td rowspan="2">{{ transdevapp.tid_id }}</td>
          <td colspan="3"><a href="/device/{{ transdevapp.dev_id }}">{{ transdevapp.dev_id }}</a></td>
          <td><a href="/experiment/{{ transdevapp.app_id }}">{{ transdevapp.app_id }}</a></td>
        </tr>
