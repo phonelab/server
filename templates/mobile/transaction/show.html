@@ -2,33 +2,64 @@
 {% block title %}Transaction View{% endblock %}
 {% block content %}
 <h2>Transaction View ({{ id }})</h2>
-<div class="well">
+<div class="span11 well">
+
   <table class="table table-striped table-bordered">
     <thead>
       <tr> 
-        <th>ID</th>
-        <th>Device ID</th>
-        <th>Application ID</th>
-        <th>Action</th>
-        <th>Result</th>
-        <th>Start Time</th>
-        <th>End Time</th>
+        <th>T_ID</th>
+        <th rowspan=4></th>
       </tr>
      </thead>
      <tbody>
        {% for transdevapp in transdevapps %}
        <tr>
-         <td>{{ transdevapp.tid_id }}</td>
-         <td><a href="/device/{{ transdevapp.dev_id }}">{{ transdevapp.dev_id }}</a></td>
+         <td rowspan="4">{{ transdevapp.tid_id }}</td>
+         <td colspan="2"><strong>D_ID</strong></td>
+         <td><strong>A_ID</strong></td>
+       </tr>
+       <tr>
+         <td colspan="2"><a href="/device/{{ transdevapp.dev_id }}">{{ transdevapp.dev_id }}</a></td>
          <td><a href="/experiment/{{ transdevapp.app_id }}">{{ transdevapp.app_id }}</a></td>
-         <td>{{ transdevapp.get_action_display }}</td>
-         <td>{{ transdevapp.get_result_display }}</td>
-         <td>{{ transdevapp.start }}</td>
+       </tr>
+       <tr>
+         <td><strong>Action</strong></td>
+         <td><strong>Result</strong></td>
+         <td><strong>E_Time</strong></td>
+       </tr>
+       <tr>
+         <td>{{ transdevapp.action }}</td>
+         <td>{{ transdevapp.result }}</td>
          <td>{{ transdevapp.end }}</td>
        </tr>
       {% empty %}
       {% endfor %}
     </tbody>
   </table>
+  T_ID  : Transaction ID<br>
+  D_ID  : Device ID<br>
+  A_ID  : Application ID<br>
+  Action: I, install and U, uninstall<br>
+  Result: S, success and F, failure<br>
+  S_Time: Start time of transaction<br>
+  E_Time: End time of transaction<br>
 </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+    window.onload = function() {
+    var table = document.getElementById('expandable_table');
+      if (table) {
+        var trs = table.getElementsByTagName('tr');
+        for(var i = 0; i < trs.length; i++) {
+          var a = trs[i].getElementsByTagName('td')[0].getElementsByTagName('a')[0];
+          a.onclick = function() {
+          var span = this.parentNode.getElementsByTagName('span')[0];
+          span.style.display = span.style.display == 'none' ? 'block' : 'none';
+          this.firstChild.nodeValue = span.style.display == 'none' ? 'More' : 'Less';
+          };
+        }
+      }
+    };
+    </script>
 {% endblock %}
