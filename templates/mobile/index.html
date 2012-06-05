@@ -2,7 +2,7 @@
 {% block content %}
 <header class="jumbotron masthead">
   <div class="inner">
-    <h1><img alt='PhoneLab Image' class='pull-left' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:35px"/>PhoneLab: </img></h1>
+    <h1><img alt='PhoneLab Image' class='pull-left' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:35px"/>PhoneLab: </h1>
     <p>A Participatory and Largescale Smartphone Testbed</p>
     <p>
     {% if not user.is_authenticated %}
@@ -15,31 +15,34 @@
 </header>
 <hr class="soften">
 <div class="marketing">
-<div class="row-fluid">
-  <div class="span4">
-    <h2><i class="icon-globe"></i> Scale: 1000 Smartphones</h2>
-    <p>
-      • Providing an order of magnitude more participants than typical smartphone experiments<br>
-      • Enabling large-scale experiments<br>
-      • Using 1000 Nexus S 4G phones<br>
-    </p>
+  <div class="row-fluid">
+    <div class="span4">
+      <img class="bs-icon" src="{{STATIC_URL}}img/glyphicons_163_iphone.png">
+      <h3> Scale: 1000 Smartphones</h3><br>
+      <p>
+        • Providing an order of magnitude more participants than typical smartphone experiments<br>
+        • Enabling large-scale experiments<br>
+        • Using 1000 Nexus S 4G phones<br>
+      </p>
+    </div>
+    <div class="span4">
+      <img class="bs-icon" src="{{STATIC_URL}}img/glyphicons_042_group.png">
+      <h3> Realism: Used by Real People</h3>
+      <p>
+        • Distributed to UB students, staff,and faculty, enabling realistic experiments<br>
+        • Eliminating the need to recruit participants<br>
+        • Providing up to 1000 participants in the same area<br>
+      </p>
+    </div>
+    <div class="span4">
+      <img class="bs-icon" src="{{STATIC_URL}}img/glyphicons_082_roundabout.png">
+      <h3> Power: Kernel & Application Experimentation</h3>
+      <p>
+        • Providing access to both the kernel layer and the app layer<br>
+        • Enabling low-level smartphone experimentation<br>
+        • Overcoming limitations of App Store or Android Market<br>
+      </p>
+    </div>
   </div>
-  <div class="span4">
-    <h2><i class="icon-user"></i> Realism: Used by Real Peopl2</h2>
-    <p>
-      • Distributed to UB students, staff,and faculty, enabling realistic experiments<br>
-      • Eliminating the need to recruit participants<br>
-      • Providing up to 1000 participants in the same area<br>
-    </p>
-  </div>
-  <div class="span4">
-    <h2><i class="icon-fire"></i> Power: Kernel & Application Experimentation</h2>
-    <p>
-      • Providing access to both the kernel layer and the app layer<br>
-      • Enabling low-level smartphone experimentation<br>
-      • Overcoming limitations of App Store or Android Market<br>
-    </p>
-  </div>
-</div>
 </div>
 {% endblock %}

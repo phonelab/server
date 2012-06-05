@@ -796,13 +796,10 @@
     overflow: hidden;
   }
 */
-  .nav-collapse{
-    height: 0;
-    overflow: hidden;
-  }
+  .nav-collapse,
   .nav-collapse.collapse {
-    height: auto;
-    overflow: visible;
+    overflow: hidden;
+    height: 0;
   }
   .navbar .btn-navbar {
     display: block;
