@@ -20,7 +20,8 @@
        <a href="/" class="btn btn-success">Home</a>
        </p>
      {% else %}
-       <form method="post" action=".">
+     {% include '_form.html' with button="Sign Up" %}
+     <!--  <form method="post" action=".">
        {% csrf_token %}
        <table class = "table table-striped">
        <tbody>
@@ -29,7 +30,7 @@
        </table>
        <input type="submit" class="btn btn-primary" value="Sign Up" />
        <a onclick="history.back()" class="btn">Cancel</a>
-       </form>
+       </form>-->
      {% endif %}
      </div>
   
