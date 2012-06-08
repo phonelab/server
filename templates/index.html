@@ -8,41 +8,42 @@
     <p>
     <br><br>
     {% if not user.is_authenticated %}
-    <a href="/register" class="btn btn-primary btn-large"><i class="icon-user icon-white"></i> Sign Up</a>
+<!--    <a href="/register" class="btn btn-primary btn-large"><i class="icon-user icon-white"></i> Sign Up</a>-->
     <a href="/login" class="btn btn-large"><i class="icon-ok"></i> Log In</a>
     {% else %}
     <br>
     {% endif %}
     </p>
 	</div>
+<hr class="soften">
 <div class="marketing">
-  <div class="row-fluid">
+  <div class="row">
     <div class="span4">
       <img class="bs-icon" src="{{STATIC_URL}}img/glyphicons_163_iphone.png">
-      <h2> Scale: 1000 Smartphones</h2>
-      <p>
-        • Providing an order of magnitude more participants than typical smartphone experiments<br>
-        • Enabling large-scale experiments<br>
-        • Using 1000 Nexus S 4G phones<br>
-      </p>
+      <h2>Scale</h2><br>
+      <ul>
+        <li>Providing an order of magnitude more participants than typical smartphone experiments</li>
+        <li>Enabling large-scale experiments</li>
+        <li>Using 1000 Nexus S 4G phones</li>
+      </ul>
     </div>
     <div class="span4">
       <img class="bs-icon" src="{{STATIC_URL}}img/glyphicons_042_group.png">
-      <h2> Realism: Used by Real People</h2>
-      <p>
-        • Distributed to UB students, staff,and faculty, enabling realistic experiments<br>
-        • Eliminating the need to recruit participants<br>
-        • Providing up to 1000 participants in the same area<br>
-      </p>
+      <h2>Realism</h2><br>
+      <ul>
+        <li>Distributed to UB students, staff,and faculty, enabling realistic experiments</li>
+        <li>Eliminating the need to recruit participants</li>
+        <li>Providing up to 1000 participants in the same area</li>
+      </ul>
     </div>
     <div class="span4">
       <img class="bs-icon" src="{{STATIC_URL}}img/glyphicons_082_roundabout.png">
-      <h2> Power: Kernel & Application Experimentation</h2>
-      <p>
-        • Providing access to both the kernel layer and the app layer<br>
-        • Enabling low-level smartphone experimentation<br>
-        • Overcoming limitations of App Store or Android Market<br>
-      </p>
+      <h2>Power</h2><br>
+      <ul>
+        <li>Providing access to both the kernel layer and the app layer</li>
+        <li>Enabling low-level smartphone experimentation</li>
+        <li>Overcoming limitations of App Store or Android Market</li>
+      </ul>
     </div>
   </div>
 </div>
