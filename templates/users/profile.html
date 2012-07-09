@@ -18,8 +18,14 @@ $('#edit').modal('{
     <div class="span3">
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
+<<<<<<< HEAD
           {% if user.is_authenticated %}
           <li><a href=".">Profile</a></li>
+=======
+          <li class="nav-header">Phonelab</li>
+          <li><a href="/">Home</a></li>
+          {% if user.is_authenticated %}
+>>>>>>> upstream/master
           <li><a data-toggle="collapse" href="#experiment">Experiments</li>
           {% if experiments %}
           {% for experiment in experiments %}
@@ -38,11 +44,16 @@ $('#edit').modal('{
           {% endfor %}
           <li><a href="/devices">Devices</a></li>
           <li><a href="/experiments">Applications</a></li>
+<<<<<<< HEAD
+=======
+          <li><a href="/transactions">Transactions</a></li>
+>>>>>>> upstream/master
           {% endif %}
         </ul>
       </div>
     </div>
     <div class="span9">
+<<<<<<< HEAD
       <h1>Profiles:</h1>
       <ul class="nav nav-tabs">
         <li class="active">
@@ -65,6 +76,69 @@ $('#edit').modal('{
         </div>
        </div>
     </div>
+=======
+      <h1>User Profile: {{userprofile.user.username}} (<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
+      <table class="table table-bordered table-striped">
+       <tbody>
+        <tr>
+          <td width='20%'><strong>First Name: </strong></td>
+          <td>{{ userprofile.user.first_name }}</td>
+        </tr>
+        <tr>
+          <td><strong>Last Name: </strong></td>
+          <td>{{ userprofile.user.last_name }}</td>
+        </tr> 
+        <tr>
+          <td><strong>Email: </strong></td>
+          <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+          <td><strong>UB ID: </strong></td>
+          <td>{{ userprofile.ub_id }}</td>
+        </tr>
+       </tbody>
+      </table>
+      <div class="modal fade" id="edit">
+        <form class="modal-form" method="post" action="/accounts/{{userprofile.user.id}}/update/">
+        <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h1>Edit User Profile: <a href='/accounts/profile/{{userprofile.user.id}}'>{{userprofile.user.username}}</a></h1>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <tbody>
+              
+              <tr>
+                <td width='20%'><strong>First Name: </strong></td>
+                <td><input type='text' name='fname' id='fname' value='{{userprofile.user.first_name}}' /></td>
+              </tr>
+              <tr>
+                <td><strong>Last Name: </strong></td>
+                <td><input type='text' name='lname' id='lname' value='{{userprofile.user.last_name}}' /></td>
+              </tr>
+              <tr>
+                <td><strong>Email: </strong></td>
+                <td><input type='text' name='email' id='email' value='{{userprofile.user.email}}' /></td>
+              </tr>
+              <tr>
+                <td><strong>UB ID: </strong></td>
+                <td><input type='text' name='ub_id' id='ub_id' value='{{userprofile.ub_id}}' /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" class='btn btn-primary' value="Save" />
+          <a onclick="history.back()" class="btn">Cancel</a>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<hr>
+>>>>>>> upstream/master
 <h1>Device Profile:</h1>
 <ul class="nav nav-tabs">
   {% for devprofile in devprofiles %}
@@ -118,7 +192,10 @@ $('#edit').modal('{
     </div>
   {% endfor %}
 </div>
+<<<<<<< HEAD
 </div>
 </div>
+=======
+>>>>>>> upstream/master
 
 {% endblock %}

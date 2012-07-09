@@ -15,8 +15,8 @@ Admin site interface
 """
 
 class DeviceAdmin(admin.ModelAdmin):
-  list_display = ('id', 'email', 'reg_id')
-  search_fields = ['id', 'email']
+  list_display = ('id', 'reg_id')
+  search_fields = ['id']
 admin.site.register(Device, DeviceAdmin)
 #admin.site.register(Device)
 
@@ -39,11 +39,11 @@ class TransactionDevAppAdmin(admin.ModelAdmin):
 admin.site.register(TransactionDevApp, TransactionDevAppAdmin)
 
 class UserProfileAdmin(admin.ModelAdmin):
-  list_display = ('user', 'ub_id', 'activation_key', 'key_expires')
+  list_display = ('user', 'user_type', 'activation_key', 'key_expires')
 admin.site.register(UserProfile, UserProfileAdmin)
 
 class DeviceProfileAdmin(admin.ModelAdmin):
-  list_display = ('dev', 'user', 'phone_no', 'working', 'plan', 'phone_purpose', 'service_type')
+  list_display = ('dev', 'user', 'phone_no', 'status', 'plan', 'image_version', 'purpose', 'service_type')
 admin.site.register(DeviceProfile, DeviceProfileAdmin)
 
 

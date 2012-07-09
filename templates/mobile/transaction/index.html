@@ -1,0 +1,39 @@
+<!-- Transaction !-->
+{% extends "base.html" %}
+{% block title %}Transaction{% endblock %}
+{% block content %}
+<h2>Transaction</h2>
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#1" data-toggle="tab">Create Transaction</a></li>
+    <li><a href="#2" data-toggle="tab">History</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="1">
+      {% include 'transaction/_create_transaction.html' %}
+    </div>
+    <div class="tab-pane" id="2">
+      {% include 'transaction/_history_list.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+    window.onload = function() {
+    var table = document.getElementById('expandable_table');
+      if (table) {
+        var trs = table.getElementsByTagName('tr');
+        for(var i = 0; i < trs.length; i++) {
+          var a = trs[i].getElementsByTagName('td')[0].getElementsByTagName('a')[0];
+          a.onclick = function() {
+          var span = this.parentNode.getElementsByTagName('span')[0];
+          span.style.display = span.style.display == 'none' ? 'block' : 'none';
+          this.firstChild.nodeValue = span.style.display == 'none' ? 'More' : 'Less';
+          };
+        }
+      }
+    };
+    </script>
+{% endblock %}

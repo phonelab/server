@@ -236,7 +236,11 @@ def confirm(request, activation_key):
 
   if user_profile.user_type == 'member':
     return render_to_response(
+<<<<<<< HEAD
           'users/group_addition.html',
+=======
+          'users/user_group.html',
+>>>>>>> upstream/master
           {'user': user,
           'user_type': user_profile.user_type},
           context_instance=RequestContext(request)

@@ -1,0 +1,13 @@
+<!-- Show list of devices !-->
+{% extends "base.html" %}
+{% block title %}DeviceID: {{device.id}}{% endblock %}
+{% block content %}
+  <h2>DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ logFilename }}.log</h2>
+  <table class="table table-striped">
+    <tbody>
+    <tr>
+      <td><pre>{{ Logdata }}</pre></td>
+    </tr>
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,13 @@
+<!-- Show list of devices !-->
+{% extends "base.html" %}
+{% block title %}DeviceID: {{device.id}}{% endblock %}
+{% block content %}
+<h2>DeviceID: <a href='/device/{{device.id}}'>{{device.id}}</a> &raquo; {{ TagName }}</h2>
+<div class="well">
+    {% if Tagdata %}
+		  {{ Tagdata|linebreaks }}
+    {% else %}
+      "<strong>{{ TagName }}</strong>" have not been updeated yet
+    {% endif %}
+</div>
+{% endblock %}

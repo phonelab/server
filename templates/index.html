@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}PhoneLab Testbed Web Site{% endblock %}
+{% block content %}
+  <div class='hero-unit' style='padding:30px'>
+    <img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:150px"/>
+    <h1>PhoneLab:</h1>
+    <h2>A Participatory and Large-scale Smartphone Testbed</h2>
+    <p>
+    <br><br>
+    {% if not user.is_authenticated %}
+<!--    <a href="/register" class="btn btn-primary btn-large"><i class="icon-user icon-white"></i> Sign Up</a>-->
+    <a href="/login" class="btn btn-large"><i class="icon-ok"></i> Log In</a>
+    {% else %}
+    <br>
+    {% endif %}
+    </p>
+	</div>
+<hr class="soften">
+<div class="marketing">
+  <div class="row">
+    <div class="span4">
+      <img class="bs-icon" src="{{STATIC_URL}}img/multiphones.png">
+      <h2>Scale</h2>
+      <ul>
+        <li>Providing an order of magnitude more participants than typical smartphone experiments</li>
+        <li>Enabling large-scale experiments</li>
+        <li>Using 200 Nexus S 4G phones and expanding</li>
+      </ul>
+    </div>
+    <div class="span4">
+      <img class="bs-icon" src="{{STATIC_URL}}img/people.png">
+      <h2>Realism</h2>
+      <ul>
+        <li>Distributed to UB students, staff,and faculty, enabling realistic experiments</li>
+        <li>Eliminating the need to recruit participants</li>
+        <li>Providing up to 1000 participants in the same area</li>
+      </ul>
+    </div>
+    <div class="span4">
+      <img class="bs-icon" src="{{STATIC_URL}}img/thunder.png">
+      <h2>Power</h2>
+      <ul>
+        <li>Providing access to both the kernel layer and the app layer</li>
+        <li>Enabling low-level smartphone experimentation</li>
+        <li>Overcoming limitations of App Store or Play Store</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

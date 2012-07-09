@@ -1,0 +1,46 @@
+<!-- Single Device !-->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Upload New Experiment</h2>
+<table class="table">
+  <tbody>
+    <form method="post" action="/experiment/" enctype="multipart/form-data">
+    <tr>
+      <td width='20%'><strong>Name: </strong></td>
+      <td><input type='text' name='name' id='name' value='{{app.name}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Package: </strong></td>
+      <td><input type='text' name='package_name' id='package_name' value='{{app.package_name}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Intent Name: </strong></td>
+      <td><input type='text' name='intent_name' id='intent_name' value='{{app.intent_name}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Description: </strong></td>
+      <td><input type='text' name='description' id='description' value='{{app.description}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Type: </strong></td>
+      <td><input type='text' name='type' id='type' value='{{app.type}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Version: </strong></td>
+      <td><input type='text' name='version' id='version' value='{{app.version}}' /></td>
+    </tr>
+    <tr>
+      <td><strong>Upload: </strong></td>
+      <td><input type='file' name='upload' id='upload' /></td>
+    </tr>
+    <tr>
+      <td colspan='2'>
+        <input type="submit" class='btn btn-primary' value="Submit" />
+        <a onclick="history.back()" class="btn">Cancel</a>
+      </td>
+    </tr>
+    </form>
+  </tbody>
+</table>
+{% endblock %}

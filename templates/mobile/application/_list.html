@@ -1,0 +1,20 @@
+<div class="span11 well">
+  <h3><strong>Installed Devices</strong></h3>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Device ID</th>
+<!--        <th>Email</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      {% for dev in devs %}
+        <tr>
+          <td><a href='/device/{{dev.id}}/'>{{dev.id}}</a></td>
+<!--          <td>{{dev.email}}</td>-->
+        </tr>
+      {% empty %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

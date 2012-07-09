@@ -15,7 +15,6 @@ RAW_APP_ROOT = os.path.join(SITE_ROOT, 'application', 'apps')
 ENV = os.environ.get("ENV") or "development"
 
 # Email setting;
-
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 
@@ -24,6 +23,20 @@ EMAIL_HOST_PASSWORD = 'phonelab2012'
 
 EMAIL_PORT = 587
 FROM_EMAIL = EMAIL_HOST_USER
+
+#Movile setting
+MOBILE_UTILS_SETTINGS = {
+    'MOBILE_TEMPLATES_DIR': (              # tuple of mobile template dirs (absolute paths
+    (os.path.join(SITE_ROOT, 'templates/mobile')),
+    ),
+    'IGNORE_LIST':(                        #tuple of browsers to ignore
+        'ipad',
+        'palm',
+        'wap',
+    ),
+    'USER_AGENTS_FILE' : (os.path.join(SITE_ROOT, 'mobile_utils/' 'data/' 'mobile_agents.txt')),  # line-broken strings to match
+    'USE_REGEX':False                      # use RegEx to do the string search
+}
 
 ADMINS = (
     ('Micheal Benedict', 'micheala@buffalo.edu'),
@@ -104,6 +117,8 @@ SECRET_KEY = '-(8mq(psp19h310((%z8(s%4^t1rv((7m+tmae6n--sum86#w)'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
+#Mobile template
+    'mobile_utils.loaders.load_template_source',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
@@ -115,6 +130,8 @@ MIDDLEWARE_CLASSES = (
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+#Mobile Middleware
+    'mobile_utils.middleware.RequestMiddleware',
 )
 
 ROOT_URLCONF = 'server.urls'
@@ -125,7 +142,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(SITE_ROOT, 'templates'),
     os.path.join(SITE_ROOT, 'templates/admin'),
-
+#    os.path.join(SITE_ROOT, 'templates/mobile'),
 )
 
 INSTALLED_APPS = (

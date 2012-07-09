@@ -20,9 +20,9 @@ class Device(models.Model):
     (u'D', u'DISABLED'),
   )
   id              = models.CharField(max_length=15, null=False, primary_key=True)
-  email           = models.CharField(max_length=30, null=False)
+#  email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=300, null=False)
-  collapse_key    = models.CharField(max_length=255)
+  collapse_key    = models.CharField(max_length=255, null=True)
   last_messaged   = models.DateTimeField(blank=True, null=True)
   failed_push     = models.BooleanField(default=False)
   update_interval = models.CharField(max_length=5, null=False, default=10)
@@ -113,16 +113,21 @@ Class DeviceProfile
 @author TKI
 """
 class DeviceProfile(models.Model):
-  WORKING_CHOICES = (
-    (u'Y', u'Working'),
-    (u'N', u'not Working'),
+  STATUS_CHOICES = (
+    (u'L', u'Lost'),
+    (u'N', u'Not Working'),
+    (u'O', u'Out of Order'),
+    (u'W', u'Working'),
   )
   PURPOSE_CHOICES = (
-    (u'C', u'CSE622'),
-    (u'F', u'Faculty'),
+    (u'C1', u'CSE622'),
+    (u'C2', u'CSE646'),
+    (u'C3', u'CSExxx'),
+    (u'F', u'Faculty Use'),
     (u'O', u'Other'),
     (u'P', u'PhoneLab'),
     (u'R', u'Research'),
+    (u'N', u'Not Assigned'),
   )
   TYPE_CHOICES = (
     (u'3', u'3G'),
@@ -130,9 +135,9 @@ class DeviceProfile(models.Model):
   )
   dev           = models.ForeignKey(Device, unique=True)
   user          = models.ForeignKey(User, blank=True, null=True)
-  phone_no      = models.CharField(max_length=13, blank=True, null=True)
-  working       = models.CharField(max_length=1, choices=WORKING_CHOICES)
-  plan          = models.CharField(max_length=45, blank=True, null=True)
+  phone_no  = models.CharField(max_length=13, blank=True, null=True)
+  status  = models.CharField(max_length=1, choices=STATUS_CHOICES)
+  plan    = models.CharField(max_length=45, blank=True, null=True)
   image_version = models.CharField(max_length=45, blank=True, null=True)
-  phone_purpose = models.CharField(max_length=1, choices=PURPOSE_CHOICES)
+  purpose = models.CharField(max_length=1, choices=PURPOSE_CHOICES)
   service_type  = models.CharField(max_length=1, choices=TYPE_CHOICES)

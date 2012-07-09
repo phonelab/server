@@ -14,7 +14,7 @@ from datetime import datetime
 from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
-from default import re_sort_nicely, sort_nicely
+from utils import re_sort_nicely, sort_nicely
 import os, errno, re
 import datetime
 import string
@@ -31,7 +31,7 @@ Main page
 """
 def main_page(request):
   return render_to_response(
-           'main_page.html',
+           'index.html',
            { 'user': request.user },
            context_instance=RequestContext(request)
          )
@@ -63,9 +63,9 @@ def index(request):
     
   return render_to_response(
             'device/index.html', 
-            {
+            {    
                 'devices': devices
-            },
+            },   
             context_instance=RequestContext(request)
           )
 
@@ -110,8 +110,8 @@ def create_or_update_device(request):
   if device.count() == 1:
     device = device[0]
     # email
-    if ('email' in params and device.email != params['email']):
-      device.email = params['email']
+    #if ('email' in params and device.email != params['email']):
+    #  device.email = params['email']
     # reg_id
     if ('reg_id' in params and device.reg_id != params['reg_id']):
       device.reg_id = params['reg_id']
@@ -122,7 +122,7 @@ def create_or_update_device(request):
   else:
     device = Device(
         id     = params['device_id'], 
-        email  = "phonelab@gmail.com", #params['email'] 
+    #    email  = "phonelab@gmail.com", #params['email'] 
         reg_id = params['reg_id']
     )
   # save device
@@ -144,9 +144,15 @@ Show Device Details and Application monitor [GET]
 """
 @login_required
 def show(request, deviceId):
+<<<<<<< HEAD
 
   user = request.user
   userprofile = UserProfile.objects.get(user_id=user.id)
+=======
+  user = request.user
+  userprofile = UserProfile.objects.get(user_id=user.id)
+
+>>>>>>> upstream/master
   # define default response
   response = { "err": "", "data": "" }
   # get device
