@@ -1,0 +1,14 @@
+{% load url from future %}
+Hello Admin,
+
+The following user requires authorization to start an experiment group
+
+Username: {{ user }}
+Email: {{ email }} 
+
+Please click the following link to authorize the user.
+
+Actvation Link: http://{{ site_name }}/accounts/authorize/{{ key}}
+
+Thank You
+Phonelab

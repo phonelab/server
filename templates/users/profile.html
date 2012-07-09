@@ -1,30 +1,70 @@
 <!-- User Profile !-->
 {% extends "base.html" %}
+<script type="text/javascript">
+$("#experiment").collapse({
+  toggle: false
+})
+$('#groups').collapse({
+  toggle: false
+})
+$('#edit').modal('{
+  keyboard: false
+}')
+</script>
 {% block title %}User Profile: {{user.username}} {% endblock %}
 {% block content %}
-<h1>User Profile: {{userprofile.user.username}} (<a href='/accounts/{{userprofile.user.id}}/edit/'>Edit</a>)</h1>
-<table class="table table-bordered table-striped">
-  <tbody>
-    <tr>
-      <td width='20%'><strong>First Name: </strong></td>
-      <td>{{ userprofile.user.first_name }}</td>
-    </tr>
-    <tr>
-      <td><strong>Last Name: </strong></td>
-      <td>{{ userprofile.user.last_name }}</td>
-    </tr>
-    <tr>
-      <td><strong>Email: </strong></td>
-      <td>{{ user.email }}</td>
-    </tr>
-    <tr>
-      <td><strong>UB ID: </strong></td>
-      <td>{{ userprofile.ub_id }}</td>
-    </tr>
-  </tbody>
-</table>
-<br>
-<hr>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span3">
+      <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+          {% if user.is_authenticated %}
+          <li><a href=".">Profile</a></li>
+          <li><a data-toggle="collapse" href="#experiment">Experiments</li>
+          {% if experiments %}
+          {% for experiment in experiments %}
+          <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
+          {% endfor %}
+          {% else %}
+          {% if userprofile.user_type == 'leader' %}
+          <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
+          {% elif userprofile.user_type == 'member' %}
+          <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
+          {% endif %}
+          {%endif%}
+          <li><a data-toggle="collapse" href="#groups">Groups</a></li>
+          {% for group in groups %}
+          <li id="groups" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ group }}</a></li>
+          {% endfor %}
+          <li><a href="/devices">Devices</a></li>
+          <li><a href="/experiments">Applications</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+    <div class="span9">
+      <h1>Profiles:</h1>
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="#userprofile" data-toggle="pill">User Profile</a>
+        </li>
+        <li>
+          <a href="#group" data-toggle="tab">Groups</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="userprofile">
+          <div class="well">
+          {% include 'user_profile.html' %}
+          </div>
+        </div>
+        <div class="tab-pane" id="group">
+          <div class="well">
+            {% include 'group_profile.html' %}
+          </div>
+        </div>
+       </div>
+    </div>
 <h1>Device Profile:</h1>
 <ul class="nav nav-tabs">
   {% for devprofile in devprofiles %}
@@ -75,6 +115,10 @@
           </table>
         </div>
       </div>
+    </div>
   {% endfor %}
 </div>
+</div>
+</div>
+
 {% endblock %}

@@ -1,0 +1,13 @@
+{% load url from future %}
+Hello {{ leader_name }},
+
+The following user requires authorization to join your experiment group
+
+Username: {{ user }}
+Email: {{ email }} 
+
+Please click the following link to authorize the user to join your group.
+
+Actvation Link: http://{{ site_name }}/accounts/authorize/{{ key}}
+
+Thank You

@@ -1,6 +1,6 @@
 from django.db import models
 from django import forms
-
+from django.contrib.auth.models import User
 """
 Class Application
 
@@ -11,6 +11,7 @@ class Application(models.Model):
     (u'E', u'ENABLED'),
     (u'D', u'DISABLED'),
   )
+  user_id       = models.ForeignKey(User, unique = True)
   name          = models.CharField(max_length=30, null=False)
   package_name  = models.CharField(max_length=100, null=False)
   intent_name   = models.CharField(max_length=100, null=False)

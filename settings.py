@@ -174,7 +174,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 AUTH_PROFILE_MODULE = 'users.UserProfile'
-
 # database vars
 # production vars
 if ENV == "production":

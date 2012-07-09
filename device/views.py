@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 
 #from django.contrib.auth.models import User
+from users.models import UserProfile
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
@@ -10,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
 
 #from manifest.views import *
-from device.models import Device, DeviceApplication
+from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
 from default import re_sort_nicely, sort_nicely
@@ -42,12 +43,24 @@ List All Devices
 
 @author Micheal
 """
+"""
+Update to show only the user's device
+
+@date 07/09/2012
+
+@author Manoj
+"""
 @login_required
 #@login_required(login_url='/login/')
-def index(request): 
-  # get all devices
-  devices = Device.objects.all
+def index(request):
 
+  user = request.user
+  # get user's devices
+  device_profiles = DeviceProfile.objects.filter(user=user)
+  
+  for device in device_profiles:
+    devices = Device.objects.filter(id = device.dev_id)
+    
   return render_to_response(
             'device/index.html', 
             {
@@ -131,6 +144,9 @@ Show Device Details and Application monitor [GET]
 """
 @login_required
 def show(request, deviceId):
+
+  user = request.user
+  userprofile = UserProfile.objects.get(user_id=user.id)
   # define default response
   response = { "err": "", "data": "" }
   # get device
@@ -171,7 +187,8 @@ def show(request, deviceId):
   	    'device' : dev,
   	    'apps'     : apps,
         'unapps'   : unapps,
-        'filelist' : filelist
+        'filelist' : filelist,
+        'user_type': userprofile.user_type
   	  },
       context_instance=RequestContext(request)
     )

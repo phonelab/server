@@ -1,0 +1,28 @@
+<form class="form-horizontal" method="post" action=".">
+	<fieldset>
+		{% for field in form %}
+		
+			<div class="control-group{% if field.errors %} error {% endif %}">
+				<!--{% if field.html_name == 'user_type' %}
+				
+				{% endif %}-->
+				<label class="control-label" for="id_{{ field.html_name }}">{{ field.label }}</label>
+				<div class="controls">
+					{{ field }}
+					
+					{% if field.errors %}
+						<p class="help-block">{{ field.errors }}</p>
+					{% endif %}
+					
+					{% if field.help_text %}
+						<p class="help-block">{{ field.help_text }}</p>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+ 		
+		<!--<div class="form-actions">
+			<input type="select" name="user_type" onchange="for_member()">
+		</div>-->
+	</fieldset>
+</form>

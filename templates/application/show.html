@@ -21,13 +21,10 @@
       <td><strong>Description: </strong></td>
       <td>{{ app.description }}</td>
     </tr>
-    <tr>
-      <td>(<a href='/experiment/{{app.id}}.apk/'><strong>Download</strong></a>)</td>
-      <td></td>
-    </tr>
   </tbody>
 </table>
-
+<a class="btn btn-primary" href='/experiment/{{app.id}}.apk/'>Download</a>
+<a class="btn btn-primary" href='/experiment/withdraw/{{app.id}}/'>Withdraw</a><br><hr>
 <div class="tabbable">
   <ul class="nav nav-tabs">
     <li class="active"><a href="#1" data-toggle="tab">Installed Devices</a></li>

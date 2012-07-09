@@ -1,0 +1,11 @@
+Hello {{ user }},
+
+Your phonelab account has been authorized and is ready to use. Please login using the following username.
+
+Username: {{ user }}
+
+http://127.0.0.1:8000/login/
+
+Thank You
+Admin
+Phonelab
