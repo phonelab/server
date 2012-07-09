@@ -1,0 +1,8 @@
+{% load url from future %}
+Hello {{ user }},
+
+Thank you for signing up for an phone-lab.org account! 
+
+Your account is authorized and is activated. Your username is "{{ user }}". 
+
+Thank You

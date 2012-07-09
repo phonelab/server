@@ -1,5 +1,6 @@
 {% load url from future %}
-Hello, {{ user }}, and thank you for signing up for an phone-lab.org account!
+Hello, {{ req_user }}, thank you for signing up for an phone-lab.org account!
 
 To activate your account, click this link within 48 hours:
+
 http://{{ site_name }}/accounts/confirm/{{ key}}

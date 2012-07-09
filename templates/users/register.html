@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}User Registration{% endblock %}
     {% block content %}
       <div class="page-header">
@@ -7,31 +8,70 @@
    
      <div class="div8">
      {% if has_account %}
+     
        <div class="alert alert-info">
-       <a class="close" data-dismiss="alert">&times;</a>
-       You already have an account. Your username is "{{ user.username }}"
+        <a class="close" data-dismiss="alert">&times;</a>
+        You already have an account. Your username is "{{ user.username }}"
+       </div>
      {% elif created %}
+    
+      {% if user_type == "participant" %}
        <div class="alert alert-success">
-       <a class="close" data-dismiss="alert">&times;</a>
-       <p><strong>Verify Your Email Address</strong><br><br>
+        <a class="close" data-dismiss="alert">&times;</a>
+        <p><strong>Verify Your Email Address</strong><br><br>
        
-       We now need to verify your email address.<br>
-       We have sent an email to {{ mail }} to verify your address.<br>
-       <a href="/" class="btn btn-success">Home</a>
-       </p>
+        We now need to verify your email address.<br>
+        We have sent an email to {{ mail }} to verify your address.<br>
+        <a href="/" class="btn btn-success">Home</a>
+        </p>
+       </div>
+       {% elif user_type == "leader" %}
+        <div class="alert alert-success">
+          <a class="close" data-dismiss="alert">&times;</a>
+          <p><strong>Requires Administrator authorization</strong><br><br>
+       
+          An authorization request has been sent to the administrator. Please check {{ mail }} for the confirmation. Thank You<br>
+          <a href="/" class="btn btn-success">Home</a>
+          </p>
+        </div>
+        {% elif user_type == "member" %}
+         <div class="alert alert-success">
+          <a class="close" data-dismiss="alert">&times;</a>
+          <p><strong>Requires Leader authorization</strong><br><br>
+       
+          An authorization request has been sent to the Leader. Please check {{ mail }} for the confirmation. Thank You<br>
+          <a href="/" class="btn btn-success">Home</a>
+          </p>
+         </div>
+        {% endif %}
+        {% elif not_leader %} 
+          <div class="alert alert-success">
+            <a class="close" data-dismiss="alert">&times;</a>
+            <p>Please Check you leader's username. The User {{ leader_name }} is not a leader of any registered experiment</p>
+          </div>
+          <a onclick="history.back()" class="btn">Back</a>
+        {% elif no_such_user %}
+          <div class="alert alert-success">
+            <a class="close" data-dismiss="alert">&times;</a>
+            <p>Please Check you leader's username. {{ leader_name }}, is not a leader of any registered experiment.</p>
+          </div>
+          <a onclick="history.back()" class="btn">Back</a>
+        
+
      {% else %}
-     {% include '_form.html' with button="Sign Up" %}
-     <!--  <form method="post" action=".">
-       {% csrf_token %}
-       <table class = "table table-striped">
-       <tbody>
-       {{ form.as_table }}
-       </tbody>
-       </table>
-       <input type="submit" class="btn btn-primary" value="Sign Up" />
-       <a onclick="history.back()" class="btn">Cancel</a>
-       </form>-->
+        
+        <form method="post" action=".">
+          {% csrf_token %}
+          <table class = "table table-striped" id="reg_table">
+            <tbody>
+              
+              {{ form.as_table }}
+            </tbody>
+          </table>
+          <input type="submit" class="btn btn-primary" value="Sign Up" />
+          <a onclick="history.back()" class="btn">Cancel</a>
+       </form>
      {% endif %}
      </div>
-  
+  <script type="text/javascript" src="{{ STATIC_URL }}js/user_type.js"></script> 
 {% endblock %}

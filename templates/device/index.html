@@ -2,7 +2,8 @@
 {% extends "base.html" %}
 {% block title %}All Devices{% endblock %}
 {% block content %}
-  <h1>All Devices</h1>
+  <h1>Your Devices</h1>
+  {% if devices %}
   <table class="table table-striped table-bordered">
     <thead>
       <tr>
@@ -19,4 +20,7 @@
     {% endfor %}
     </tbody>
   </table>
+  {% else %}
+  There are no devices!
+  {% endif %}
 {% endblock %}

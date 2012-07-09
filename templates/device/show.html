@@ -2,17 +2,19 @@
 {% extends "base.html" %}
 {% block title %}DeviceID: {{device.id}} {% endblock %}
 {% block content %}
-<h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a> (<a href='/device/{{device.id}}/edit/'>Edit</a>)</h1>
+<h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a> (<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
 <table class="table table-bordered table-striped">
   <tbody>
     <tr>
       <td width='20%'><strong>Email: </strong></td>
       <td>{{ device.email }}</td>
     </tr>
+    {% if user_type == 'admin' %}
     <tr>
       <td><strong>Registration ID: </strong></td>
       <td>{{ device.reg_id }}</td>
     </tr>
+    {% endif %}
     <tr>
       <td><strong>Status Interval: </strong></td>
       <td>{{ device.update_interval }} mins</td>
@@ -20,11 +22,48 @@
   </tbody>
 </table>
 
+<div class="modal fade" id="edit">
+  <form class="modal-form" method="post" action="/device/{{device.id}}/update/">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">&times;</a>
+        <h1>DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a></h1>
+      </a>
+    </div>
+    <div class="modal-body">
+      <table class="table">
+        <tbody>
+          <form method="post" action="/device/{{device.id}}/update/">
+          <tr>
+            <td width='20%'><strong>Email: </strong></td>
+            <td><input type='text' name='email' id='email' value='{{device.email}}' /></td>
+          </tr>
+          {% if user_type == 'admin' %}
+          <tr>
+            <td><strong>Registration ID: </strong></td>
+            <td><input type='text' name='reg_id' id='reg_id' value='{{device.reg_id}}' /></td>
+          </tr>
+          {% endif %}
+          <tr>
+            <td><strong>Status Interval: </strong></td>
+            <td><input type='text' name='update_interval' id='update_interval' value='{{device.update_interval}}' /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class='btn btn-primary' value="Save" />
+      <a onclick="history.back()" class="btn">Cancel</a>
+    </div>
+  </form>
+</div>
+
 <!--<dddiv class="subnav">-->
   <ul class="nav nav-tabs">
     <li class="active"><a href="#1" data-toggle="tab">Log</a></li>
     <li><a href="#2" data-toggle="tab">Log Tag Filter</a></li>
+    {% if user_type == 'admin' %}
     <li><a href="#3" data-toggle="tab">Send C2DM</a></li>
+    {% endif %}
     <li><a href="#4" data-toggle="tab">Applications</a></li>
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">Status Updates<b class="caret"></b></a>

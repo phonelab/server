@@ -6,8 +6,9 @@ from django.utils.encoding import smart_str
 from django.shortcuts import render_to_response
 from lib.helper import json_response_from
 from django.conf import settings
-from device.models import Device, DeviceApplication
+from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
+from users.models import UserProfile
 import os, errno, mimetypes
 
 RAW_APP_ROOT = settings.RAW_APP_ROOT
@@ -56,15 +57,31 @@ Show all Application
 
 @author Micheal
 """
+"""
+Show Application corresponding to user type
+
+@date 07/02/2012
+
+@author Manoj
+"""
 @login_required
 def index(request):
-  # query the database for all applications
-  apps = Application.objects.all().order_by('-created')
+  user = request.user
+  userprofile = UserProfile.objects.get(user_id=user.id)
+
+  if userprofile.user_type == 'participant':
+    # query the database for all applications
+    apps = Application.objects.all().order_by('-created')
+
+  if userprofile.user_type == 'member' or 'leader':
+    #query the database for user's own applications
+    apps = Application.objects.filter(user_id=user.id)
 
   return render_to_response(
       'application/index.html', 
       {
-        'apps': apps
+        'apps': apps,
+        'user_type': userprofile.user_type
       },
       context_instance=RequestContext(request)
     )
@@ -135,6 +152,7 @@ Upload Application/Experiment Action
 @author Micheal
 """
 def create_or_update_application(request):
+  
   # define default response
   response = { "err": "", "data": "" }
   # create new application
@@ -149,6 +167,7 @@ def create_or_update_application(request):
     params = request.POST
     ## First Save to database
     app = Application(
+        user_id       = request.user,
         name          = params['name'], 
         package_name  = params['package_name'],
         intent_name   = params['intent_name'],
@@ -188,3 +207,29 @@ def create_or_update_application(request):
       response["err"] = "err1"
 #    print response["err"]
     return HttpResponseRedirect('/experiments/')
+
+
+"""
+Withdraw an Application
+
+@date 07/09/2012
+
+@author Manoj
+"""
+def withdraw(request, appId):
+  user = request.user
+  userprofile = UserProfile.objects.get(user_id=user.id)
+  
+  app = Application.objects.get(id = appId)
+  app.delete()
+
+  apps = Application.objects.filter(user_id=user.id)
+
+  return render_to_response(
+      'application/index.html', 
+      {
+        'apps': apps,
+        'user_type': userprofile.user_type
+      },
+      context_instance=RequestContext(request)
+    )
