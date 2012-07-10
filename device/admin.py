@@ -48,7 +48,8 @@ class DeviceProfileAdmin(admin.ModelAdmin):
 admin.site.register(DeviceProfile, DeviceProfileAdmin)
 
 class ExperimentAdmin(admin.ModelAdmin):
-  list_display = ('id', 'group', 'user', 'dev', 'app', 'name', 'description', 'tag')
+  list_display = ('id', 'group', 'name', 'description', 'tag')
+  #list_display = ('id', 'group', 'user', 'dev', 'app', 'name', 'description', 'tag')
 admin.site.register(Experiment, ExperimentAdmin)
 
 class ExperimentProfileAdmin(admin.ModelAdmin):
