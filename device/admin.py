@@ -3,6 +3,7 @@ from users.models import UserProfile
 from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
+from experiment.models import Experiment, ExperimentProfile
 
 #TODO: change location and implement inline
 #Inline reference: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.InlineModelAdmin
@@ -46,5 +47,10 @@ class DeviceProfileAdmin(admin.ModelAdmin):
   list_display = ('dev', 'user', 'phone_no', 'status', 'plan', 'image_version', 'purpose', 'service_type')
 admin.site.register(DeviceProfile, DeviceProfileAdmin)
 
+class ExperimentAdmin(admin.ModelAdmin):
+  list_display = ('id', 'group', 'user', 'dev', 'app', 'name', 'description', 'tag')
+admin.site.register(Experiment, ExperimentAdmin)
 
-
+class ExperimentProfileAdmin(admin.ModelAdmin):
+  list_display = ('id', 'eid')
+admin.site.register(ExperimentProfile, ExperimentProfileAdmin)

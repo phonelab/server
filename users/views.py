@@ -16,7 +16,6 @@ import datetime, random, hashlib
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
 
-site_name = '127.0.0.1:8000'
 #TO = [ email for name, email in ADMINS ]
 """
 Register New User with activation
@@ -54,11 +53,11 @@ def register(request):
       if(user_type=='leader'):
         EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
         
-        c = Context({'user': user.username, 'email':user.email, 'key': new_profile.activation_key, 'site_name': site_name})
+        c = Context({'user': user.username, 'email':user.email, 'key': new_profile.activation_key})
 #       
         EMAIL_BODY = (loader.get_template('users/mails/leader_request.txt')).render(c)
 
-        TO_EMAIL = ['manojmyl@buffalo.edu']
+        TO_EMAIL = ['tempphonelab@gmail.com']
 
       elif(user_type=='member'):
         
