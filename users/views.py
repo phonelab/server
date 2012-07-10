@@ -86,7 +86,7 @@ def register(request):
         current_site = Site.objects.get_current()
 
         EMAIL_SUBJECT = 'Phonelab: Member request for '+ group.name
-        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key, 'site_name': site_name})
+        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key})
         EMAIL_BODY = (loader.get_template('users/mails/member_request.txt')).render(c)
         TO_EMAIL = [leader.email]
         send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
