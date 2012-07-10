@@ -55,7 +55,7 @@ def register(request):
         EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
         c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key})
         EMAIL_BODY = (loader.get_template('users/mails/leader_request.txt')).render(c)
-        TO_EMAIL = ['manojmyl@buffalo.edu']
+        TO_EMAIL = [admin_mail]
         send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
       
         # Create and save their profile                                                                                                                                 
