@@ -3,12 +3,13 @@ Hello Admin,
 
 The following user requires authorization to start an experiment group
 
+Group Name: {{ group }}
 Username: {{ user }}
 Email: {{ email }} 
 
 Please click the following link to authorize the user.
 
-Actvation Link: http://{{ site_name }}/accounts/authorize/{{ key}}
+Actvation Link: http://{{ site_name }}/accounts/authorize/{{ group }}/{{ key}}
 
 Thank You
 Phonelab

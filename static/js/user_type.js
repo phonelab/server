@@ -3,8 +3,13 @@ window.onload = typecheck;
 function typecheck() {
 	var x=document.getElementById("id_user_type");
 	x.onchange = function() {
-			
+
 		if(this.value=="member") {
+			if(document.getElementById("id_groupname")) {
+				var table = document.getElementById("reg_table");
+				var row_count = table.rows.length;
+				table.deleteRow(row_count-1);
+			}
 			if(!document.getElementById("id_leadername")) {
 				var element = document.createElement("input");
 
@@ -35,8 +40,30 @@ function typecheck() {
 				var row_count = table.rows.length;
 				table.deleteRow(row_count-1);
 			}
+			if(!document.getElementById("id_groupname")) {
+				var element = document.createElement("input");
+
+				element.setAttribute("type", "text");
+				var table = document.getElementById("reg_table")
+				var rowCount = table.rows.length;
+            	var row = table.insertRow(rowCount);
+
+            	var cell1 = row.insertCell(0);
+            	var label = document.createElement("label");
+            	label.setAttribute("for", "id_groupname");
+            	label.innerHTML= "Group Name:";
+            	cell1.appendChild(label);
+
+            	var cell2 = row.insertCell(1);
+            	var textbox = document.createElement("input");
+            	textbox.setAttribute("type", "text");
+            	textbox.setAttribute("id", "id_groupname");
+            	textbox.setAttribute("name", "group_name");
+            	textbox.setAttribute("maxlength", "30");
+            	cell2.appendChild(textbox);
+			}
+			
 		}	
 
 	}
 }
-

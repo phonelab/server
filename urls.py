@@ -45,11 +45,9 @@ if settings.DEBUG:
     # Update User Profile Form [POST]
     url(r'^accounts/(?P<userId>\d+)/update/$', 'users.views.update'),
     #signup authorization page
-    url(r'^accounts/authorize/(?P<activation_key>[a-z0-9]\w+)/$', 'users.views.authorize'),
+    url(r'^accounts/authorize/(?P<groupname>\w+)/(?P<activation_key>[a-z0-9]\w+)/$', 'users.views.authorize'),
     #signup confirm page
     url(r'^accounts/confirm/(?P<activation_key>[a-z0-9]\w+)/$', 'users.views.confirm'),
-    #user group creation or addition
-    url(r'^accounts/(?P<userId>\d+)/join/$', 'users.views.user_group_creation_or_addition'),
     #change password
     url(r'^accounts/password_change/$', password_change, PASSWORD_CHANGE_DICT, name='password_change'),
     #change password

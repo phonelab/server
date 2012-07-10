@@ -11,12 +11,13 @@ from lib.helper import json_response_from, json
 from django.contrib.auth.models import User, Group
 from users.models import UserProfile
 from device.models import Device, DeviceProfile
-from users.forms import RegistrationForm, Member_Group_Form
+from users.forms import RegistrationForm
 import datetime, random, hashlib
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
+from django import forms
 
-site_name = '127.0.0.1:8000'
+admin_mail = 'tempphonelab@gmail.com'
 #TO = [ email for name, email in ADMINS ]
 """
 Register New User with activation
@@ -37,76 +38,66 @@ def register(request):
   if request.method == 'POST':
     form = RegistrationForm(request.POST)
     if form.is_valid(): 
-      # Save the user                                                                                                                                                 
-      user = form.save(form)
-
       # Find the user type
       user_type = form.cleaned_data['user_type']
-      # Build the activation key for their account                                                                                                                    
-      salt = hashlib.md5(str(random.random())).hexdigest()[:5]
-      activation_key = hashlib.md5(salt+user.username).hexdigest()
-      key_expires = datetime.datetime.today() + datetime.timedelta(2)
-
-     
-      new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
-      current_site = Site.objects.get_current()
-        
+      
       if(user_type=='leader'):
-        EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
+        groupname = form.cleaned_data['groupname']
+        user = form.save(form)
+        # Build the activation key for their account                                                                                                                    
+        salt = hashlib.md5(str(random.random())).hexdigest()[:5]
+        activation_key = hashlib.md5(salt+user.username).hexdigest()
+        key_expires = datetime.datetime.today() + datetime.timedelta(2)
+        new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
+        current_site = Site.objects.get_current()
         
-        c = Context({'user': user.username, 'email':user.email, 'key': new_profile.activation_key, 'site_name': site_name})
-#       
+        EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
+        c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key})
         EMAIL_BODY = (loader.get_template('users/mails/leader_request.txt')).render(c)
-
         TO_EMAIL = ['manojmyl@buffalo.edu']
+        send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+      
+        # Create and save their profile                                                                                                                                 
+        new_profile.save()
+        
+        return render_to_response(
+                'users/register.html',
+                { 'created': True,
+                'user_type': user_type,
+                'mail'   : user.email },
+                context_instance=RequestContext(request)
+              )
 
       elif(user_type=='member'):
         
 
         # Experiment leader name
-        leader_name = request.POST['leader_name']
-        # Define default response
-        response = { "err": "", "data": "" }
-        try:
-          # get UserProfile with user foreignkey
-          userId = User.objects.get(username=leader_name)
-          leaderprofile = UserProfile.objects.get(user=userId)
-          # Verify leader
-          if(leaderprofile.user_type=='leader'):
-            EMAIL_SUBJECT = 'Authorization for a Member to join your experiment group'
-            c = Context({'user': user.username, 'email':user.email, 'leader_name':leader_name, 'key': new_profile.activation_key, 'site_name': site_name})
-            EMAIL_BODY = (loader.get_template('users/mails/member_request.txt')).render(c)
-            TO_EMAIL = [userId.email]
+        group = form.cleaned_data['groupname']
+        leader_profile = get_object_or_404(UserProfile, group=group, user_type='leader' )
+        leader = leader_profile.user
+        user = form.save(form)
+        # Build the activation key for their account                                                                                                                    
+        salt = hashlib.md5(str(random.random())).hexdigest()[:5]
+        activation_key = hashlib.md5(salt+user.username).hexdigest()
+        key_expires = datetime.datetime.today() + datetime.timedelta(2)
+        new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
+        current_site = Site.objects.get_current()
 
-          else:
-            
-            return render_to_response(
-                    'users/register.html',
-                    {'not_leader': True,
-                     'leader_name': leader_name},
-                    context_instance=RequestContext(request)
-                   )
-        # User does not exist
-        except User.DoesNotExist:
-         
-          return render_to_response(
-                  'users/register.html',
-                  {'no_such_user': True,
-                   'leader_name': leader_name},
-                   context_instance=RequestContext(request)
-                 )
+        EMAIL_SUBJECT = 'Phonelab: Member request for '+ group.name
+        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key, 'site_name': site_name})
+        EMAIL_BODY = (loader.get_template('users/mails/member_request.txt')).render(c)
+        TO_EMAIL = [leader.email]
+        send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
       
-      send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
-      
-      # Create and save their profile                                                                                                                                 
-      new_profile.save()
-      return render_to_response(
-              'users/register.html',
-              { 'created': True,
+        # Create and save their profile                                                                                                                                 
+        new_profile.save()
+        return render_to_response(
+                'users/register.html',
+                { 'created': True,
                 'user_type': user_type,
                 'mail'   : user.email },
-              context_instance=RequestContext(request)
-            )
+                context_instance=RequestContext(request)
+              )
   else:
     form = RegistrationForm()
        
@@ -115,44 +106,6 @@ def register(request):
            { 'form': form },
            context_instance=RequestContext(request)
          )
-
-"""
-User group Creation/addition
-
-@date 07/05/2012
-
-@author Manoj
-"""
-def user_group_creation_or_addition(request, userId):
-  
-  userprofile = UserProfile.objects.get(user_id = userId)
-  user = userprofile.user
-
-  if userprofile.user_type == 'member':
-    form = Member_Group_Form(request.POST)
-
-    if form.is_valid():
-
-      leader = form.check_leader(form)
-      group = form.save(user, leader)
-      user.is_active = True
-      user.save()
-      return render_to_response(
-              'users/confirm.html',
-              {'req_user': user,
-               'activated': True,
-               'user_type': userprofile.user_type},
-              context_instance=RequestContext(request)
-            )
-
-    else:
-      form = Member_Group_Form()
-
-  return render_to_response(
-          'users/confirm.html',
-          {'req_user':user},
-          context_instance=RequestContext(request)
-        )
 
 
 """
@@ -163,13 +116,11 @@ Email Authorization
 @author Manoj
 """
 
-def authorize(request, activation_key):
+def authorize(request, groupname, activation_key):
   user_profile = get_object_or_404(UserProfile, activation_key=activation_key)
   user = user_profile.user
 
-  c = Context({'user': user.username, 'user_type': user_profile.user_type, 'key': activation_key, 'site_name': site_name})
-  EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
-  TO_EMAIL = [user.email]
+  
 
   if user.is_active:
     return render_to_response(
@@ -188,14 +139,23 @@ def authorize(request, activation_key):
 
   
   elif user_profile.user_type == 'leader':
+    group = Group.objects.create(name=groupname)
+    user.groups = [group]
+    user_profile.group = group
+    user_profile.save()
     EMAIL_SUBJECT = 'Phonelab Admin Authorization'
-    
 
   elif user_profile.user_type=='member':
+    group = Group.objects.get(name=groupname)
+    user.groups = [group]
+    user_profile.group = group
+    user_profile.save()
     EMAIL_SUBJECT = 'Phonelab Leader Authorization'
     
   
-
+  c = Context({'user': user, 'group': group ,'user_type': user_profile.user_type, 'key': activation_key, 'site_name': site_name})
+  EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
+  TO_EMAIL = [user.email]
   send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
 
   return render_to_response(
@@ -235,19 +195,29 @@ def confirm(request, activation_key):
            )
 
   if user_profile.user_type == 'member':
+    user.is_active = True
+    user.save()
     return render_to_response(
-<<<<<<< HEAD
-          'users/group_addition.html',
-=======
-          'users/user_group.html',
->>>>>>> upstream/master
-          {'user': user,
-          'user_type': user_profile.user_type},
-          context_instance=RequestContext(request)
+           'users/confirm.html',
+           {'req_user': user,
+           'activated': True,
+           'user_type': user_profile.user_type},
+           context_instance=RequestContext(request)
           )
 
-  user_account.is_active = True
-  user_account.save()
+  if user_profile.user_type == 'leader':
+    user.is_active = True
+    user.save()
+    return render_to_response(
+           'users/confirm.html',
+           {'req_user': user,
+           'activated': True,
+           'user_type': user_profile.user_type},
+           context_instance=RequestContext(request)
+          )
+
+
+  
   return render_to_response(
            'users/confirm.html', 
            {'activated': True,

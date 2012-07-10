@@ -144,15 +144,8 @@ Show Device Details and Application monitor [GET]
 """
 @login_required
 def show(request, deviceId):
-<<<<<<< HEAD
-
   user = request.user
   userprofile = UserProfile.objects.get(user_id=user.id)
-=======
-  user = request.user
-  userprofile = UserProfile.objects.get(user_id=user.id)
-
->>>>>>> upstream/master
   # define default response
   response = { "err": "", "data": "" }
   # get device
