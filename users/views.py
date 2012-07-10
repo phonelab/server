@@ -18,6 +18,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 
 admin_mail = 'tempphonelab@gmail.com'
+
 #TO = [ email for name, email in ADMINS ]
 """
 Register New User with activation
@@ -50,7 +51,7 @@ def register(request):
         key_expires = datetime.datetime.today() + datetime.timedelta(2)
         new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
         current_site = Site.objects.get_current()
-        
+ 
         EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
         c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key})
         EMAIL_BODY = (loader.get_template('users/mails/leader_request.txt')).render(c)
@@ -67,6 +68,7 @@ def register(request):
                 'mail'   : user.email },
                 context_instance=RequestContext(request)
               )
+
 
       elif(user_type=='member'):
         
