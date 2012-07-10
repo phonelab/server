@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from application.models import Application
 from device.models import Device
+from experiment.models import Experiment
 
 """
 Class Transaction
@@ -14,6 +15,7 @@ class Transaction(models.Model):
 #    (u'C', u'Complete'),
 #  )
   user               = models.ForeignKey(User)
+  eid                = models.ForeignKey(Experiment)
   total              = models.IntegerField(null=False) 
   progress           = models.IntegerField(null=False)
   # status: start, progress and complete
@@ -48,7 +50,7 @@ class TransactionDevApp(models.Model):
   # action: I or U, I means uninstall, U means uninstall
   action   = models.CharField(max_length=1, choices=ACTION_CHOICES, null=False)
   result   = models.CharField(max_length=2, choices=RESULT_CHOICES, default="N" , null=False)
-  start              = models.DateTimeField(auto_now_add=True)
-  end                = models.DateTimeField(blank=True, null=True)
+  start    = models.DateTimeField(auto_now_add=True)
+  end      = models.DateTimeField(blank=True, null=True)
   class Meta:
     unique_together= (('tid', 'dev', 'app'),)

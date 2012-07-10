@@ -1,6 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
-#from device.models import DeviceProfile
+from django.contrib.auth.models import User, Group
+from device.models import Device
+from application.models import Application
 
      
 """

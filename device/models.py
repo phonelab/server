@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from application.models import Application
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.conf import settings
 
 ## other includes
@@ -19,6 +19,7 @@ class Device(models.Model):
     (u'E', u'ENABLED'),
     (u'D', u'DISABLED'),
   )
+  group           = models.ForeignKey(Group, blank=True, null=True)
   id              = models.CharField(max_length=15, null=False, primary_key=True)
 #  email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=300, null=False)
