@@ -1,6 +1,6 @@
 from django.db import models
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 """
 Class Application
@@ -18,6 +18,7 @@ class Application(models.Model):
   )
   name          = models.CharField(max_length=30, null=False)
   user          = models.ForeignKey(User, null=False)
+  group         = models.ForeignKey(Group, blank=True, null=True)
   package_name  = models.CharField(max_length=100, null=False)
 #  intent_name   = models.CharField(max_length=100, null=False)
   description   = models.CharField(max_length=255, null=True, blank=True)

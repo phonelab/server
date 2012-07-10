@@ -154,13 +154,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     #Activating the administration interface (needs .auth, .contenttypes, sessions, messages)
     'django.contrib.admin', 
-    'application', # experiment
+    'application', # application
     'manifest', # manifest
     'datalogger', # datalogger
     'device', # device
     'error', # error
     'transaction', # transaction
     'users', #users
+    'experiment', #experiment
 )
 
 # A sample logging configuration. The only tangible logging

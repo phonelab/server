@@ -59,7 +59,7 @@ if settings.DEBUG:
     #Password Reset Done
     url(r'^accounts/password_reset/done/$', 'django.contrib.auth.views.password_reset_done', {'template_name': 'users/password_reset_done.html'}),
     #Password Reset Confirm
-    url(r'^accounts/password_reset/confirm/(?P<uidb36>[A-Z0-9]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', PASSWORD_RESET_CONFIRM_DICT),
+    url(r'^accounts/password_reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', PASSWORD_RESET_CONFIRM_DICT),
     #Password Reset Complete
     url(r'^accounts/password_reset/complete/$', 'django.contrib.auth.views.password_reset_complete', {'template_name': 'users/password_reset_complete.html'}),
 
