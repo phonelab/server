@@ -52,7 +52,7 @@ Show status monitor for admin
 @author TKI
 """
 class StatusAdmin(admin.ModelAdmin):
-  list_display = ('dev', 'user', 'phone_no', 'status', 'plan', 'image_version', 'purpose', 'service_type')
+  list_display = ('dev', 'user', 'phone_no', 'status', 'last_log', 'plan', 'image_version', 'purpose', 'service_type')
   
   def get_urls(self):
     urls = super(StatusAdmin, self).get_urls()
