@@ -42,7 +42,7 @@ def register(request):
       # Find the user type
       user_type = form.cleaned_data['user_type']
       
-      if(user_type=='leader'):
+      if(user_type=='L'):
         groupname = form.cleaned_data['groupname']
         user = form.save(form)
         # Build the activation key for their account                                                                                                                    
@@ -70,12 +70,12 @@ def register(request):
               )
 
 
-      elif(user_type=='member'):
+      elif(user_type=='M'):
         
 
         # Experiment leader name
         group = form.cleaned_data['groupname']
-        leader_profile = get_object_or_404(UserProfile, group=group, user_type='leader' )
+        leader_profile = get_object_or_404(UserProfile, group=group, user_type='L' )
         leader = leader_profile.user
         user = form.save(form)
         # Build the activation key for their account                                                                                                                    
@@ -140,14 +140,14 @@ def authorize(request, groupname, activation_key):
            )
 
   
-  elif user_profile.user_type == 'leader':
+  elif user_profile.user_type == 'L':
     group = Group.objects.create(name=groupname)
     user.groups = [group]
     user_profile.group = group
     user_profile.save()
     EMAIL_SUBJECT = 'Phonelab Admin Authorization'
 
-  elif user_profile.user_type=='member':
+  elif user_profile.user_type=='M':
     group = Group.objects.get(name=groupname)
     user.groups = [group]
     user_profile.group = group
@@ -196,7 +196,7 @@ def confirm(request, activation_key):
              context_instance=RequestContext(request)
            )
 
-  if user_profile.user_type == 'member':
+  if user_profile.user_type == 'M':
     user.is_active = True
     user.save()
     return render_to_response(
@@ -207,7 +207,7 @@ def confirm(request, activation_key):
            context_instance=RequestContext(request)
           )
 
-  if user_profile.user_type == 'leader':
+  if user_profile.user_type == 'L':
     user.is_active = True
     user.save()
     return render_to_response(

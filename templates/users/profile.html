@@ -26,9 +26,9 @@ $('#edit').modal('{
                 <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
               {% endfor %}
             {% else %}
-              {% if userprofile.user_type == 'leader' %}
+              {% if userprofile.user_type == 'L' %}
                 <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
-              {% elif userprofile.user_type == 'member' %}
+              {% elif userprofile.user_type == 'M' %}
                 <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
               {% endif %}
             {%endif%}

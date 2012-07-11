@@ -8,14 +8,14 @@
     <thead>
       <tr>
         <th>Device ID</th>
-        <th>Email</th>
+<!--        <th>Email</th> -->
       </tr>
     </thead>
     <tbody>
     {% for device in devices %}
     <tr>
       <td><a href='/device/{{device.id}}'>{{ device.id }}</a></td>
-      <td>{{ device.email }}</td>
+<!--      <td>{{ device.email }}</td> -->
     </tr>
     {% endfor %}
     </tbody>

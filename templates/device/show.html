@@ -5,11 +5,11 @@
 <h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a> (<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
 <table class="table table-bordered table-striped">
   <tbody>
-    <tr>
+<!--    <tr>
       <td width='20%'><strong>Email: </strong></td>
       <td>{{ device.email }}</td>
-    </tr>
-    {% if user_type == 'admin' %}
+    </tr>-->
+    {% if user_type == 'A' %}
     <tr>
       <td><strong>Registration ID: </strong></td>
       <td>{{ device.reg_id }}</td>
@@ -36,7 +36,7 @@
             <td width='20%'><strong>Email: </strong></td>
             <td><input type='text' name='email' id='email' value='{{device.email}}' /></td>
           </tr>-->
-          {% if user_type == 'admin' %}
+          {% if user_type == 'A' %}
           <tr>
             <td><strong>Registration ID: </strong></td>
             <td><input type='text' name='reg_id' id='reg_id' value='{{device.reg_id}}' /></td>

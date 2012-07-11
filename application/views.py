@@ -69,11 +69,11 @@ def index(request):
   user = request.user
   userprofile = UserProfile.objects.get(user_id=user.id)
 
-  if userprofile.user_type == 'participant':
+  if userprofile.user_type == 'P':
     # query the database for all applications
     apps = Application.objects.all().order_by('-created')
 
-  if userprofile.user_type == 'member' or 'leader':
+  if userprofile.user_type == 'M' or 'L':
     #query the database for user's own applications
     apps = Application.objects.filter(user_id=user.id)
 
