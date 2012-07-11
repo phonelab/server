@@ -3,15 +3,11 @@
 {% block title %}All Applications{% endblock %}
 {% block content %}
   <h1>All Applications 
-    {% if user_type != 'participant' %}
+    {% if user_type != 'P' %}
     (<a href='/experiment/new'>Add</a>)
     {% endif %}
   </h1>
-<<<<<<< HEAD
-    {% if apps %}
-=======
   {% if apps %}
->>>>>>> 0434da99ebc364741b9f3cbc27b4954c44a4d247
   <table class="table table-striped table-bordered">
     <thead>
       <tr>
