@@ -71,7 +71,7 @@
 
             {% if user.is_authenticated %}
             <div class="btn-group pull-right">
-					    <a class="btn btn-primary" href="/">{{ user.username }}</a>
+					    <a class="btn btn-primary" href="/accounts/profile/{{user.id}}/">{{ user.username }}</a>
 					    <a class="btn btn-primary dropdown-toggle" href="#" data-toggle="dropdown">
 						    <span class="caret"></span>
 					    </a>

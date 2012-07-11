@@ -146,7 +146,6 @@ Show Device Details and Application monitor [GET]
 def show(request, deviceId):
   user = request.user
   userprofile = UserProfile.objects.get(user_id=user.id)
-
   # define default response
   response = { "err": "", "data": "" }
   # get device

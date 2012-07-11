@@ -1,6 +1,8 @@
 import re
 from django import forms
 from django.contrib.auth.models import User, Group
+from users.models import UserProfile
+from django.shortcuts import get_object_or_404
  
 """
 RigistrationForm
@@ -28,6 +30,8 @@ class RegistrationForm(forms.Form):
     label=u'User Type',
     widget=forms.Select(), choices = CHOICE
   )
+  
+  groupname = forms.CharField(label=u'Group Name', max_length=30)
 
   def clean_username(self):
     username = self.cleaned_data['username']
@@ -55,33 +59,24 @@ class RegistrationForm(forms.Form):
     u.save()
     return u
 
+  def clean_groupname(self):
+    user_type = self.cleaned_data['user_type']
+    if user_type == 'leader':
+      groupname = self.cleaned_data['groupname']
+      try:
+        group = Group.objects.get(name=groupname)
+      except Group.DoesNotExist:
+        return groupname
+      raise forms.ValidationError('Group name "%s" is not available.' % groupname)
 
-"""
-Adding Member to Group form
+    elif user_type == 'member':
+      groupname = self.cleaned_data['groupname']
+      try:
+        group = Group.objects.get(name=groupname)
+      except Group.DoesNotExist:
+        raise forms.ValidationError('"%s" is not a registered group.' % groupname )
+      return group
 
-@date 07/05/2012
-
-@author Manoj
-""" 
-class Member_Group_Form(forms.Form):
-
-  leadername = forms.CharField(label=u'Leader Username', max_length=30)
-
-  def check_leader(self, form):
-    
-    try:
-     
-      leader = User.objects.get(username=form.cleaned_data['leadername'])
-      
-    except User.DoesNotExist:
-      raise forms.ValidationError('"%s" is not a registered leader for any experiment group.' % leadername)
-
-    return leader
-
-  def save(self, user, leader):
-    group = Group.objects.get(user=leader)
-    print group
-    user.groups = [group]
     
 
         
