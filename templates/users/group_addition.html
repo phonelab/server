@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Group Information{% endblock %}
     {% block content %}
-    {% if user_type == 'member' %}
+    {% if user_type == 'M' %}
        <div class="alert alert-info">
        <a class="close" data-dismiss="alert">&times;</a>
        <h1>Hello {{ user.username }}, </h1>

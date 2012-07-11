@@ -53,7 +53,7 @@ def register(request):
         current_site = Site.objects.get_current()
  
         EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
-        c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key})
+        c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key, 'site_name': current_site})
         EMAIL_BODY = (loader.get_template('users/mails/leader_request.txt')).render(c)
         TO_EMAIL = [admin_mail]
         send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
@@ -86,7 +86,7 @@ def register(request):
         current_site = Site.objects.get_current()
 
         EMAIL_SUBJECT = 'Phonelab: Member request for '+ group.name
-        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key, 'site_name': site_name})
+        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key, 'site_name': current_site})
         EMAIL_BODY = (loader.get_template('users/mails/member_request.txt')).render(c)
         TO_EMAIL = [leader.email]
         send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
@@ -122,8 +122,6 @@ def authorize(request, groupname, activation_key):
   user_profile = get_object_or_404(UserProfile, activation_key=activation_key)
   user = user_profile.user
 
-  
-
   if user.is_active:
     return render_to_response(
              'users/confirm.html', 
@@ -154,8 +152,8 @@ def authorize(request, groupname, activation_key):
     user_profile.save()
     EMAIL_SUBJECT = 'Phonelab Leader Authorization'
     
-  
-  c = Context({'user': user, 'group': group ,'user_type': user_profile.user_type, 'key': activation_key, 'site_name': site_name})
+  current_site = Site.objects.get_current()
+  c = Context({'user': user, 'group': group ,'user_type': user_profile.user_type, 'key': activation_key, 'site_name': current_site})
   EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
   TO_EMAIL = [user.email]
   send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
@@ -244,12 +242,17 @@ def profile(request, userId):
     # get DeviceProfile with devprofile foreignkey
     devprofiles = DeviceProfile.objects.filter(user=userId)
 
-    user = User.objects.get(id = userId)
-    groups = Group.objects.filter(user = userId)
+    #get group its leader and members
+    group = Group.objects.get(user = userId)
+    leader = get_object_or_404(UserProfile, user_type='L', group=group) 
+    members = UserProfile.objects.filter(user_type='M', group=group)
+      
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,
-               'groups': groups,
+               'group': group,
+               'leader': leader,
+               'members': members, 
                'devprofiles'  : devprofiles },
              context_instance=RequestContext(request)
              )
@@ -323,9 +326,6 @@ def update(request, userId):
     # User email, not device email
     if ('email' in params and userprofile.user.email != params['email']):
       user.email = params['email']
-    # ub_id
-    if ('ub_id' in params and userprofile.ub_id != params['ub_id']):
-      userprofile.ub_id = params['ub_id']
     # save User and UserProfile
     user.save()
     userprofile.save()

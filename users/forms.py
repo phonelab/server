@@ -13,7 +13,10 @@ RigistrationForm
 """
 class RegistrationForm(forms.Form):
 
-  CHOICE = ((u'leader',u'Leader'), (u'member', u'Member'))
+  CHOICE = (
+    (u'L',u'Leader'), 
+    (u'M', u'Member'),
+  )
 
   username =forms.CharField(label=u'Username', max_length=30)
   email = forms.EmailField(label=u'Email')

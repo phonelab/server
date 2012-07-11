@@ -48,9 +48,9 @@ $('#edit').modal('{
         <li class="active">
           <a href="#userprofile" data-toggle="pill">User Profile</a>
         </li>
-        <li>
+        <!--<li>
           <a href="#group" data-toggle="tab">Groups</a>
-        </li>
+        </li>-->
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="userprofile">
@@ -58,12 +58,7 @@ $('#edit').modal('{
           {% include 'user_profile.html' %}
           </div>
         </div>
-        <div class="tab-pane" id="group">
-          <div class="well">
-            {% include 'group_profile.html' %}
-          </div>
-        </div>
-       </div>
+      </div>
     </div>
 <h1>Device Profile:</h1>
 <ul class="nav nav-tabs">
