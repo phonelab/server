@@ -19,7 +19,6 @@ class Device(models.Model):
     (u'E', u'ENABLED'),
     (u'D', u'DISABLED'),
   )
-  group           = models.ForeignKey(Group, blank=True, null=True)
   id              = models.CharField(max_length=15, null=False, primary_key=True)
 #  email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=300, null=False)
@@ -136,9 +135,11 @@ class DeviceProfile(models.Model):
   )
   dev           = models.ForeignKey(Device, unique=True)
   user          = models.ForeignKey(User, blank=True, null=True)
-  phone_no  = models.CharField(max_length=13, blank=True, null=True)
-  status  = models.CharField(max_length=1, choices=STATUS_CHOICES)
-  plan    = models.CharField(max_length=45, blank=True, null=True)
+  group         = models.ForeignKey(Group, blank=True, null=True)
+  last_log      = models.DateTimeField(blank=True, null=True)
+  phone_no      = models.CharField(max_length=13, blank=True, null=True)
+  status        = models.CharField(max_length=1, choices=STATUS_CHOICES)
+  plan          = models.CharField(max_length=45, blank=True, null=True)
   image_version = models.CharField(max_length=45, blank=True, null=True)
-  purpose = models.CharField(max_length=1, choices=PURPOSE_CHOICES)
+  purpose       = models.CharField(max_length=2, choices=PURPOSE_CHOICES)
   service_type  = models.CharField(max_length=1, choices=TYPE_CHOICES)

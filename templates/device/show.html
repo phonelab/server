@@ -20,7 +20,11 @@
       <td>{{ device.update_interval }} mins</td>
     </tr>
   </tbody>
+<<<<<<< HEAD
 </table>
+=======
+
+>>>>>>> 0434da99ebc364741b9f3cbc27b4954c44a4d247
 <div class="modal fade" id="edit">
   <form class="modal-form" method="post" action="/device/{{device.id}}/update/">
     <div class="modal-header">
@@ -32,10 +36,10 @@
       <table class="table">
         <tbody>
           <form method="post" action="/device/{{device.id}}/update/">
-          <tr>
+<!--          <tr>
             <td width='20%'><strong>Email: </strong></td>
             <td><input type='text' name='email' id='email' value='{{device.email}}' /></td>
-          </tr>
+          </tr>-->
           {% if user_type == 'admin' %}
           <tr>
             <td><strong>Registration ID: </strong></td>
@@ -55,6 +59,10 @@
     </div>
   </form>
 </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0434da99ebc364741b9f3cbc27b4954c44a4d247
 <!--<dddiv class="subnav">-->
   <ul class="nav nav-tabs">
     <li class="active"><a href="#1" data-toggle="tab">Log</a></li>

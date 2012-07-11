@@ -15,7 +15,7 @@ def production():
 def move():
   stop()
   run('rm -rf server')
-  run("git clone git://github.com/rowoot/server.git")
+  run("git clone git://github.com/phonelab/server.git")
   if os.environ.get("ENV") == "production":
     run("git checkout production")
 
