@@ -4,7 +4,9 @@
 {% block title %}{{ title }} | {% trans 'PhoneLab site admin' %}{% endblock %}
 
 {% block branding %}
-{% trans 'PhoneLab Administration' %}
+{% trans 'PhoneLab Administration' %} | 
+<a href='/admin/device/deviceprofile/'><img src="{{STATIC_URL}}admin/img/statusmonitor.png" border="0" height="28" width="28"> Status Monitor</a> |
+<a href='/admin/experiment/'><img src="{{STATIC_URL}}admin/img/experiment.png" border="0" height="28" width="28"> Experiment</a>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}

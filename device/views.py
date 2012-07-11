@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
 
 #from manifest.views import *
-from device.models import Device, DeviceApplication
+from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
 from utils import re_sort_nicely, sort_nicely

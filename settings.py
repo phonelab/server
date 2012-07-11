@@ -162,6 +162,7 @@ INSTALLED_APPS = (
     'transaction', # transaction
     'users', #users
     'experiment', #experiment
+    'admin', #admin
 )
 
 # A sample logging configuration. The only tangible logging

@@ -30,6 +30,8 @@ if settings.DEBUG:
     #####
     #main_page
     url(r'^$', 'device.views.main_page'),
+    #Status Monitor for admin
+    #url(r'^admin/statusmonitor/$', 'admin.views.status_monitor'),
     #Admin interface for django version 1.3
     url(r'^admin/', include(admin.site.urls)),
     #login page
