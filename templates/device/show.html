@@ -2,9 +2,9 @@
 {% extends "base.html" %}
 {% block title %}DeviceID: {{device.id}} {% endblock %}
 {% block content %}
-<h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</h1>
+<h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a></h1>
 {% if user_type == 'A' %}
-</a> (<a data-toggle="modal" href='#edit'>Edit</a>)
+<h1>(<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
 
 <table class="table table-bordered table-striped">
   <tbody>
@@ -54,7 +54,7 @@
     </div>
     <div class="modal-footer">
       <input type="submit" class='btn btn-primary' value="Save" />
-      <a onclick="history.back()" class="btn">Cancel</a>
+      <a href="." class="btn">Cancel</a>
     </div>
   </form>
 </div>
