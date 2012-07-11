@@ -55,6 +55,8 @@ Update to show only the user's device
 def index(request):
 
   user = request.user
+  #initialize devices
+  devices = []
   # get user's devices
   device_profiles = DeviceProfile.objects.filter(user=user)
   

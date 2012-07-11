@@ -250,7 +250,7 @@ def profile(request, userId):
 
     for group in groups:
       leaders = get_object_or_404(UserProfile, user_type='leader', group=group) 
-      print leaders
+      
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,

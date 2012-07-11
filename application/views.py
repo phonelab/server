@@ -167,13 +167,13 @@ def create_or_update_application(request):
     params = request.POST
     ## First Save to database
     app = Application(
-        user_id       = request.user,
+        user       = request.user,
         name          = params['name'], 
         package_name  = params['package_name'],
-        intent_name   = params['intent_name'],
+        #intent_name   = params['intent_name'],
         description   = params['description'],
         type          = params['type'],
-        version       = params["version"],
+        #version       = params["version"],
     )
     app.save()
     # Verify Filename is coming in post
