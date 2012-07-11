@@ -13,7 +13,10 @@ RigistrationForm
 """
 class RegistrationForm(forms.Form):
 
-  CHOICE = ((u'leader',u'Leader'), (u'member', u'Member'))
+  CHOICE = (
+    (u'L',u'Leader'), 
+    (u'M', u'Member'),
+  )
 
   username =forms.CharField(label=u'Username', max_length=30)
   email = forms.EmailField(label=u'Email')
@@ -61,7 +64,7 @@ class RegistrationForm(forms.Form):
 
   def clean_groupname(self):
     user_type = self.cleaned_data['user_type']
-    if user_type == 'leader':
+    if user_type == 'L':
       groupname = self.cleaned_data['groupname']
       try:
         group = Group.objects.get(name=groupname)
@@ -69,7 +72,7 @@ class RegistrationForm(forms.Form):
         return groupname
       raise forms.ValidationError('Group name "%s" is not available.' % groupname)
 
-    elif user_type == 'member':
+    elif user_type == 'M':
       groupname = self.cleaned_data['groupname']
       try:
         group = Group.objects.get(name=groupname)

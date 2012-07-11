@@ -23,8 +23,13 @@
       <td><input type='text' name='description' id='description' value='{{app.description}}' /></td>
     </tr>
     <tr>
-      <td><strong>Type: </strong></td>
-      <td><input type='text' name='type' id='type' value='{{app.type}}' /></td>
+      <td><label for="type">Type: </label></td>
+      <td>
+        <select name='type' id='type' >
+          <option value='B'>Background</option>
+          <option value='I'>Interactive</option>
+        </select>
+      </td>
     </tr>
     <!--<tr>
       <td><strong>Version: </strong></td>

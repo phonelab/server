@@ -19,7 +19,7 @@
        </p>
       </div>
      {% else %}
-      {% if user_type == 'leader' %}
+      {% if user_type == 'L' %}
         {% if activated %}
           <div class="alert alert-success">
             <a class="close" data-dismiss="alert">&times;</a> 
@@ -38,7 +38,7 @@
             </p>
           </div>
         {% endif %}
-      {% elif user_type == 'member' %}
+      {% elif user_type == 'M' %}
         {% if activated %}
           <div class="alert alert-success">
             <a class="close" data-dismiss="alert">&times;</a>

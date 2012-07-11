@@ -19,7 +19,7 @@
     {% for app in apps %}
     <tr>
       <td><a href='/experiment/{{app.id}}'>{{ app.id }}</a></td>
-      <td>{{ app.name }}</td>
+      <td>{{ app.name }}<a class="btn-mini btn-primary pull-right" href='/experiment/withdraw/{{app.id}}/'><i class="icon-trash icon-white"></i> Withdraw</a></td>
     </tr>
     {% endfor %}
     </tbody>

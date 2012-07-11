@@ -42,7 +42,7 @@ def register(request):
       # Find the user type
       user_type = form.cleaned_data['user_type']
       
-      if(user_type=='leader'):
+      if(user_type=='L'):
         groupname = form.cleaned_data['groupname']
         user = form.save(form)
         # Build the activation key for their account                                                                                                                    
@@ -70,12 +70,12 @@ def register(request):
               )
 
 
-      elif(user_type=='member'):
+      elif(user_type=='M'):
         
 
         # Experiment leader name
         group = form.cleaned_data['groupname']
-        leader_profile = get_object_or_404(UserProfile, group=group, user_type='leader' )
+        leader_profile = get_object_or_404(UserProfile, group=group, user_type='L' )
         leader = leader_profile.user
         user = form.save(form)
         # Build the activation key for their account                                                                                                                    
@@ -122,8 +122,6 @@ def authorize(request, groupname, activation_key):
   user_profile = get_object_or_404(UserProfile, activation_key=activation_key)
   user = user_profile.user
 
-  
-
   if user.is_active:
     return render_to_response(
              'users/confirm.html', 
@@ -140,22 +138,22 @@ def authorize(request, groupname, activation_key):
            )
 
   
-  elif user_profile.user_type == 'leader':
+  elif user_profile.user_type == 'L':
     group = Group.objects.create(name=groupname)
     user.groups = [group]
     user_profile.group = group
     user_profile.save()
     EMAIL_SUBJECT = 'Phonelab Admin Authorization'
 
-  elif user_profile.user_type=='member':
+  elif user_profile.user_type=='M':
     group = Group.objects.get(name=groupname)
     user.groups = [group]
     user_profile.group = group
     user_profile.save()
     EMAIL_SUBJECT = 'Phonelab Leader Authorization'
     
-  
-  c = Context({'user': user, 'group': group ,'user_type': user_profile.user_type, 'key': activation_key, 'site_name': site_name})
+  current_site = Site.objects.get_current()
+  c = Context({'user': user, 'group': group ,'user_type': user_profile.user_type, 'key': activation_key, 'site_name': current_site})
   EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
   TO_EMAIL = [user.email]
   send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
@@ -196,7 +194,7 @@ def confirm(request, activation_key):
              context_instance=RequestContext(request)
            )
 
-  if user_profile.user_type == 'member':
+  if user_profile.user_type == 'M':
     user.is_active = True
     user.save()
     return render_to_response(
@@ -207,7 +205,7 @@ def confirm(request, activation_key):
            context_instance=RequestContext(request)
           )
 
-  if user_profile.user_type == 'leader':
+  if user_profile.user_type == 'L':
     user.is_active = True
     user.save()
     return render_to_response(
@@ -236,7 +234,6 @@ User Profile
 @login_required
 def profile(request, userId):
 
-  leaders = {}
   # define default response
   response = {"err": "", "data": ""}
   try:
@@ -245,17 +242,17 @@ def profile(request, userId):
     # get DeviceProfile with devprofile foreignkey
     devprofiles = DeviceProfile.objects.filter(user=userId)
 
-    user = User.objects.get(id = userId)
-    groups = Group.objects.filter(user = userId)
-
-    for group in groups:
-      leaders = get_object_or_404(UserProfile, user_type='leader', group=group) 
+    #get group its leader and members
+    group = Group.objects.get(user = userId)
+    leader = get_object_or_404(UserProfile, user_type='L', group=group) 
+    members = UserProfile.objects.filter(user_type='M', group=group)
       
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,
-               'groups': groups,
-               'leaders': leaders,
+               'group': group,
+               'leader': leader,
+               'members': members, 
                'devprofiles'  : devprofiles },
              context_instance=RequestContext(request)
              )
