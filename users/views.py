@@ -53,7 +53,7 @@ def register(request):
         current_site = Site.objects.get_current()
  
         EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
-        c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key})
+        c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key, 'site_name': current_site})
         EMAIL_BODY = (loader.get_template('users/mails/leader_request.txt')).render(c)
         TO_EMAIL = [admin_mail]
         send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
@@ -86,7 +86,7 @@ def register(request):
         current_site = Site.objects.get_current()
 
         EMAIL_SUBJECT = 'Phonelab: Member request for '+ group.name
-        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key})
+        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key, 'site_name': current_site})
         EMAIL_BODY = (loader.get_template('users/mails/member_request.txt')).render(c)
         TO_EMAIL = [leader.email]
         send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
@@ -236,6 +236,7 @@ User Profile
 @login_required
 def profile(request, userId):
 
+  leaders = {}
   # define default response
   response = {"err": "", "data": ""}
   try:
@@ -246,10 +247,15 @@ def profile(request, userId):
 
     user = User.objects.get(id = userId)
     groups = Group.objects.filter(user = userId)
+
+    for group in groups:
+      leaders = get_object_or_404(UserProfile, user_type='leader', group=group) 
+      print leaders
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,
                'groups': groups,
+               'leaders': leaders,
                'devprofiles'  : devprofiles },
              context_instance=RequestContext(request)
              )
@@ -323,9 +329,6 @@ def update(request, userId):
     # User email, not device email
     if ('email' in params and userprofile.user.email != params['email']):
       user.email = params['email']
-    # ub_id
-    if ('ub_id' in params and userprofile.ub_id != params['ub_id']):
-      userprofile.ub_id = params['ub_id']
     # save User and UserProfile
     user.save()
     userprofile.save()
