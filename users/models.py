@@ -26,4 +26,3 @@ class UserProfile(models.Model):
   user_type      = models.CharField(max_length=1, choices=USERTYPE_CHOICES) 
   activation_key = models.CharField(max_length=40)
   key_expires    = models.DateTimeField()
-  user_type 	 = models.CharField(max_length=20)

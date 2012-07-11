@@ -141,5 +141,5 @@ class DeviceProfile(models.Model):
   status        = models.CharField(max_length=1, choices=STATUS_CHOICES)
   plan          = models.CharField(max_length=45, blank=True, null=True)
   image_version = models.CharField(max_length=45, blank=True, null=True)
-  purpose       = models.CharField(max_length=1, choices=PURPOSE_CHOICES)
+  purpose       = models.CharField(max_length=2, choices=PURPOSE_CHOICES)
   service_type  = models.CharField(max_length=1, choices=TYPE_CHOICES)
