@@ -233,7 +233,9 @@ User Profile
 """
 @login_required
 def profile(request, userId):
-
+  group = {}
+  leader = {}
+  members = {}
   # define default response
   response = {"err": "", "data": ""}
   try:
