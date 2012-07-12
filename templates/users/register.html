@@ -15,7 +15,7 @@
        </div>
      {% elif created %}
     
-      {% if user_type == "participant" %}
+      {% if user_type == "P" %}
        <div class="alert alert-success">
         <a class="close" data-dismiss="alert">&times;</a>
         <p><strong>Verify Your Email Address</strong><br><br>
@@ -34,7 +34,7 @@
           <a href="/" class="btn btn-success">Home</a>
           </p>
         </div>
-        {% elif user_type == "member" %}
+        {% elif user_type == "M" %}
          <div class="alert alert-success">
           <a class="close" data-dismiss="alert">&times;</a>
           <p><strong>Requires Leader authorization</strong><br><br>
