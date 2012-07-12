@@ -4,12 +4,12 @@ from django.shortcuts import render_to_response
 from django.conf import settings
 from django.template import RequestContext
 from django.utils import  simplejson as json
-from device.models import Device
+from device.models import Device, DeviceProfile
 from lib.helper import json_response_from
 from datetime import datetime
 
 from utils import sort_nicely
-import time
+#import time
 import os, errno, re
 # Log Dir
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
@@ -38,10 +38,10 @@ def upload_log(request, deviceId):
   response = {"err": "", "data": ""}
   # Verify Filename is coming in post
   if ("filename" in request.POST):
-    now = datetime.datetime.now()
+    now = datetime.now()
     #filename = os.path.join(RAW_LOG_ROOT, deviceId, str(int(time.time())) + ".log")
     #filename = os.path.join(RAW_LOG_ROOT, deviceId, request.POST['filename'])
-    filename = os.path.join(RAW_LOG_ROOT, deviceId, str(now.strftime("%Y%m%d%H%M")) + ".log")
+    filename = os.path.join(RAW_LOG_ROOT, deviceId, str(int(now.strftime("%Y%m%d%H%M"))) + ".log")
     filedir = os.path.dirname(filename)
     # create folder for user if it doesn`t exist
     try:
