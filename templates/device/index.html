@@ -11,8 +11,9 @@
 <!--        <th>Email</th> -->
       </tr>
     </thead>
+    
     <tbody>
-    {% for device in devices %}
+      {% for device in devices %}
     <tr>
       <td><a href='/device/{{device.dev}}'>{{ device.dev }}</a></td>
 <!--      <td>{{ device.email }}</td> -->

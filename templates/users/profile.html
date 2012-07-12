@@ -97,7 +97,7 @@ $('#edit').modal('{
               </tr>
               <tr>
                 <td><strong>Working: </strong></td>
-                <td>{{devprofile.get_working_display}}</td>
+                <td>{{devprofile.get_status_display}}</td>
               </tr>
               <tr>
                 <td><strong>Image Version: </strong></td>
@@ -105,7 +105,7 @@ $('#edit').modal('{
               </tr>
               <tr>
                 <td><strong>Phone Purpose: </strong></td>
-                <td>{{devprofile.get_phone_purpose_display}}</td>
+                <td>{{devprofile.get_purpose_display}}</td>
               </tr>
               <tr>
                 <td><strong>Service Type: </strong></td>
@@ -115,7 +115,6 @@ $('#edit').modal('{
           </table>
         </div>
       </div>
-    </div>
   {% endfor %}
 </div>
 </div>
