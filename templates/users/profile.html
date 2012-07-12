@@ -33,9 +33,7 @@ $('#edit').modal('{
               {% endif %}
             {%endif%}
               <li><a data-toggle="collapse" href="#groups">Groups</a></li>
-              {% for group in groups %}
-                <li id="groups" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ group }}</a></li>
-              {% endfor %}
+              <li id="groups" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ group }}</a></li>
               <li><a href="/devices">Devices</a></li>
               <li><a href="/experiments">Applications</a></li>
           {% endif %}
@@ -48,9 +46,9 @@ $('#edit').modal('{
         <li class="active">
           <a href="#userprofile" data-toggle="pill">User Profile</a>
         </li>
-        <li>
+        <!--<li>
           <a href="#group" data-toggle="pill">Groups</a>
-        </li>
+        </li>-->
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="userprofile">

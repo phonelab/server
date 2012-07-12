@@ -243,9 +243,10 @@ def profile(request, userId):
     devprofiles = DeviceProfile.objects.filter(user=userId)
 
     #get group its leader and members
-    group = Group.objects.get(user = userId)
-    leader = get_object_or_404(UserProfile, user_type='L', group=group) 
-    members = UserProfile.objects.filter(user_type='M', group=group)
+    if(userprofile.user_type=='M' or 'L'):
+      group = Group.objects.get(user = userId)
+      leader = get_object_or_404(UserProfile, user_type='L', group=group) 
+      members = UserProfile.objects.filter(user_type='M', group=group)
       
     return render_to_response(
              'users/profile.html', 
