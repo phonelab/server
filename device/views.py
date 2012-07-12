@@ -55,13 +55,13 @@ def index(request):
 
   user = request.user
   #initialize devices
-  devices = []
+  devices = {}
   # get user's devices
   device_profiles = DeviceProfile.objects.filter(user=user)
   
   for device in device_profiles:
-    devices = Device.objects.filter(id = device.dev_id)
-    
+    devices[device] = Device.objects.filter(id = device.dev)
+  
   return render_to_response(
             'device/index.html', 
             {    
