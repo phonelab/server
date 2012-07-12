@@ -163,6 +163,7 @@ INSTALLED_APPS = (
     'users', #users
     'experiment', #experiment
     'admin', #admin
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging
