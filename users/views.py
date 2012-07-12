@@ -243,14 +243,12 @@ def profile(request, userId):
     userprofile = UserProfile.objects.get(user=userId)    
     # get DeviceProfile with devprofile foreignkey
     devprofiles = DeviceProfile.objects.filter(user=userId)
-    print userprofile.user_type
     #get group its leader and members
     if(userprofile.user_type== 'M' or userprofile.user_type=='L'):
       group = Group.objects.get(user = userId)
       leader = get_object_or_404(UserProfile, user_type='L', group=group) 
       members = UserProfile.objects.filter(user_type='M', group=group)
-      print userprofile.user_type
-
+      
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,
