@@ -16,7 +16,6 @@ from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
 from utils import re_sort_nicely, sort_nicely
 import os, errno, re
-import datetime
 import string
 
 # Log Dir
@@ -469,10 +468,10 @@ def insert_or_update_deviceapplication(request):
         try:
 #          for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(action=actions[num]).filter(result="N"):
           for i in TransactionDevApp.objects.filter(dev=dev).filter(app=app).filter(result="N"):
-            count = TransactionDevApp.objects.filter(id=i.id).update(result=results[num], end=datetime.datetime.now())
+            count = TransactionDevApp.objects.filter(id=i.id).update(result=results[num], end=datetime.now())
             trans = Transaction.objects.get(id=i.tid.id)
             if trans.total ==  trans.progress + count:
-              trans.end = datetime.datetime.now()
+              trans.end = datetime.now()
             trans.progress += count     #progress/ total
             trans.save()
             if not TransactionDevApp.objects.filter(dev=dev).filter(result="N"):

@@ -2,9 +2,11 @@
 {% extends "base.html" %}
 {% block title %}DeviceID: {{device.id}} {% endblock %}
 {% block content %}
+{% if not user_type == 'A' %}
 <h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a></h1>
+{% endif %}
 {% if user_type == 'A' %}
-<h1>(<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
+<h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a>(<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
 
 <table class="table table-bordered table-striped">
   <tbody>
