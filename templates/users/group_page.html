@@ -1,6 +1,22 @@
 {% extends "base.html" %}
-{% block title %}Group Information{% endblock %}
+{% block title %}Group: {{group.name}}{% endblock %}
     {% block content %}
+    <table class="table table-bordered table-striped">
+      <tbody>
+        <tr>
+          <td><strong>Leader Name: </strong></td>
+          <td>{{ leader.user.username }}</td>
+        </tr>
+        <tr>
+          <td><strong>Members:</strong></td>
+          <td>
+            {% for member in members %}
+              <li>{{ member.user.username }}</li>
+            {% endfor %}
+          </td>
+        </tr> 
+      </tbody>
+    </table>
     {% if user_type == 'M' %}
        <div class="alert alert-info">
        <a class="close" data-dismiss="alert">&times;</a>
