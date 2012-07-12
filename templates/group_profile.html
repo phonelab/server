@@ -1,16 +1,22 @@
 <h1>Your Groups:</h1>
 <table class="table table-bordered table-striped">
 	<tbody>
-    {% for group in groups %}
     {{leaders.user.username}}
 		<tr>
 			<td width='20%'><strong>Group Name: </strong></td>
-      <td>{{ group.name }}</td>
+      <td><a href="#">{{ group.name }}</a></td>
     </tr>
     <tr>
       <td><strong>Leader Name: </strong></td>
-      <td>{{ leaders.user.username }}</td>
-		</tr> 
-    {% endfor %}
+      <td>{{ leader.user.username }}</td>
+		</tr>
+    <tr>
+      <td><strong>Members:</strong></td>
+      <td>
+        {% for member in members %}
+          <li>{{ member.user.username }}</li>
+        {% endfor %}
+      </td>
+    </tr> 
   </tbody>
 </table>

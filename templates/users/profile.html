@@ -36,7 +36,7 @@ $('#edit').modal('{
               {% if group %}
               <li id="groups" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ group }}</a></li>
               {% else %}
-              <li id="groups" style="height: 0px; ">No Groups</li>
+              <li id="groups" style="height: 0px; ">Add Groups</li>
               {% endif %}
               <li><a href="/devices">Devices</a></li>
               <li><a href="/experiments">Applications</a></li>
@@ -50,15 +50,18 @@ $('#edit').modal('{
         <li class="active">
           <a href="#userprofile" data-toggle="pill">User Profile</a>
         </li>
-        <!--<li>
+        <li>
           <a href="#group" data-toggle="pill">Groups</a>
-        </li>-->
+        </li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="userprofile">
           <div class="well">
           {% include 'user_profile.html' %}
           </div>
+        </div>
+        <div class="tab-pane" id="group" >
+          {% include 'group_profile.html' %}
         </div>
       </div>
     </div>
