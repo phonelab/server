@@ -56,12 +56,12 @@ def upload_log(request, deviceId):
         }
         raise
     # get file handle
-#    fileHandle = open(filename, 'wb+')
+    fileHandle = open(filename, 'wb+')
     # write it out
-#    for chunk in request.FILES['file'].chunks():
-#      fileHandle.write(chunk)
+    for chunk in request.FILES['file'].chunks():
+      fileHandle.write(chunk)
     # close file handle
-#    fileHandle.close()
+    fileHandle.close()
     DeviceProfile.objects.filter(dev=deviceId).update(last_log=now)
     # success msg
     response['data'] = "done"
