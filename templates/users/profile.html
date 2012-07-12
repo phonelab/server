@@ -50,9 +50,11 @@ $('#edit').modal('{
         <li class="active">
           <a href="#userprofile" data-toggle="pill">User Profile</a>
         </li>
+        {% if userprofile.user_type == 'L' or userprofile.user_type == 'M'  %}
         <li>
           <a href="#group" data-toggle="pill">Groups</a>
         </li>
+        {% endif %}
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="userprofile">
