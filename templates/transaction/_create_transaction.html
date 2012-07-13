@@ -6,7 +6,7 @@
       <tr>
         {% for dev in devs %}
           <td width="20%"><input type='checkbox' id='dev' name='dev' value='{{dev.id}}' {{ dev.get_active_display }} /> 
-          <a href="/device/{{dev.id}}">{{dev.id}}</a></td>
+          <a href="/device/{{dev.dev}}">{{dev.dev}}</a></td>
           {% if forloop.counter|divisibleby:"5" %}
             </tr><tr>
           {% endif %}

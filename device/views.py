@@ -54,10 +54,18 @@ Update to show only the user's device
 def index(request):
 
   user = request.user
+  userprofile = UserProfile.objects.get(user = user)
   #initialize devices
   devices = {}
-  # get user's devices
-  device_profiles = DeviceProfile.objects.filter(user=user)
+  if userprofile.user_type == 'P':
+    # get user's devices
+    device_profiles = DeviceProfile.objects.filter(user=user)
+
+  if userprofile.user_type == 'A'
+    device_profiles = DeviceProfile.objects.all()
+
+  if userprofile.user_type == 'M' or userprofile.user_type == 'L':
+    device_profiles = DeviceProfile.objects.filter(group = group)
   
   for device in device_profiles:
     devices[device] = Device.objects.filter(id = device.dev)

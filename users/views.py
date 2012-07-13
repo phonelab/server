@@ -240,12 +240,20 @@ def profile(request, userId):
   response = {"err": "", "data": ""}
   try:
     # get UserProfile with user foreignkey
-    userprofile = UserProfile.objects.get(user=userId)    
-    # get DeviceProfile with devprofile foreignkey
-    devprofiles = DeviceProfile.objects.filter(user=userId)
-    #get group its leader and members
+    userprofile = UserProfile.objects.get(user=userId)
+
+    if userprofile.user_type == 'P':
+      # get DeviceProfile with devprofile foreignkey
+      devprofiles = DeviceProfile.objects.filter(user=userId)
+
+    if userprofile.user_type == 'A':
+      #get all devices
+      devprofiles = DeviceProfile.objects.all()
+
+    #get group its leader and members and its devices
     if(userprofile.user_type== 'M' or userprofile.user_type=='L'):
       group = Group.objects.get(user = userId)
+      devprofiles = DeviceProfile.objects.filter(group=group)
       leader = get_object_or_404(UserProfile, user_type='L', group=group) 
       members = UserProfile.objects.filter(user_type='M', group=group)
       

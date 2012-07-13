@@ -219,4 +219,6 @@ elif ENV == "staging":
 else:
     from config_development import *
 
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
