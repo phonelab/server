@@ -218,5 +218,4 @@ elif ENV == "staging":
     from config_staging import *
 else:
     from config_development import *
-
 TEMPLATE_DEBUG = DEBUG
