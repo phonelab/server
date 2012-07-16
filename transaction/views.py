@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, get_object_or_404, Http404, HttpResponse
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
@@ -10,6 +10,7 @@ from transaction.models import Transaction, TransactionDevApp
 from django.http import HttpResponse, HttpResponseRedirect
 from lib.helper import json_response_from, json
 from django.core.exceptions import ObjectDoesNotExist
+from users.models import UserProfile
 
 """
 Index Transaction
@@ -18,23 +19,60 @@ Index Transaction
 
 @author TKI
 """
+"""
+
+"""
 @login_required
 #@permission_required
 def index(request): 
-  # get all transacts, devs, apps
-  transacts = Transaction.objects.all()
-  devs = DeviceProfile.objects.filter(status="W")
-  #devs = Device.objects.all()
-  apps = Application.objects.all()
-  return render_to_response(
-            'transaction/index.html', 
-            {
-                'transacts': transacts,
-                'devs'     : devs,
-                'apps'     : apps
-            },
-            context_instance=RequestContext(request)
-          )
+  user = request.user
+  #get the user type
+  userprofile = UserProfile.objects.get(user = user)
+  user_type = userprofile.user_type
+
+  #check user type
+  if user_type == 'P':
+    apps = Application.objects.all()
+    transacts = get_object_or_404(Transaction,user = user)
+    devs = DeviceProfile.objects.filter(user=user).filter(status="W")
+  
+
+  if user_type == 'M' or user_type == 'L':
+    apps = Application.objects.filter(group = userprofile.group)
+    devs = DeviceProfile.objects.filter(group = userprofile.group).filter(status="W") 
+
+    users = UserProfile.objects.filter(group = userprofile.group)
+    for user in users:
+      try:
+        transacts[user] = Transaction.objects.get(user = user)
+
+      except Transaction.DoesNotExist:
+        transacts = {}
+        return render_to_response(
+                'transaction/index.html', 
+                {
+                    'transacts': transacts,
+                    'devs'     : devs,
+                    'apps'     : apps
+                },
+                context_instance=RequestContext(request)
+              )
+    
+  if user_type == 'A':
+
+    # get transacts, devs, apps
+    transacts = Transaction.objects.all()
+    devs = DeviceProfile.objects.filter(status="W")
+    apps = Application.objects.all()
+    return render_to_response(
+              'transaction/index.html', 
+              {
+                  'transacts': transacts,
+                  'devs'     : devs,
+                  'apps'     : apps
+              },
+              context_instance=RequestContext(request)
+            )
 
 """
 Index Transact Creation [POST]
