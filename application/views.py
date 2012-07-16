@@ -75,13 +75,13 @@ def index(request):
 
   if userprofile.user_type == 'M' or 'L':
     #query the database for user's own applications
-    apps = Application.objects.filter(user_id=user.id)
+    apps = Application.objects.filter(group=userprofile.group)
 
   return render_to_response(
       'application/index.html', 
       {
         'apps': apps,
-        'user_type': userprofile.user_type
+        'userprofile': userprofile
       },
       context_instance=RequestContext(request)
     )
@@ -97,6 +97,7 @@ Show Application Details [GET]
 """
 @login_required
 def show(request, appId): 
+  userprofile = UserProfile.objects.get(user=request.user)
   # define default response
   response = { "err": "", "data": "" }
   # get application
@@ -111,6 +112,7 @@ def show(request, appId):
     return render_to_response(
   		'application/show.html', 
   		{
+        'userprofile': userprofile,
   			'app' : app,
         'devs': devs
   		},
@@ -177,6 +179,9 @@ def create_or_update_application(request):
         active        = "E"
         #version      = params["version"],
     )
+    userprofile = UserProfile.objects.get(user = request.user)
+    if userprofile.user_type=='M' or userprofile.user_type == 'L':
+      app.group = userprofile.group
     app.save()
     # Verify Filename is coming in post
     if (request.POST):

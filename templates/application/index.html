@@ -2,8 +2,48 @@
 {% extends "base.html" %}
 {% block title %}All Applications{% endblock %}
 {% block content %}
+<div class="container-fluid">
+<div class ="row-fluid">
+{% if userprofile.user_type == 'M' or userprofile.user_type == 'L' %}
+<div class="span3">
+  <br>
+  <br>
+      <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+          {% if user.is_authenticated %}
+            <li><a href=".">Profile</a></li>
+            {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
+              <li><a data-toggle="collapse" href="#experiment">Experiments</li>
+              {% if experiments %}
+                {% for experiment in experiments %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
+                {% endfor %}
+              {% else %}
+                {% if userprofile.user_type == 'L' %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
+                {% elif userprofile.user_type == 'M' %}
+                  <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
+                {% endif %}
+              {%endif%}
+                <li><a data-toggle="collapse" href="#groups">Groups</a></li>
+                {% if group %}
+                  <li id="groups" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ group }}</a></li>
+                {% else %}
+                  <li id="groups" style="height: 0px; ">No Groups</li>
+                {% endif %}
+            {% endif %}
+                  <li><a href="/devices">Devices</a></li>
+                  <li><a href="/experiments">Applications</a></li>  
+          {% endif %}
+        </ul>
+      </div>
+</div>
+<div class="span9">
+{% else %}
+<div class ="span">
+  {% endif %}
   <h1>All Applications 
-    {% if user_type != 'P' %}
+    {% if userprofile.user_type != 'P' %}
     (<a href='/experiment/new'>Add</a>)
     {% endif %}
   </h1>
@@ -27,4 +67,7 @@
   {% else %}
   There are no applications!
   {% endif %}
+</div>
+</div>
+</div>
 {% endblock %}
