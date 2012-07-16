@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.core.urlresolvers import reverse
+from device.models import Device, DeviceProfile
+from datetime import datetime, timedelta
 
 """
 Human Sorting
@@ -58,3 +60,24 @@ class AuthorProtectedView(ProtectedView):
             return redirect('access_denied')
         
         return super(AuthorProtectedView, self).dispatch(*args, **kwargs)
+
+"""
+update working status using Last Log info
+
+@date 05/08/2012
+
+@author Taeyeon Ki
+"""
+def update_working_status():
+  deviceprofiles = DeviceProfile.objects.all()
+
+  for deviceprofile in deviceprofiles:
+    if deviceprofile.last_log < datetime.today() - timedelta(2):
+      #Not Working phone since a phone did not update a log file for two days
+      DeviceProfile.objects.filter(id=deviceprofile.id).update(status="N")
+      print deviceprofile.id
+      print "not working"
+    else:
+      DeviceProfile.objects.filter(id=deviceprofile.id).update(status="W")
+      print deviceprofile.id
+      print "Working"

@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 
 from django.contrib.auth.models import User
-from device.models import Device, DeviceApplication
+from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
 
@@ -23,7 +23,8 @@ Index Transaction
 def index(request): 
   # get all transacts, devs, apps
   transacts = Transaction.objects.all()
-  devs = Device.objects.all()
+  devs = DeviceProfile.objects.filter(status="W")
+  #devs = Device.objects.all()
   apps = Application.objects.all()
   return render_to_response(
             'transaction/index.html', 
