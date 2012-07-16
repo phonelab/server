@@ -6,6 +6,7 @@ from django.contrib.auth.views import login, logout, password_change
 from django.contrib import admin
 admin.autodiscover()
 
+
 PASSWORD_CHANGE_DICT = {
                        'template_name': 'users/password_change.html',
                        'post_change_redirect': '/accounts/password_change/done/'

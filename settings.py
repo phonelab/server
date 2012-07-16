@@ -14,7 +14,10 @@ RAW_APP_ROOT = os.path.join(SITE_ROOT, 'application', 'apps')
 # Env variable
 ENV = os.environ.get("ENV") or "development"
 
-# Email setting;
+#django_cron 
+CRON_POLLING_FREQUENCY = 60
+
+# Email setting
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 
@@ -39,7 +42,7 @@ MOBILE_UTILS_SETTINGS = {
 }
 
 ADMINS = (
-    ('Micheal Benedict', 'micheala@buffalo.edu'),
+#    ('Micheal Benedict', 'micheala@buffalo.edu'),
     ('Taeyeon Ki', 'tki@buffalo.edu'),
 )
 
@@ -55,7 +58,7 @@ MANAGERS = ADMINS
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/New_York'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -163,7 +166,7 @@ INSTALLED_APPS = (
     'users', #users
     'experiment', #experiment
     'admin', #admin
-    'south',
+    'south', #south
 )
 
 # A sample logging configuration. The only tangible logging

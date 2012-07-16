@@ -55,7 +55,7 @@
     <tbody>
       {% for device in devices %}
     <tr>
-      <td><a href='/device/{{device.dev}}'>{{ device.dev }}</a></td>
+      <td><a href='/device/{{ device.dev.id }}'>{{ device.dev.id }}</a></td>
 <!--      <td>{{ device.email }}</td> -->
     </tr>
     {% endfor %}

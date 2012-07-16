@@ -12,7 +12,8 @@ from django.contrib.auth.models import User, Group
 from users.models import UserProfile
 from device.models import Device, DeviceProfile
 from users.forms import RegistrationForm
-import datetime, random, hashlib
+import random, hashlib
+from datetime from datetime, timedelta
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
@@ -48,7 +49,7 @@ def register(request):
         # Build the activation key for their account                                                                                                                    
         salt = hashlib.md5(str(random.random())).hexdigest()[:5]
         activation_key = hashlib.md5(salt+user.username).hexdigest()
-        key_expires = datetime.datetime.today() + datetime.timedelta(2)
+        key_expires = datetime.today() + timedelta(2)
         new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
         current_site = Site.objects.get_current()
  
@@ -81,7 +82,7 @@ def register(request):
         # Build the activation key for their account                                                                                                                    
         salt = hashlib.md5(str(random.random())).hexdigest()[:5]
         activation_key = hashlib.md5(salt+user.username).hexdigest()
-        key_expires = datetime.datetime.today() + datetime.timedelta(2)
+        key_expires = datetime.today() + timedelta(2)
         new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
         current_site = Site.objects.get_current()
 
@@ -130,7 +131,7 @@ def authorize(request, groupname, activation_key):
              context_instance=RequestContext(request)
            )
   
-  if user_profile.key_expires < datetime.datetime.today():
+  if user_profile.key_expires < datetime.today():
     return render_to_response(
              'users/confirm.html', 
              {'expired': True},
@@ -187,7 +188,7 @@ def confirm(request, activation_key):
              context_instance=RequestContext(request)
            )
   
-  if user_profile.key_expires < datetime.datetime.today():
+  if user_profile.key_expires < datetime.today():
     return render_to_response(
              'users/confirm.html', 
              {'expired': True},
