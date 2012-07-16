@@ -256,7 +256,6 @@ def profile(request, userId):
       devprofiles = DeviceProfile.objects.filter(group=group)
       leader = get_object_or_404(UserProfile, user_type='L', group=group) 
       members = UserProfile.objects.filter(user_type='M', group=group)
-      
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,

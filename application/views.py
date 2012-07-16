@@ -9,8 +9,8 @@ from django.conf import settings
 from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from users.models import UserProfile
+from xml.etree import ElementTree
 import os, errno, mimetypes
-
 RAW_APP_ROOT = settings.RAW_APP_ROOT
 
 """
@@ -163,17 +163,19 @@ def create_or_update_application(request):
     }
     return HttpResponseRedirect('/error/')
   else:
+ 
     # post 
     params = request.POST
     ## First Save to database
     app = Application(
-        user       = request.user,
+        user          = request.user,
         name          = params['name'], 
-        package_name  = params['package_name'],
-        #intent_name   = params['intent_name'],
+        #package_name = params['package_name'],
+        #intent_name  = params['intent_name'],
         description   = params['description'],
         type          = params['type'],
-        #version       = params["version"],
+        active        = "E"
+        #version      = params["version"],
     )
     app.save()
     # Verify Filename is coming in post
@@ -201,6 +203,16 @@ def create_or_update_application(request):
         fileHandle.write(chunk)
       # close file handle
       fileHandle.close()
+      #pulling package name from apk file
+      #apktool extract apk file to a directory
+      os.system('bin/apktool d ' + filename)
+      with open(str(app.id) + '/AndroidManifest.xml', 'rt') as f:
+        tree = ElementTree.parse(f)
+      for node in tree.iter('manifest'):
+        package = node.attrib.get('package')
+      Application.objects.filter(id=app.id).update(package_name=package)
+      #remove the directory 
+      os.system('rm -rf ' + str(app.id))
       # success msg
       response['data'] = "done"
     else:

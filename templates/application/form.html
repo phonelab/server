@@ -5,16 +5,16 @@
 <h1>Upload New Experiment</h1>
 <table class="table">
   <tbody>
-    <form method="post" action="/experiment/" enctype="multipart/form-data">
+    <form method="post" onsubmit="return ValidateForm(this);" action="/experiment/" enctype="multipart/form-data">
     <tr>
       <td width='20%'><strong>Name: </strong></td>
       <td><input type='text' name='name' id='name' value='{{app.name}}' /></td>
     </tr>
-    <tr>
+    <!--<tr>
       <td><strong>Package: </strong></td>
       <td><input type='text' name='package_name' id='package_name' value='{{app.package_name}}' /></td>
     </tr>
-    <!--<tr>
+    <tr>
       <td><strong>Intent Name: </strong></td>
       <td><input type='text' name='intent_name' id='intent_name' value='{{app.intent_name}}' /></td>
     </tr>-->
@@ -37,7 +37,7 @@
     </tr>-->
     <tr>
       <td><strong>Upload: </strong></td>
-      <td><input type='file' name='upload' id='upload' /></td>
+      <td><input type='file' name='upload' id='upload' onchange="check_file()" /></td>
     </tr>
     <tr>
       <td colspan='2'>
@@ -49,3 +49,33 @@
   </tbody>
 </table>
 {% endblock %}
+{% block js %}
+<script type="text/javascript">
+  function check_file(){
+    str = document.getElementById('upload').value.toUpperCase();
+    suffix = ".APK";
+    if(!(str.indexOf(suffix, str.length - suffix.length) !== -1)){
+      alert('File type not allowed,\nAllowed file: *.apk');
+      document.getElementById('upload').value='';
+    }
+  }
+  function ValidateForm(form){
+     if((form.name.value.length == 0) || (form.name.value == null)) 
+     { 
+       alert('Please enter name in the name field') 
+       form.name.focus(); 
+       return false; 
+     } 
+     if((form.upload.value.length == 0) || (form.name.value == null)) 
+     { 
+       alert('Please choose a apk file in the upload field') 
+       form.name.focus(); 
+       return false; 
+     } 
+     return true;
+   }	
+ 
+</script>
+{% endblock %}
+
+
