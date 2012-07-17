@@ -1,0 +1,7 @@
+{% load url from future %}
+Hello {{ user }},
+
+You have been removed from the group {{group}} by its leader {{leader}}.
+
+Thank you 
+PhoneLab

@@ -237,7 +237,7 @@ def create_or_update_application(request):
     else:
       response["err"] = "err1"
 #    print response["err"]
-    return HttpResponseRedirect('/experiments/')
+    return HttpResponseRedirect('/applications/')
 
 
 """

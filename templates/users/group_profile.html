@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-  {% block content %}
+  
 <script type="text/javascript">
 function confirmsubmit() {
 
@@ -16,40 +16,7 @@ $('#add_member').modal('{
   keyboard: false
 }')
 </script>
-
-<div class="container-fluid">
-<div class ="row-fluid">
-<div class="span3">
-  <div class="well sidebar-nav">
-        <ul class="nav nav-list">
-          {% if user.is_authenticated %}
-            <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
-              <li><a data-toggle="collapse" href="#experiment">Experiments</li>
-              {% if experiments %}
-                {% for experiment in experiments %}
-                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
-                {% endfor %}
-              {% else %}
-                {% if userprofile.user_type == 'L' %}
-                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
-                {% elif userprofile.user_type == 'M' %}
-                  <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
-                {% endif %}
-              {%endif%}
-                <li><a data-toggle="collapse" href="#groups">Groups</a></li>
-                {% if group %}
-                  <li id="groups" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ group }}</a></li>
-                {% else %}
-                  <li id="groups" style="height: 0px; ">No Groups</li>
-                {% endif %}
-            
-                  <li><a href="/devices">Devices</a></li>
-                  <li><a href="/experiments">Applications</a></li>  
-          {% endif %}
-        </ul>
-      </div>
-</div>
-<div class="span9">
+{% block content %}
   {% if no_such_member %}
   <div class="alert alert-error">
     <button type="button" class="close" data-dismiss="alert">×</button>
@@ -60,9 +27,15 @@ $('#add_member').modal('{
     <button type="button" class="close" data-dismiss="alert">×</button>
     A request has been sent to the Admin! Thank You!
   </div><!-- alert-success -->
+  {% elif already_member %}
+  <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    We are Sorry! The user is a member of another group!
+  </div><!-- alert-error -->
   {% endif %}
+  <br><br>
   <div class="well">
-    <h1>Group Profile: <a href="/accounts/group_profile/">{{group.name}}</a></h1>
+    <h2>Group Profile: <a href="/accounts/group_profile/">{{group.name}}</a></h2>
     <table class="table table-bordered table-striped">
       <tbody>
         <tr>
@@ -94,7 +67,7 @@ $('#add_member').modal('{
           <td>
             <ul class="unstyled">
             {% for app in apps %}
-              <li><a href="/experiment/{{app.id}}">{{ app.name }}</a></li>
+              <li><a href="/application/{{app.id}}">{{ app.name }}</a></li>
             {% endfor %}
             </ul>
           </td>
@@ -102,13 +75,10 @@ $('#add_member').modal('{
       </tbody>
     </table>
     {% if userprofile.user_type == 'L' %}
-    <a data-toggle="modal" class="btn btn-primary" href="#add_member">Add Member</a>
     <a data-toggle="modal" class="btn btn-primary" href="#request_devices">Request Devices</a>
     {% endif %}
   </div><!-- well -->
-</div><!-- span9 -->
-</div><!-- row-fluid -->
-</div><!-- fluid-container -->
+
 <div class="modal fade" id="add_member">
   <form class="form-horizontal" method="post" action="/accounts/group_profile/">
     <div class="modal-header">

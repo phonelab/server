@@ -13,42 +13,6 @@ $('#edit').modal('{
 </script>
 
 {% block content %}
-<div class="container-fluid">
-  <div class="row-fluid">
-    {% if userprofile.user_type == 'M' or userprofile.user_type == 'L' %}
-      <div class="span3">
-        <br><br><br>
-        <div class="well sidebar-nav">
-          <ul class="nav nav-list">
-            {% if user.is_authenticated %}
-              <li><a href=".">Profile</a></li>
-              {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
-                <li><a data-toggle="collapse" href="#experiment">Experiments</li>
-                {% if experiments %}
-                  {% for experiment in experiments %}
-                    <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
-                  {% endfor %}
-                {% else %}
-                  {% if userprofile.user_type == 'L' %}
-                    <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
-                  {% elif userprofile.user_type == 'M' %}
-                    <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
-                  {% endif %}
-                {%endif%}
-                  <li><a data-toggle="collapse" href="#groups">Groups</a></li>
-                  {% if group %}
-                    <li id="groups" style="height: 0px; "><a href="/accounts/group_profile/">&nbsp;&nbsp;{{ group }}</a></li>
-                  {% else %}
-                    <li id="groups" style="height: 0px; ">No Groups</li>
-                  {% endif %}
-              {% endif %}
-                    <li><a href="/devices">Devices</a></li>
-                    <li><a href="/experiments">Applications</a></li>  
-            {% endif %}
-          </ul>
-        </div><!-- well sidebar-nav -->
-      </div><!-- span3 -->
-      <div class="span9">
         <ul class="nav nav-pills">
           <li class="active">
             <a href="#userprofile" data-toggle="pill">User Profile</a>
@@ -70,11 +34,9 @@ $('#edit').modal('{
           </div><!-- tab-pane -->
         </div><!-- tab-content -->
       </div><!-- span9 -->
-    {% else %}
-      {% include 'user_tab.html' %}
-    {% endif %}
+    
 
-<h1>Device Profile:</h1>
+<h2>Device Profile:</h2>
 <ul class="nav nav-tabs">
   {% for devprofile in devices %}
     {% if forloop.first %}
@@ -122,10 +84,8 @@ $('#edit').modal('{
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
+        </div><!-- well -->
+      </div><!-- tab-pane -->
   {% endfor %}
-</div>
-</div>
-</div>
+</div><!-- tab-content -->
 {% endblock %}

@@ -390,43 +390,11 @@ def group_profile(request):
   #get the apps
   apps = Application.objects.filter(group=userprofile.group)
 
+  #get the members
+  members = UserProfile.objects.filter(user_type='M', group=group)
 
   if request.POST:
     params = request.POST
-    if ('member' in params):
-
-      try:
-        member = User.objects.get(username=params['member'])
-
-      except User.DoesNotExist:
-        #get the members
-        members = UserProfile.objects.filter(user_type='M', group=group)
-        return render_to_response(
-                'users/group_profile.html', 
-                { 'no_such_member': True,
-                  'userprofile' : userprofile,
-                  'group': group,
-                  'apps': apps,
-                  'leader': leader,
-                  'members': members,
-                  'no_of_devices': no_of_devices, 
-                  'devices'  : devices },
-                context_instance=RequestContext(request)
-               )
-
-      current_site = Site.objects.get_current()
-      c = Context({'user': member, 'group': group ,'leader': leader, 'site_name': current_site})
-      EMAIL_SUBJECT = "Phonelab: Group "+group.name+" Notification"
-      EMAIL_BODY = (loader.get_template('users/mails/member_added.txt')).render(c)
-      TO_EMAIL = [member.email]
-      send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
-
-      member.groups = [group]
-      member_profile = UserProfile.objects.get(user = member)
-      member_profile.group = group
-      if member_profile.user_type != 'M':
-        member_profile.user_type = 'M'
-      member_profile.save()
 
     if 'req_devices' in params:
       req_devices = params['req_devices']
@@ -439,9 +407,6 @@ def group_profile(request):
       send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
 
       device_requested = True
-
-  #get the members
-  members = UserProfile.objects.filter(user_type='M', group=group)
 
   return render_to_response(
           'users/group_profile.html', 
@@ -481,6 +446,16 @@ def delete_member(request, member):
 
   user = request.user
   userprofile = UserProfile.objects.get(user=user)
+
+  #Notify the member
+  current_site = Site.objects.get_current()
+  c = Context({'user': group_member, 'group': group ,'leader': user, 'site_name': current_site})
+  EMAIL_SUBJECT = "Phonelab: Group "+group.name+" Notification"
+  EMAIL_BODY = (loader.get_template('users/mails/member_removed.txt')).render(c)
+  TO_EMAIL = [member.email]
+  send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
+  
 
   #get the group
   group = Group.objects.get(user = user)

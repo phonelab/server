@@ -1,50 +1,10 @@
-<!-- Show list of devices !-->
+<!-- Show list of Applications !-->
 {% extends "base.html" %}
-{% block title %}All Applications{% endblock %}
+{% block title %}{% endblock %}
 {% block content %}
-<div class="container-fluid">
-<div class ="row-fluid">
-{% if userprofile.user_type == 'M' or userprofile.user_type == 'L' %}
-<div class="span3">
-  <br>
-  <br>
-      <div class="well sidebar-nav">
-        <ul class="nav nav-list">
-          {% if user.is_authenticated %}
-            <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
-            {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
-              <li><a data-toggle="collapse" href="#experiment">Experiments</li>
-              {% if experiments %}
-                {% for experiment in experiments %}
-                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
-                {% endfor %}
-              {% else %}
-                {% if userprofile.user_type == 'L' %}
-                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
-                {% elif userprofile.user_type == 'M' %}
-                  <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
-                {% endif %}
-              {%endif%}
-                <li><a data-toggle="collapse" href="#groups">Groups</a></li>
-                {% if group %}
-                  <li id="groups" style="height: 0px; "><a href="/accounts/group_profile/">&nbsp;&nbsp;{{ group }}</a></li>
-                {% else %}
-                  <li id="groups" style="height: 0px; ">No Groups</li>
-                {% endif %}
-            {% endif %}
-                  <li><a href="/devices">Devices</a></li>
-                  <li><a href="/experiments">Applications</a></li>  
-          {% endif %}
-        </ul>
-      </div>
-</div>
-<div class="span9">
-{% else %}
-<div class ="span">
-  {% endif %}
   <h1>All Applications 
     {% if userprofile.user_type != 'P' %}
-    (<a href='/experiment/new'>Add</a>)
+    (<a href='/application/new'>Add</a>)
     {% endif %}
   </h1>
   {% if apps %}
@@ -58,8 +18,8 @@
     <tbody>
     {% for app in apps %}
     <tr>
-      <td><a href='/experiment/{{app.id}}'>{{ app.id }}</a></td>
-      <td>{{ app.name }}<a class="btn-mini btn-primary pull-right" href='/experiment/withdraw/{{app.id}}/'><img src="{{ STATIC_URL }}img/trash.ico"></i> Withdraw</a></td>
+      <td><a href='/application/{{app.id}}'>{{ app.id }}</a></td>
+      <td>{{ app.name }} {% if userprofile.user_type != 'P' %}<a class="btn-mini btn-primary pull-right" href='/application/withdraw/{{app.id}}/'><img src="{{ STATIC_URL }}img/trash.ico"></i> Withdraw</a>{% endif %}</td>
     </tr>
     {% endfor %}
     </tbody>
@@ -67,7 +27,4 @@
   {% else %}
   There are no applications!
   {% endif %}
-</div>
-</div>
-</div>
 {% endblock %}

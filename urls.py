@@ -95,19 +95,28 @@ if settings.DEBUG:
     ## Application
     #
     # All Applications [GET]
-    url(r'^experiments/$', 'application.views.index'),
+    url(r'^applications/$', 'application.views.index'),
     # Single Application [GET]
-    url(r'^experiment/(?P<appId>\d+)/$', 'application.views.show'),
+    url(r'^application/(?P<appId>\d+)/$', 'application.views.show'),
     # New Application Form [GET]
-    url(r'^experiment/new/$', 'application.views.new'),
+    url(r'^application/new/$', 'application.views.new'),
     # Withdraw Application
-    url(r'^experiment/withdraw/(?P<appId>\d+)/$', 'application.views.withdraw'),
+    url(r'^application/withdraw/(?P<appId>\d+)/$', 'application.views.withdraw'),
     # Edit Application Form [GET]
-    #url(r'^experiment/(?P<appId>[A-Z0-9]\w+)/edit/$', 'application.views.edit'),
+    #url(r'^application/(?P<appId>[A-Z0-9]\w+)/edit/$', 'application.views.edit'),
     # Create/Update Application [POST]
-    url(r'^experiment/$', 'application.views.create_or_update_application'),
+    url(r'^application/$', 'application.views.create_or_update_application'),
 
     
+    #
+    ## Experiment
+    #
+    # Single Experiment
+    url(r'^experiment/(?P<expId>\d+)/$', 'experiment.views.show'),
+    # Create or Update experiment [POST]
+    url(r'^experiment/$', 'experiment.views.create_or_update_experiment' ),
+
+
     #
     ## Transaction
     #
@@ -161,7 +170,7 @@ if settings.DEBUG:
     ## Application
     #
     # Download Application [GET]
-    url(r'^experiment/(?P<appId>\d+).apk/$', 'application.views.get_download'),
+    url(r'^application/(?P<appId>\d+).apk/$', 'application.views.get_download'),
 
     #
     ## Error
