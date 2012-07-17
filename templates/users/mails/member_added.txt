@@ -1,0 +1,7 @@
+{% load url from future %}
+Hello {{ user }},
+
+You have been added to the group "{{group}}" by its leader {{leader.user}}.
+
+Thank You
+PhoneLab

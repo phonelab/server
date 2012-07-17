@@ -2,6 +2,46 @@
 {% extends "base.html" %}
 {% block title %}Transaction{% endblock %}
 {% block content %}
+<div class="container-fluid">
+<div class ="row-fluid">
+{% if userprofile.user_type == 'M' or userprofile.user_type == 'L' %}
+<div class="span3">
+  <br>
+  <br>
+      <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+          {% if user.is_authenticated %}
+            <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
+            {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
+              <li><a data-toggle="collapse" href="#experiment">Experiments</li>
+              {% if experiments %}
+                {% for experiment in experiments %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
+                {% endfor %}
+              {% else %}
+                {% if userprofile.user_type == 'L' %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
+                {% elif userprofile.user_type == 'M' %}
+                  <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
+                {% endif %}
+              {%endif%}
+                <li><a data-toggle="collapse" href="#groups">Groups</a></li>
+                {% if group %}
+                  <li id="groups" style="height: 0px; "><a href="/accounts/group_profile/">&nbsp;&nbsp;{{ group }}</a></li>
+                {% else %}
+                  <li id="groups" style="height: 0px; ">No Groups</li>
+                {% endif %}
+            {% endif %}
+                  <li><a href="/devices">Devices</a></li>
+                  <li><a href="/experiments">Applications</a></li>  
+          {% endif %}
+        </ul>
+      </div>
+</div>
+<div class="span9">
+{% else %}
+<div class ="span">
+  {% endif %}
 <h1>Transaction</h1>
 
 <div class="tabbable">
@@ -17,5 +57,7 @@
       {% include 'transaction/_history_list.html' %}
     </div>
   </div>
-</div>
+</div><!-- tabbable -->
+</div><!-- row-fluid -->
+</div><!-- container-fluid -->
 {% endblock %}

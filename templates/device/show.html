@@ -2,8 +2,47 @@
 {% extends "base.html" %}
 {% block title %}DeviceID: {{device.id}} {% endblock %}
 {% block content %}
-
-{% if user_type == 'A' %}
+<div class="container-fluid">
+<div class ="row-fluid">
+{% if userprofile.user_type == 'M' or userprofile.user_type == 'L' %}
+<div class="span3">
+  <br>
+  <br>
+      <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+          {% if user.is_authenticated %}
+            <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
+            {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
+              <li><a data-toggle="collapse" href="#experiment">Experiments</li>
+              {% if experiments %}
+                {% for experiment in experiments %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
+                {% endfor %}
+              {% else %}
+                {% if userprofile.user_type == 'L' %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
+                {% elif userprofile.user_type == 'M' %}
+                  <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
+                {% endif %}
+              {%endif%}
+                <li><a data-toggle="collapse" href="#groups">Groups</a></li>
+                {% if group %}
+                  <li id="groups" style="height: 0px; "><a href="/accounts/group_profile/">&nbsp;&nbsp;{{ group }}</a></li>
+                {% else %}
+                  <li id="groups" style="height: 0px; ">No Groups</li>
+                {% endif %}
+            {% endif %}
+                  <li><a href="/devices">Devices</a></li>
+                  <li><a href="/experiments">Applications</a></li>  
+          {% endif %}
+        </ul>
+      </div><!-- well sidebar -->
+</div><!-- span3 -->
+<div class="span9">
+{% else %}
+<div class ="span">
+  {% endif %}
+{% if userprofile.user_type == 'A' %}
 <h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a>(<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
 
 <table class="table table-bordered table-striped">
@@ -63,11 +102,11 @@
   <ul class="nav nav-tabs">
     <li class="active"><a href="#1" data-toggle="tab">Log</a></li>
     <li><a href="#2" data-toggle="tab">Log Tag Filter</a></li>
-    {% if user_type == 'A' %}
+    {% if userprofile.user_type == 'A' %}
     <li><a href="#3" data-toggle="tab">Send C2DM</a></li>
     {% endif %}
     <li><a href="#4" data-toggle="tab">Applications</a></li>
-    {% if user_type != 'P' %}
+    {% if userprofile.user_type != 'P' %}
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">Status Updates<b class="caret"></b></a>
       <ul class="dropdown-menu">
@@ -132,5 +171,6 @@
     </div>
   </div>
 <!--</div>-->
-
+</div><!-- row-fluid -->
+</div><!-- container-fluid  -->
 {% endblock %}

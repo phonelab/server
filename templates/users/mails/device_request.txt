@@ -1,0 +1,13 @@
+{% load url from future %}
+Hello Admin,
+
+The following group has request for additional devices.
+
+Group: {{ group.name }}
+Leader: {{ leader }}
+Leader's email: {{ leader.email }}
+Available Devices: {{ available_devices }}
+Number of devices Requested: {{ req_devices }}
+
+Thank You
+Phonelab

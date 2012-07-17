@@ -13,10 +13,11 @@ from users.models import UserProfile
 from device.models import Device, DeviceProfile
 from users.forms import RegistrationForm
 import random, hashlib
-from datetime from datetime, timedelta
+from datetime import datetime, timedelta
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
+from application.models import Application
 
 admin_mail = 'tempphonelab@gmail.com'
 
@@ -115,6 +116,10 @@ def register(request):
 Email Authorization
 
 @date 07/03/2012
+
+@params String groupname,
+        activation_key
+        
 
 @author Manoj
 """
@@ -237,6 +242,9 @@ def profile(request, userId):
   group = {}
   leader = {}
   members = {}
+  no_of_members = 0
+  no_of_devices = 0
+  devices={}
   # define default response
   response = {"err": "", "data": ""}
   try:
@@ -245,7 +253,7 @@ def profile(request, userId):
 
     if userprofile.user_type == 'P':
       # get DeviceProfile with devprofile foreignkey
-      devprofiles = DeviceProfile.objects.filter(user=userId)
+      devices = DeviceProfile.objects.filter(user=userId)
 
     if userprofile.user_type == 'A':
       #get all devices
@@ -254,16 +262,18 @@ def profile(request, userId):
     #get group its leader and members and its devices
     if(userprofile.user_type== 'M' or userprofile.user_type=='L'):
       group = Group.objects.get(user = userId)
-      devprofiles = DeviceProfile.objects.filter(group=group)
+      devices = DeviceProfile.objects.filter(group=group)
+      no_of_devices = devices.count()
       leader = get_object_or_404(UserProfile, user_type='L', group=group) 
-      members = UserProfile.objects.filter(user_type='M', group=group)
+      no_of_members = UserProfile.objects.filter(user_type='M', group=group).count()
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,
                'group': group,
                'leader': leader,
-               'members': members, 
-               'devprofiles'  : devprofiles },
+               'no_of_members': no_of_members,
+               'no_of_devices': no_of_devices, 
+               'devices'  : devices },
              context_instance=RequestContext(request)
              )
   # User does not exist
@@ -349,7 +359,152 @@ def update(request, userId):
     }
   return json_response_from(response)
 
+"""
+Group Profile
+
+@date 07/16/2012
+
+@param String groupname
+
+@author Manoj
+"""
+
+def group_profile(request):
+
+  #initialize beeloan
+  device_requested = False
+
+  user = request.user
+  userprofile = UserProfile.objects.get(user=user)
+
+  #get the group
+  group = Group.objects.get(user = user)
+
+  #get the devices and number of devices
+  devices = DeviceProfile.objects.filter(group=group)
+  no_of_devices = devices.count()
+
+  #get the leader
+  leader = get_object_or_404(UserProfile, user_type='L', group=group)
+
+  #get the apps
+  apps = Application.objects.filter(group=userprofile.group)
 
 
+  if request.POST:
+    params = request.POST
+    if ('member' in params):
 
+      try:
+        member = User.objects.get(username=params['member'])
 
+      except User.DoesNotExist:
+        #get the members
+        members = UserProfile.objects.filter(user_type='M', group=group)
+        return render_to_response(
+                'users/group_profile.html', 
+                { 'no_such_member': True,
+                  'userprofile' : userprofile,
+                  'group': group,
+                  'apps': apps,
+                  'leader': leader,
+                  'members': members,
+                  'no_of_devices': no_of_devices, 
+                  'devices'  : devices },
+                context_instance=RequestContext(request)
+               )
+
+      current_site = Site.objects.get_current()
+      c = Context({'user': member, 'group': group ,'leader': leader, 'site_name': current_site})
+      EMAIL_SUBJECT = "Phonelab: Group "+group.name+" Notification"
+      EMAIL_BODY = (loader.get_template('users/mails/member_added.txt')).render(c)
+      TO_EMAIL = [member.email]
+      send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
+      member.groups = [group]
+      member_profile = UserProfile.objects.get(user = member)
+      member_profile.group = group
+      if member_profile.user_type != 'M':
+        member_profile.user_type = 'M'
+      member_profile.save()
+
+    if 'req_devices' in params:
+      req_devices = params['req_devices']
+
+      current_site = Site.objects.get_current()
+      c = Context({'leader': leader.user, 'group': group ,'req_devices': req_devices, 'available_devices': no_of_devices, 'site_name': current_site})
+      EMAIL_SUBJECT = "Group "+group.name+" Device request"
+      EMAIL_BODY = (loader.get_template('users/mails/device_request.txt')).render(c)
+      TO_EMAIL = [admin_mail]
+      send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
+      device_requested = True
+
+  #get the members
+  members = UserProfile.objects.filter(user_type='M', group=group)
+
+  return render_to_response(
+          'users/group_profile.html', 
+             { 'device_requested': device_requested,
+               'userprofile' : userprofile,
+               'group': group,
+               'apps': apps,
+               'leader': leader,
+               'members': members,
+               'no_of_devices': no_of_devices, 
+               'devices'  : devices },
+             context_instance=RequestContext(request)
+         )
+
+"""
+Delete member from group
+
+@date 07/16/2012
+
+@param String member
+
+@author Manoj
+"""
+def delete_member(request, member):
+  
+  group_member = User.objects.get(username=member)
+  member_profile = UserProfile.objects.get(user = group_member)
+  group = Group.objects.get(user = group_member)
+
+  #remove the user from group
+  group_member.groups.remove(group)
+
+  #Update userprofile
+  member_profile.group_id = ""
+  member_profile.user_type = "P"
+  member_profile.save()
+
+  user = request.user
+  userprofile = UserProfile.objects.get(user=user)
+
+  #get the group
+  group = Group.objects.get(user = user)
+
+  #get the devices and number of devices
+  devices = DeviceProfile.objects.filter(group=group)
+  no_of_devices = devices.count()
+
+  #get the leader and the members
+  leader = get_object_or_404(UserProfile, user_type='L', group=group)
+  members = UserProfile.objects.filter(user_type='M', group=group)
+
+  #get the apps
+  apps = Application.objects.filter(group=userprofile.group)
+
+  return render_to_response(
+          'users/group_profile.html', 
+             { 'userprofile' : userprofile,
+               'group': group,
+               'apps': apps,
+               'leader': leader,
+               'members': members,
+               'no_of_devices': no_of_devices, 
+               'devices'  : devices },
+             context_instance=RequestContext(request)
+         )
+  return render_to_response

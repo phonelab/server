@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+  {% block content %}
+<script type="text/javascript">
+function confirmsubmit() {
+
+  if (confirm("You sure you want to delete the member?")) {
+    document.GetElementById("member_delete").submit();
+  }
+    
+  return false;
+}
+</script>
+<script type="text/javascript">
+//initialize modal
+$('#add_member').modal('{
+  keyboard: false
+}')
+</script>
+
+<div class="container-fluid">
+<div class ="row-fluid">
+<div class="span3">
+  <div class="well sidebar-nav">
+        <ul class="nav nav-list">
+          {% if user.is_authenticated %}
+            <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
+              <li><a data-toggle="collapse" href="#experiment">Experiments</li>
+              {% if experiments %}
+                {% for experiment in experiments %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
+                {% endfor %}
+              {% else %}
+                {% if userprofile.user_type == 'L' %}
+                  <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
+                {% elif userprofile.user_type == 'M' %}
+                  <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
+                {% endif %}
+              {%endif%}
+                <li><a data-toggle="collapse" href="#groups">Groups</a></li>
+                {% if group %}
+                  <li id="groups" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ group }}</a></li>
+                {% else %}
+                  <li id="groups" style="height: 0px; ">No Groups</li>
+                {% endif %}
+            
+                  <li><a href="/devices">Devices</a></li>
+                  <li><a href="/experiments">Applications</a></li>  
+          {% endif %}
+        </ul>
+      </div>
+</div>
+<div class="span9">
+  {% if no_such_member %}
+  <div class="alert alert-error">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    Please Check the Member's username. No such user!
+  </div><!-- alert-error -->
+  {% elif device_requested %}
+  <div class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    A request has been sent to the Admin! Thank You!
+  </div><!-- alert-success -->
+  {% endif %}
+  <div class="well">
+    <h1>Group Profile: <a href="/accounts/group_profile/">{{group.name}}</a></h1>
+    <table class="table table-bordered table-striped">
+      <tbody>
+        <tr>
+          <td><strong>Leader Name: </strong></td>
+          <td>{{ leader.user.username }}</td>
+        </tr>
+        <tr>
+          <td><strong>Members:</strong></td>
+          <td>
+            <ul class="unstyled">
+            {% for member in members %}
+              <li>{{ member.user.username }} {% if userprofile.user_type == 'L' %} <a onclick="confirmsubmit()" href="/accounts/delete_member/{{member.user}}" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+            {% endfor %}
+            </ul>
+          </td>
+        </tr> 
+        <tr>
+          <td><strong>Devices (<a href="/devices">{{no_of_devices}}</a>):</strong></td>
+          <td>
+            <ul class="unstyled">
+            {% for device in devices %}
+              <li><a href="/device/{{device}}">{{device.dev}}</a></li>
+            {% endfor %}
+            </ul>
+          </td> 
+        </tr>
+        <tr>
+          <td><strong>Applications:</strong></td>
+          <td>
+            <ul class="unstyled">
+            {% for app in apps %}
+              <li><a href="/experiment/{{app.id}}">{{ app.name }}</a></li>
+            {% endfor %}
+            </ul>
+          </td>
+        </tr> 
+      </tbody>
+    </table>
+    {% if userprofile.user_type == 'L' %}
+    <a data-toggle="modal" class="btn btn-primary" href="#add_member">Add Member</a>
+    <a data-toggle="modal" class="btn btn-primary" href="#request_devices">Request Devices</a>
+    {% endif %}
+  </div><!-- well -->
+</div><!-- span9 -->
+</div><!-- row-fluid -->
+</div><!-- fluid-container -->
+<div class="modal fade" id="add_member">
+  <form class="form-horizontal" method="post" action="/accounts/group_profile/">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">&times;</a>
+      <h1>Add Member</h1>
+    </div><!-- modal-header -->
+    <div class="modal-body">
+      Member username: 
+      <input type='text' name='member' id='member'/>
+    </div><!-- modal-body -->
+    <div class="modal-footer">
+      <input type="submit" class='btn btn-primary' value="Add" />
+      <a href="." class="btn">Cancel</a>
+    </div>
+  </form>
+</div><!-- modal -->
+<div class="modal fade" id="request_devices">
+  <form class="form-horizontal" method="post" action="/accounts/group_profile/">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">&times;</a>
+      <h1>Request Devices</h1>
+    </div><!-- modal-header -->
+    <div class="modal-body">
+      Number of Devices required: <input type='text' name='req_devices' id='member'/>
+    </div><!-- modal-body -->
+    <div class="modal-footer">
+      <input type="submit" class='btn btn-primary' value="Request" />
+      <a href="." class="btn">Cancel</a>
+    </div>
+  </form>
+  </div><!-- modal -->
+{% endblock %}
