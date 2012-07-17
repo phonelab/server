@@ -12,18 +12,71 @@ $('#edit').modal('{
 }')
 </script>
 
-{% block title %}User Profile: {{user.username}} {% endblock %}
 {% block content %}
 <div class="container-fluid">
   <div class="row-fluid">
     {% if userprofile.user_type == 'M' or userprofile.user_type == 'L' %}
-      {% include 'users/user_main_profile.html' %}
+      <div class="span3">
+        <br><br><br>
+        <div class="well sidebar-nav">
+          <ul class="nav nav-list">
+            {% if user.is_authenticated %}
+              <li><a href=".">Profile</a></li>
+              {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
+                <li><a data-toggle="collapse" href="#experiment">Experiments</li>
+                {% if experiments %}
+                  {% for experiment in experiments %}
+                    <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
+                  {% endfor %}
+                {% else %}
+                  {% if userprofile.user_type == 'L' %}
+                    <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
+                  {% elif userprofile.user_type == 'M' %}
+                    <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
+                  {% endif %}
+                {%endif%}
+                  <li><a data-toggle="collapse" href="#groups">Groups</a></li>
+                  {% if group %}
+                    <li id="groups" style="height: 0px; "><a href="/accounts/group_profile/">&nbsp;&nbsp;{{ group }}</a></li>
+                  {% else %}
+                    <li id="groups" style="height: 0px; ">No Groups</li>
+                  {% endif %}
+              {% endif %}
+                    <li><a href="/devices">Devices</a></li>
+                    <li><a href="/experiments">Applications</a></li>  
+            {% endif %}
+          </ul>
+        </div><!-- well sidebar-nav -->
+      </div><!-- span3 -->
+      <div class="span9">
+        <ul class="nav nav-pills">
+          <li class="active">
+            <a href="#userprofile" data-toggle="pill">User Profile</a>
+          </li>
+          {% if userprofile.user_type == 'L' or userprofile.user_type == 'M'  %}
+            <li>
+              <a href="#group" data-toggle="pill">Groups</a>
+            </li>
+          {% endif %}
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="userprofile">
+            <div class="well">
+              {% include 'user_tab.html' %}
+            </div><!-- well -->
+          </div><!-- tav-pane -->
+          <div class="tab-pane" id="group" >
+            {% include 'group_tab.html' %}
+          </div><!-- tab-pane -->
+        </div><!-- tab-content -->
+      </div><!-- span9 -->
     {% else %}
-      {% include 'user_profile.html' %}
+      {% include 'user_tab.html' %}
     {% endif %}
+
 <h1>Device Profile:</h1>
 <ul class="nav nav-tabs">
-  {% for devprofile in devprofiles %}
+  {% for devprofile in devices %}
     {% if forloop.first %}
       <li class="active"><a href="#{{forloop.counter}}" data-toggle="tab">Device #{{forloop.counter}}</a></li>
     {% else %}
@@ -34,7 +87,7 @@ $('#edit').modal('{
   {% endfor %}
 </ul>
 <div class="tab-content">
-  {% for devprofile in devprofiles %}
+  {% for devprofile in devices %}
     {% if forloop.first %}
       <div class="tab-pane active" id="{{forloop.counter}}">
     {% else %}

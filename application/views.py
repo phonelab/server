@@ -72,10 +72,13 @@ def index(request):
   if userprofile.user_type == 'P':
     # query the database for all applications
     apps = Application.objects.all().order_by('-created')
-
-  if userprofile.user_type == 'M' or 'L':
+    
+  elif userprofile.user_type == 'M' or 'L':
     #query the database for user's own applications
     apps = Application.objects.filter(group=userprofile.group)
+
+  elif userprofile.user_type == 'A':
+    apps = Application.objects.all()
 
   return render_to_response(
       'application/index.html', 

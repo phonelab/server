@@ -43,6 +43,10 @@ if settings.DEBUG:
     url(r'^register/$', 'users.views.register'),
     #profile page
     url(r'^accounts/profile/(?P<userId>\d+)/$', 'users.views.profile'),
+    #delete member from group
+    url(r'^accounts/delete_member/(?P<member>\w+)/$', 'users.views.delete_member'),
+    #group profile
+    url(r'^accounts/group_profile/$', 'users.views.group_profile'),
     # Edit User Profile Form [GET]
     url(r'^accounts/(?P<userId>\d+)/edit/$', 'users.views.edit'),
     # Update User Profile Form [POST]
