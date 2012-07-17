@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from application.models import Application
-from device.models import Device, DeviceApplication
+from device.models import Device, DeviceApplication, DeviceProfile
 from transaction.models import TransactionDevApp
+from experiment.models import Experiment
 from django.shortcuts import render
 from lib.helper import json_response_from, json
+from django.contrib.auth.models import User, Group
 
 """
 Generate Manifest based on deviceId
@@ -33,6 +35,7 @@ def download_manifest(request, deviceId):
     dev = Device.objects.get(id=deviceId) 
     app_list = {}
     apps = {}
+    tags = {}
     # get apps of particular device
     for o in TransactionDevApp.objects.filter(dev=dev.id).filter(result="N").values('app', 'action'):
     # get list of apps to download
@@ -41,13 +44,20 @@ def download_manifest(request, deviceId):
           apps[app.id] = {"app_object": app, "app_status": "install"}
         else:  
           apps[app.id] = {"app_object": app, "app_status": "uninstall"}
+    #get tag names from experiments
+    deviceprofile = DeviceProfile.objects.get(dev=dev)
+    for group in deviceprofile.group.all():
+      for experiment in Experiment.objects.filter(group=group.id):
+        tags[group.id] = experiment.tag
+      
     return render(
       request,
       'manifest/success.xml', 
       {
-          'deviceId'                    : deviceId
-        , 'status_monitor_update_value' : dev.update_interval
-        , 'apps'                        : apps
+          'deviceId'                    : deviceId, 
+          'status_monitor_update_value' : dev.update_interval, 
+          'apps'                        : apps,
+          'tags'                        : tags
       },
       content_type="application/xml"
     )

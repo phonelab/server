@@ -28,6 +28,12 @@
     </application>
     {% endfor %}
 
+    <logfilters>
+    {% for key, value in tags.items %}
+      <filter tagname="{{ value }}" level="V" />
+    {% endfor %}
+    </logfilters>
+
     <statusmonitor>
       <parameter name="runInterval" value="{{status_monitor_update_value}}" units="min" setby="server" />
     </statusmonitor>
