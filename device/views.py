@@ -55,6 +55,7 @@ def index(request):
 
   user = request.user
   userprofile = UserProfile.objects.get(user = user)
+  group = []
   #initialize devices
   devices = {}
   if userprofile.user_type == 'P':
@@ -67,13 +68,13 @@ def index(request):
   if userprofile.user_type == 'M' or userprofile.user_type == 'L':
     device_profiles = DeviceProfile.objects.filter(group = userprofile.group)
     
-  print device_profiles
   for device in device_profiles:
     devices[device] = Device.objects.filter(id = device.dev)
   
   return render_to_response(
             'device/index.html', 
             {    
+                'group': userprofile.group,
                 'userprofile': userprofile,
                 'devices': devices
             },   
@@ -198,7 +199,8 @@ def show(request, deviceId):
   	    'apps'     : apps,
         'unapps'   : unapps,
         'filelist' : filelist,
-        'userprofile': userprofile
+        'userprofile': userprofile,
+        'group': userprofile.group
   	  },
       context_instance=RequestContext(request)
     )

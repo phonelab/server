@@ -51,6 +51,7 @@ def index(request):
                 'transaction/index.html', 
                 {
                     'userprofile':userprofile,
+                    'group': userprofile.group,
                     'transacts': transacts,
                     'devs'     : devs,
                     'apps'     : apps
@@ -73,6 +74,7 @@ def index(request):
                 'transaction/index.html', 
                 {
                     'userprofile':userprofile,
+                    'group': userprofile.group,
                     'transacts': transacts,
                     'devs'     : devs,
                     'apps'     : apps
