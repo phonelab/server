@@ -75,9 +75,5 @@ def update_working_status():
     if deviceprofile.last_log < datetime.today() - timedelta(2):
       #Not Working phone since a phone did not update a log file for two days
       DeviceProfile.objects.filter(id=deviceprofile.id).update(status="N")
-      print deviceprofile.id
-      print "not working"
     else:
       DeviceProfile.objects.filter(id=deviceprofile.id).update(status="W")
-      print deviceprofile.id
-      print "Working"
