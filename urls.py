@@ -78,9 +78,9 @@ if settings.DEBUG:
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.show'),
     # Edit Device Form [GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/edit/$', 'device.views.edit'),
-    # Update Device Form [GET]
+    # Update Device Form [POST]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/$', 'device.views.update'),
-	# REFACTOR: C2DM [GET]
+	# REFACTOR: C2DM [POST]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/c2dm/$', 'device.views.c2dm'),
     # Log Tag filter[GET]
     url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/tag/$', 'datalogger.views.show_tag'),
