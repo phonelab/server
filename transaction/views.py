@@ -138,7 +138,7 @@ def create(request):
     return HttpResponseRedirect('/error/')
   # params checking
   if not (request.POST.has_key('dev') and request.POST.has_key('app') \
-          and request.POST.has_key('upload')):
+          and request.POST.has_key('action')):
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'

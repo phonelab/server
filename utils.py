@@ -72,8 +72,9 @@ def update_working_status():
   deviceprofiles = DeviceProfile.objects.all()
 
   for deviceprofile in deviceprofiles:
-    if deviceprofile.last_log < datetime.today() - timedelta(2):
-      #Not Working phone since a phone did not update a log file for two days
-      DeviceProfile.objects.filter(id=deviceprofile.id).update(status="N")
-    else:
-      DeviceProfile.objects.filter(id=deviceprofile.id).update(status="W")
+    if deviceprofile.last_log:
+      if deviceprofile.last_log < (datetime.today() - timedelta(2)):
+        #Not Working phone since a phone did not update a log file for two days
+        DeviceProfile.objects.filter(id=deviceprofile.id).update(status="N")
+      else:
+        DeviceProfile.objects.filter(id=deviceprofile.id).update(status="W")
