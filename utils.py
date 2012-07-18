@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from django.core.urlresolvers import reverse
 from device.models import Device, DeviceProfile
+from users.models import UserProfile
 from datetime import datetime, timedelta
 
 """
@@ -64,7 +65,7 @@ class AuthorProtectedView(ProtectedView):
 """
 update working status using Last Log info
 
-@date 05/08/2012
+@date 07/16/2012
 
 @author Taeyeon Ki
 """
@@ -78,3 +79,24 @@ def update_working_status():
         DeviceProfile.objects.filter(id=deviceprofile.id).update(status="N")
       else:
         DeviceProfile.objects.filter(id=deviceprofile.id).update(status="W")
+
+
+"""
+check valid access
+
+@date 07/18/2012
+@param String user
+@param String deviceId
+
+@author Taeyeon
+"""
+def is_valid_device(user, deviceId):
+  userprofile = UserProfile.objects.get(user_id=user.id)
+
+  #to protect wrong accesses
+  if userprofile.user_type == 'M' or userprofile.user_type == 'L':
+    return DeviceProfile.objects.filter(group = userprofile.group).filter(dev=deviceId).count() > 0
+
+  if userprofile.user_type == 'P':
+    return DeviceProfile.objects.filter(dev=deviceId).filter(user=user).count() > 0
+  return False

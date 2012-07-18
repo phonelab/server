@@ -14,7 +14,7 @@ from device.models import Device, DeviceApplication, DeviceProfile
 from users.models import UserProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
-from utils import re_sort_nicely, sort_nicely
+from utils import re_sort_nicely, sort_nicely, is_valid_device
 #from users.views import is_member, is_leader
 import os, errno, re
 import string
@@ -53,7 +53,6 @@ Update to show only the user's device
 @login_required
 #@login_required(login_url='/login/')
 def index(request):
-
   user = request.user
   userprofile = UserProfile.objects.get(user = user)
   group = []
@@ -529,14 +528,3 @@ def insert_or_update_deviceapplication(request):
     return json_response_from(response)
   
   return json_response_from(response)
-
-def is_valid_device(user, deviceId):
-  userprofile = UserProfile.objects.get(user_id=user.id)
-
-  #to protect wrong accesses
-  if userprofile.user_type == 'M' or userprofile.user_type == 'L':
-    return DeviceProfile.objects.filter(group = userprofile.group).filter(dev=deviceId).count() > 0
-
-  if userprofile.user_type == 'P':
-    return DeviceProfile.objects.filter(dev=deviceId).filter(user=user).count() > 0
-  return False
