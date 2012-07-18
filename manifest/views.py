@@ -21,8 +21,8 @@ Generate Manifest based on deviceId
 # import datetime
 # d = Device(id='123', email='micheala@buffalo.edu')
 # d.save()
-# a = Application(name='TestCat', package_name='com.phonelab.testcat', intent_name='Main.intent', description='asdasd', type='sync', starttime=datetime.datetime.now(), endtime=datetime.datetime.now(), download='/experiment/testcat.apk', version='1.0')
-# b = Application(name='Calender', package_name='com.google.calender', intent_name='Main.intent', description='awesome google clender', type='async', starttime=datetime.datetime.now(), endtime=datetime.datetime.now(), download='/experiment/calender.apk', version='1.5.1')
+# a = Application(name='TestCat', package_name='com.phonelab.testcat', intent_name='Main.intent', description='asdasd', type='sync', starttime=datetime.datetime.now(), endtime=datetime.datetime.now(), download='/application/testcat.apk', version='1.0')
+# b = Application(name='Calender', package_name='com.google.calender', intent_name='Main.intent', description='awesome google clender', type='async', starttime=datetime.datetime.now(), endtime=datetime.datetime.now(), download='/application/calender.apk', version='1.5.1')
 # a.save()
 # b.save()
 #

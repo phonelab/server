@@ -61,7 +61,7 @@
               <li><a href="/">About</a></li>
               {% if user.is_authenticated %}
               <li><a href="/devices">Devices</a></li>
-              <li><a href="/experiments">Applications</a></li>
+              <li><a href="/applications">Applications</a></li>
               <li><a href="/transactions">Transactions</a></li>
 <!--			        <form class="navbar-search pull-left" method="get" action="/"> 
         		  <input type="text" value="{{ q }}" name="q" class="search-query" placeholder="Search">
@@ -131,13 +131,54 @@
 
 
     <div class="container">
-      {% block content %}{% endblock %}
-      <footer class="footer">
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        	<p>&copy; PhoneLab at UB</p>
-      </footer>
-    </div> <!-- container -->
+      <div class="container-fluid">
+      <div class ="row-fluid">
+        {% if userprofile.user_type == 'M' or userprofile.user_type == 'L' %}
+          <div class="span3"><br><br>
+            <div class="well sidebar-nav">
+              <ul class="nav nav-list">
+              {% if user.is_authenticated %}
+                <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
+                {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
+                  <li><a data-toggle="collapse" href="#experiment">Experiments</li>
+                  {% if experiments %}
+                    {% for experiment in experiments %}
+                      <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;{{ experiment }}</a></li>
+                    {% endfor %}
+                  {% else %}
+                    {% if userprofile.user_type == 'L' %}
+                      <li id="experiment" style="height: 0px; "><a href="#">&nbsp;&nbsp;add experiment</a></li>
+                    {% elif userprofile.user_type == 'M' %}
+                      <li id="experiment" style="height: 0px; "><a>&nbsp;&nbsp;No Experiments</a></li>
+                    {% endif %}
+                  {%endif%}
+                  <li><a data-toggle="collapse" href="#groups">Groups</a></li>
+                  {% if group %}
+                    <li id="groups" style="height: 0px; "><a href="/accounts/group_profile/">&nbsp;&nbsp;{{ group }}</a></li>
+                  {% else %}
+                    <li id="groups" style="height: 0px; ">No Groups</li>
+                  {% endif %}
+                {% endif %}
+                <li><a href="/devices">Devices</a></li>
+                <li><a href="/applications">Applications</a></li>  
+              {% endif %}
+              </ul>
+            </div><!-- well sidebar-nav -->
+          </div><!-- span3 -->
+          <div class="span9">
+        {% else %}
+          <div class ="span">
+        {% endif %}
+          {% block content %}{% endblock %}
+          </div><!-- span9/span --> 
+     </div><!-- row-fluid -->
     
+    <footer class="footer">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+          <p>&copy; PhoneLab at UB</p>
+      </footer>
+     </div> <!-- fluid-container -->
+  </div><!-- container -->
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

@@ -22,7 +22,7 @@
       <tr>
         {% for app in apps %}
           <td width="20%"><input type='checkbox' id='app' name='app' value='{{app.id}}' {{ app.get_active_display }} /> 
-          <a href="/experiment/{{app.id}}">{{app.name}}</a></td>
+          <a href="/application/{{app.id}}">{{app.name}}</a></td>
           {% if forloop.counter|divisibleby:"2" %}
             </tr><tr>
           {% endif %}
