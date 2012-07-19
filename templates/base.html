@@ -139,8 +139,8 @@
               <ul class="nav nav-list">
               {% if user.is_authenticated %}
                 <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
-                {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}
-                    <li><a href="/experiments/">Experiments</li>
+                {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}  
+                  <li><a href="/experiments/">Experiments</a></li>
                   <li><a data-toggle="collapse" href="#groups">Groups</a></li>
                   {% if group %}
                     <li id="groups" style="overflow: hidden; height: 0px; "><a href="/accounts/group_profile/">&nbsp;&nbsp;{{ group }}</a></li>
