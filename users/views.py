@@ -1,24 +1,25 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.mail import send_mail
 from django.template import RequestContext, Context, loader
 from django.http import HttpResponseRedirect
 from django.contrib.sites.models import Site
+from datetime import datetime, timedelta
+from django.contrib.auth.models import User, Group
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User, Group
+from django import forms
+import random, hashlib
 
 from settings import FROM_EMAIL, ADMINS
 #from django.utils import  simplejson as json
 from lib.helper import json_response_from, json
-from django.contrib.auth.models import User, Group
 from users.models import UserProfile
 from device.models import Device, DeviceProfile
 from users.forms import RegistrationForm
-import random, hashlib
-from datetime import datetime, timedelta
-from django.contrib.auth.models import User, Group
-from django.core.exceptions import ObjectDoesNotExist
-from django import forms
 from application.models import Application
 from experiment.models import Experiment
+
 
 admin_mail = 'tempphonelab@gmail.com'
 
@@ -441,3 +442,16 @@ def delete_member(request, member):
   member_profile.save()
 
   return HttpResponseRedirect('/accounts/group_profile/')
+
+# usage: @user_passes_test(is_leader, login_url='/login')
+# usage: @user_passes_test(is_member, login_url='/login')
+def is_member(user, deviceId):
+  if user:
+    return UserProfile.objects.filter(user=user).filter(user_type="M").count() > 0
+  return False
+
+def is_leader(user):
+  if user:
+    return UserProfile.objects.filter(user=user).filter(user_type="L").count() > 0
+  return False
+

@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.conf import settings
@@ -7,8 +7,7 @@ from django.utils import  simplejson as json
 from device.models import Device, DeviceProfile
 from lib.helper import json_response_from
 from datetime import datetime
-
-from utils import sort_nicely
+from utils import sort_nicely, is_valid_device
 #import time
 import os, errno, re
 # Log Dir
@@ -83,42 +82,48 @@ Show Log for Device
 """
 @login_required
 def show(request, deviceId, logFilename):
-	# define default response  
-	response = { "err": "", "data": "" }  
-	# get device  
-	device = Device.objects.filter(id=deviceId)
-	# if device exists, update  
-	if device.count() == 1:
-		# generate file name    
-		filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename + ".log")		
-		if os.path.isfile(filename):			
-			# open log file
-			Logfile = open(filename, 'r+')
-			# read file
-			Logdata = Logfile.read()
-			# render respone
-			return render_to_response(
-				'device/log.html',
-				{
-					'device': device[0],
-					'logFilename': logFilename,
-					'Logdata': Logdata
-				},
-        context_instance=RequestContext(request)
-			)
-		#the file does not exist
-		else:
-			response['err'] = {
-				'no' : 'err2',
-				'msg': 'No such log file'
-			}
-	#device does not exist		
-	else:
-		response['err'] = {
-			'no' : 'err1',
-			'msg': 'invalid device'
-		}
-	return json_response_from(response)
+  user = request.user
+  # define default response  
+  response = { "err": "", "data": "" }  
+
+  if is_valid_device(user, deviceId):
+    # get device  
+    device = Device.objects.filter(id=deviceId)
+    # if device exists, update  
+    if device.count() == 1:
+      # generate file name    
+      filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename + ".log")		
+      if os.path.isfile(filename):			
+        # open log file
+        Logfile = open(filename, 'r+')
+        # read file
+        Logdata = Logfile.read()
+        # render respone
+        return render_to_response(
+          'device/log.html',
+          {
+            'device': device[0],
+            'logFilename': logFilename,
+            'Logdata': Logdata
+          },
+          context_instance=RequestContext(request)
+        )
+      #the file does not exist 
+      else:
+        response['err'] = {
+          'no' : 'err2',
+          'msg': 'No such log file'
+        }
+    #device does not exist		
+    else:
+      response['err'] = {
+        'no' : 'err1',
+        'msg': 'invalid device'
+      }
+    return json_response_from(response)
+  else:
+    return HttpResponseRedirect('/')
+
 
 
 """

@@ -1,8 +1,7 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template import RequestContext
 
 #from django.contrib.auth.models import User
-from users.models import UserProfile
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from lib.helper import json_response_from, json
@@ -12,9 +11,11 @@ from datetime import datetime
 
 #from manifest.views import *
 from device.models import Device, DeviceApplication, DeviceProfile
+from users.models import UserProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
-from utils import re_sort_nicely, sort_nicely
+from utils import re_sort_nicely, sort_nicely, is_valid_device
+#from users.views import is_member, is_leader
 import os, errno, re
 import string
 
@@ -52,7 +53,6 @@ Update to show only the user's device
 @login_required
 #@login_required(login_url='/login/')
 def index(request):
-
   user = request.user
   userprofile = UserProfile.objects.get(user = user)
   group = []
@@ -82,8 +82,6 @@ def index(request):
           )
 
 """
-Create New Device [POST]
-Update Device Details [POST]
 
 @date 01/29/2012
 
@@ -160,58 +158,63 @@ def show(request, deviceId):
   userprofile = UserProfile.objects.get(user_id=user.id)
   # define default response
   response = { "err": "", "data": "" }
-  # get device
-  try:
-    dev = Device.objects.get(id=deviceId)
-    # device exists
-    app_list = {}
-    apps = {}
-    unapps = {}
-    # get apps of particular device
-    for o in DeviceApplication.objects.filter(dev=dev.id).values('app', 'dev'):
-      app_list[o['app']] = o['dev']
-    # get list of apps to download
-    for app in Application.objects.all():
-      if app_list.has_key(app.id):
-        apps[app.id] = {"app_object": app,}
-      else:
-        unapps[app.id] = {"app_object": app,}
-
-    # get log data list from deviceId directory
-    path = os.path.join(RAW_LOG_ROOT, dev.id)
-    # empty
-    filelist = {}
+  
+  #check deviceId to control accesses
+  if is_valid_device(user, deviceId):
+    # get device
     try:
-      os.chdir(path)
-      filelist = os.listdir(".")
-      re_sort_nicely(filelist)
+      dev = Device.objects.get(id=deviceId)
+      # device exists
+      app_list = {}
+      apps = {}
+      unapps = {}
+      # get apps of particular device
+      for o in DeviceApplication.objects.filter(dev=dev.id).values('app', 'dev'):
+        app_list[o['app']] = o['dev']
+      # get list of apps to download
+      for app in Application.objects.all():
+        if app_list.has_key(app.id):
+          apps[app.id] = {"app_object": app,}
+        else:
+          unapps[app.id] = {"app_object": app,}
 
-    except OSError, e:
-      if e.errno != errno.EEXIST:
-        response['err'] = {
-          'no' : 'err1', 
-          'msg': 'cannot change dir, failed upload'
-        }
-    return render_to_response(
-  	  'device/show.html', 
-  	  {
-  	    'device' : dev,
-  	    'apps'     : apps,
-        'unapps'   : unapps,
-        'filelist' : filelist,
-        'userprofile': userprofile,
-        'group': userprofile.group
-  	  },
-      context_instance=RequestContext(request)
-    )
+      # get log data list from deviceId directory
+      path = os.path.join(RAW_LOG_ROOT, dev.id)
+      # empty
+      filelist = {}
+      try:
+        os.chdir(path)
+        filelist = os.listdir(".")
+        re_sort_nicely(filelist)
+
+      except OSError, e:
+        if e.errno != errno.EEXIST:
+          response['err'] = {
+            'no' : 'err1', 
+            'msg': 'cannot change dir, failed upload'
+          }
+      return render_to_response(
+    	  'device/show.html', 
+  	    {
+    	    'device' : dev,
+    	    'apps'     : apps,
+          'unapps'   : unapps,
+          'filelist' : filelist,
+          'userprofile': userprofile,
+          'group': userprofile.group
+    	  },
+        context_instance=RequestContext(request)
+      )
     
-  # device does not exist
-  except Device.DoesNotExist: 
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
-  return json_response_from(response)
+    # device does not exist
+    except Device.DoesNotExist: 
+      response['err'] = {
+        'no' : 'err1',
+        'msg': 'invalid device'
+      }
+    return json_response_from(response)
+  else:
+    return HttpResponseRedirect('/')
 
 """
 Edit Device Form [GET]
@@ -223,26 +226,32 @@ Edit Device Form [GET]
 """
 @login_required
 def edit(request, deviceId):
+  user = request.user
   # define default response
   response = { "err": "", "data": "" }
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-  if device.count() == 1:
-    return render_to_response(
-      'device/edit.html', 
-        {
-          'device': device[0]
-        },
-        context_instance=RequestContext(request)
-      )
-  # device does not exist
+
+  #check deviceId to control accesses
+  if is_valid_device(user, deviceId):
+    # get device
+    device = Device.objects.filter(id=deviceId)
+    # device exists
+    if device.count() == 1:
+      return render_to_response(
+        'device/edit.html', 
+          {
+            'device': device[0]
+          },
+          context_instance=RequestContext(request)
+        )
+    # device does not exist
+    else:
+      response['err'] = {
+        'no' : 'err1',
+        'msg': 'invalid device'
+      }
+      return HttpResponseRedirect('/error/')
   else:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
-    return HttpResponseRedirect('/error/')
+    return HttpResponseRedirect('/')
 
 """
 Update Device Via Form [POST]
@@ -332,73 +341,79 @@ Status monitor [GET]
 """
 @login_required
 def status(request, deviceId, statusType):
+  user = request.user
   # define default response
   response = { "err": "", "data": "" }
-  # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
 
-  if device.count() == 1:
-    # get log data list from deviceId directory
-    path = os.path.join(RAW_LOG_ROOT, device[0].id)
-    # empty
-    filelist = {}
-    tagName = ''
-    if statusType == '1':
-      tagName = 'Battery_level'
-      #tagName = 'Battery level'
-    elif statusType == '2':
-      tagName = 'Location_Latitude'
-      #tagName = 'Location: Latitude'
-    else:
-      tagName = 'Signal_Strength'
-      #tagName = 'Signal Strength'
-    try:
-      os.chdir(path)
-      filelist = os.listdir(".")
-      sort_nicely(filelist)
-      Tagdata = ''
-      for file in filelist:
-        filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
-        Logfile = open(filename, 'r+')
-        for line in Logfile:
-          #Logdata = Logfile.readline()
-          if re.search(tagName, line):
-            temp = line.split()
-            Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
-            if statusType == '1':
-              Tagdata += 'Battery Level: ' + temp[7] + '\n'
-            elif statusType == '2':
-              Tagdata += 'GPS Latitude: ' + temp[7] + ', Longitude: ' + temp[9] + ', Accuracy: ' + temp[11] + '\n'
-            else:
-              Tagdata += 'Signal Strengh: ' + temp[7] + ', asu: ' + temp[9] + '\n'
+  #check deviceId to control accesses
+  if is_valid_device(user, deviceId):
+    # get device
+    device = Device.objects.filter(id=deviceId)
+    # device exists
 
-      # render respone
-      return render_to_response(
-        'device/status.html',
-        {
-          'device': device[0],
-          'TagName': tagName,
-          'Tagdata': Tagdata
-        },
-        context_instance=RequestContext(request)
-      )
-      Logfile.close()
-      Tagfile.close()
-    except OSError, e:
-      if e.errno != errno.EEXIST:
-        response['err'] = {
-          'no' : 'err1', 
-          'msg': 'cannot change dir'
-        }
+    if device.count() == 1:
+      # get log data list from deviceId directory
+      path = os.path.join(RAW_LOG_ROOT, device[0].id)
+      # empty
+      filelist = {}
+      tagName = ''
+      if statusType == '1':
+        tagName = 'Battery_level'
+        #tagName = 'Battery level'
+      elif statusType == '2':
+        tagName = 'Location_Latitude'
+        #tagName = 'Location: Latitude'
+      else:
+        tagName = 'Signal_Strength'
+        #tagName = 'Signal Strength'
+      try:
+        os.chdir(path)
+        filelist = os.listdir(".")
+        sort_nicely(filelist)
+        Tagdata = ''
+        for file in filelist:
+          filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
+          Logfile = open(filename, 'r+')
+          for line in Logfile:
+            #Logdata = Logfile.readline()
+            if re.search(tagName, line):
+              temp = line.split()
+              Tagdata += ' [ ' + temp[0] + ' ' + temp[1] + ' ] '
+              if statusType == '1':
+                Tagdata += 'Battery Level: ' + temp[7] + '\n'
+              elif statusType == '2':
+                Tagdata += 'GPS Latitude: ' + temp[7] + ', Longitude: ' + temp[9] + ', Accuracy: ' + temp[11] + '\n'
+              else:
+                Tagdata += 'Signal Strengh: ' + temp[7] + ', asu: ' + temp[9] + '\n'
+
+        # render respone
+        return render_to_response(
+          'device/status.html',
+          {
+            'device': device[0],
+            'TagName': tagName,
+            'Tagdata': Tagdata
+          },
+          context_instance=RequestContext(request)
+        )
+        Logfile.close()
+        Tagfile.close()
+      except OSError, e:
+        if e.errno != errno.EEXIST:
+          response['err'] = {
+            'no' : 'err1', 
+            'msg': 'cannot change dir'
+          }
     
-  # device does not exist
+    # device does not exist
+    else:
+      response['err'] = {
+        'no' : 'err1',
+        'msg': 'invalid device'
+      }
+    return json_response_from(response)
   else:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid device'
-    }
-  return json_response_from(response)
+    return HttpResponseRedirect('/')
 
 
 """
