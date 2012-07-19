@@ -1,0 +1,51 @@
+<form class="modal-form" method="post" action="/experiment/update/{{experiment.id}}/">
+	<table class="table">
+		<tbody>
+        	<tr>
+            	<td width='20%'><strong>Name: </strong></td>
+                <td><input type='text' name='name' id='name' value='{{experiment.name}}' /></td>
+            </tr> 
+          	<tr>
+    			<td><strong>Members: </strong></td>
+    			<td>
+        			{% for member in members %}
+          				<input type='checkbox' id='members' name='members' value='{{member.user}}' {{ member.user }} />
+          				{{member.user}}
+          				{% if forloop.counter|divisibleby:"3" %}
+            			</tr><tr>
+          				{% endif %}
+        			{% empty %}
+        			No Members
+        		{% endfor %}
+        		</td>
+      		</tr>
+            <tr>
+    			<td><strong>Devices: </strong></td>
+    			<td>
+        			{% for dev in devices %}
+          			<input type='checkbox' id='dev' name='devs' value='{{dev.dev.id}}' {{ dev.get_active_display }} /> 
+          			<a href="/device/{{dev.dev.id}}">{{dev.dev.id}}</a>
+          			{% if forloop.counter|divisibleby:"3" %}
+            			</tr><tr>
+          			{% endif %}
+        			{% empty %}
+        				No devices
+        			{% endfor %}
+    			</td>
+      		</tr>
+      		<tr>
+    			<td><strong>Applications: </strong></td>
+    			<td>
+        			{% for app in apps %}
+          			<input type='checkbox' id='app' name='apps' value='{{app.id}}' {{ app.get_active_display }} /> 
+          			<a href="/application/{{app.id}}">{{app.name}}</a>
+          			{% if forloop.counter|divisibleby:"3" %}
+            			</tr><tr>
+          			{% endif %}
+        			{% empty %}
+         				No devices
+        			{% endfor %}
+    			</td>
+      		</tr>
+		</tbody>
+    </table>

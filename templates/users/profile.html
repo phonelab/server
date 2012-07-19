@@ -2,14 +2,14 @@
 {% extends "base.html" %}
 <script type="text/javascript">
 $("#experiment").collapse({
-  toggle: false
+  toggle: true
 })
 $('#groups').collapse({
-  toggle: false
+  toggle: true
 })
-$('#edit').modal('{
+$('#edit').modal({
   keyboard: false
-}')
+})
 </script>
 
 {% block content %}
@@ -21,21 +21,34 @@ $('#edit').modal('{
             <li>
               <a href="#group" data-toggle="pill">Groups</a>
             </li>
+            <li>
+              <a href="#experiments" data-toggle="pill">Experiments</a>
+            </li>
           {% endif %}
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="userprofile">
             <div class="well">
-              {% include 'user_tab.html' %}
+              {% include 'users/user_tab.html' %}
             </div><!-- well -->
           </div><!-- tav-pane -->
           <div class="tab-pane" id="group" >
-            {% include 'group_tab.html' %}
+            {% include 'users/group_tab.html' %}
+          </div><!-- tab-pane -->
+          <div class="tab-pane" id="experiments" >
+            {% if experiments %}
+            {% include 'experiment/experiment_tab.html' %}
+            {% else %}
+            <div class="well">
+            There are no experiments
+            <a href="/experiment/new/" class="btn-small btn-primary">Add Experiment</a>
+            </div>
+            {% endif %}
           </div><!-- tab-pane -->
         </div><!-- tab-content -->
       </div><!-- span9 -->
     
-
+<div class="span">
 <h2>Device Profile:</h2>
 <ul class="nav nav-tabs">
   {% for devprofile in devices %}
@@ -48,6 +61,7 @@ $('#edit').modal('{
     <strong>You do not have a device.</strong>
   {% endfor %}
 </ul>
+
 <div class="tab-content">
   {% for devprofile in devices %}
     {% if forloop.first %}
@@ -88,4 +102,5 @@ $('#edit').modal('{
       </div><!-- tab-pane -->
   {% endfor %}
 </div><!-- tab-content -->
+</div><!-- span -->
 {% endblock %}

@@ -1,21 +1,4 @@
 {% extends "base.html" %}
-  
-<script type="text/javascript">
-function confirmsubmit() {
-
-  if (confirm("You sure you want to delete the member?")) {
-    document.GetElementById("member_delete").submit();
-  }
-    
-  return false;
-}
-</script>
-<script type="text/javascript">
-//initialize modal
-$('#add_member').modal('{
-  keyboard: false
-}')
-</script>
 {% block content %}
   {% if no_such_member %}
   <div class="alert alert-error">
@@ -47,7 +30,7 @@ $('#add_member').modal('{
           <td>
             <ul class="unstyled">
             {% for member in members %}
-              <li>{{ member.user.username }} {% if userprofile.user_type == 'L' %} <a onclick="confirmsubmit()" href="/accounts/delete_member/{{member.user}}" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+              <li>{{ member.user.username }} {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/accounts/delete_member/{{member.user}}')" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
             {% endfor %}
             </ul>
           </td>
@@ -78,23 +61,6 @@ $('#add_member').modal('{
     <a data-toggle="modal" class="btn btn-primary" href="#request_devices">Request Devices</a>
     {% endif %}
   </div><!-- well -->
-
-<div class="modal fade" id="add_member">
-  <form class="form-horizontal" method="post" action="/accounts/group_profile/">
-    <div class="modal-header">
-      <a class="close" data-dismiss="modal">&times;</a>
-      <h1>Add Member</h1>
-    </div><!-- modal-header -->
-    <div class="modal-body">
-      Member username: 
-      <input type='text' name='member' id='member'/>
-    </div><!-- modal-body -->
-    <div class="modal-footer">
-      <input type="submit" class='btn btn-primary' value="Add" />
-      <a href="." class="btn">Cancel</a>
-    </div>
-  </form>
-</div><!-- modal -->
 <div class="modal fade" id="request_devices">
   <form class="form-horizontal" method="post" action="/accounts/group_profile/">
     <div class="modal-header">
@@ -110,4 +76,21 @@ $('#add_member').modal('{
     </div>
   </form>
   </div><!-- modal -->
+
+<!-- JavaScript -->
+<script type="text/javascript">
+function confirmsubmit(path) {
+  if (confirm("You sure you want to delete the member?")) {
+    document.location = path;
+  }
+    
+  return false;
+}
+</script>
+<script type="text/javascript">
+//initialize modal
+$('#add_member').modal('{
+  keyboard: false
+}')
+</script>
 {% endblock %}

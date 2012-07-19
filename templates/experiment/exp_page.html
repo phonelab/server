@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+{% block content %}
+<h2>Experiments</h2>
+{% if experiments %}
+{% include 'experiment/experiment_tab.html' %}
+{% else %}
+There are no experiments!
+{% endif %}
+{% if userprofile.user_type == 'L' %}
+<a class="btn btn-primary" href="/experiment/new/">Add New</a>
+{% endif %}
+{% endblock %}

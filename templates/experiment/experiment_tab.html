@@ -1,0 +1,52 @@
+{% if experiments %}
+<ul class="nav nav-tabs">
+  {% for experiment in experiments %}
+    {% if forloop.first %}
+      <li class="active"><a href="#{{forloop.counter}}" data-toggle="tab">Experiment #{{forloop.counter}}</a></li>
+    {% else %}
+      <li><a href="#{{forloop.counter}}" data-toggle="tab">Experiment #{{forloop.counter}}</a></li>
+    {% endif %}
+  {% empty %}
+    <strong>You do not have a device.</strong>
+  {% endfor %}
+</ul>
+<div class="tab-content">
+  {% for experiment in experiments %}
+    {% if forloop.first %}
+      <div class="tab-pane active" id="{{forloop.counter}}">
+    {% else %}
+      <div class="tab-pane" id="{{forloop.counter}}">
+    {% endif %}
+        <div class="well">
+          <h3>Experiment: {{experiment.name}}</h3>
+          <table class="table table-bordered table-striped">
+            <tbody>
+              <tr>
+                <td width='20%'><strong>Experiement: </strong></td>
+                <td><a href='/experiment/{{experiment.id}}/'>{{experiment.name}}</a></td>
+              </tr>
+              <tr>
+                <td><strong>Group: </strong></td>
+                <td><a href="/accounts/group_profile/">{{experiment.group}}</a></td>
+              </tr>
+              <tr>
+                <td><strong>Members: </strong></td>
+                <td>
+                  <a href='/experiment/{{experiment.id}}/'>{{ experiment.user.count }}</a>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Devices: </strong></td>
+                <td><a href='/experiment/{{experiment.id}}/'>{{experiment.dev.count}}</a></td>
+              </tr>
+              <tr>
+                <td><strong>Applications: </strong></td>
+                <td><a href='/experiment/{{experiment.id}}/'>{{experiment.app.count}}</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- well -->
+      </div><!-- tab-pane -->
+  {% endfor %}
+</div><!-- tab-content -->
+{% endif %}

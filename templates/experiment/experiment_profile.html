@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br><br>
+  <div class="well">
+    <h2>Experiment Profile: {{experiment.name}} (<a data-toggle="modal" href="#exp_edit">Edit</a>)</h2>
+    <table class="table table-bordered table-striped">
+      <tbody>
+        <tr>
+          <td><strong>Leader Name: </strong></td>
+          <td>{{ leader.username }}</td>
+        </tr>
+        <tr>
+          <td><strong>Members ({{experiment.user.count}}): </strong></td>
+          <td>
+          	{% for member in experiment.user.all %}
+          		<li>{{member}} {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_member/{{experiment.id}}/{{member}}/')" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+			      {% endfor %}
+          </td>
+        </tr>
+        <tr>
+        	<td><strong>Devices ({{experiment.dev.count}}):</strong></td>
+        	<td>
+        		{% for device in experiment.dev.all %}
+        			<li><a href="/device/{{device.id}}">{{device}}</a> {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_device/{{experiment.id}}/{{device}}/')" id="device_delete"><img alt="Delete Device" title="Delete Device" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+        		{% endfor %}
+
+        	</td>	
+        </tr>
+        <tr>
+        	<td><strong>Applications ({{experiment.app.count}}):</strong></td>
+        	<td>
+        		{% for app in experiment.app.all %}
+        			<li><a href="/application/{{app.id}}">{{app}}</a> {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_app/{{experiment.id}}/{{app.id}}/')" id="app_delete"><img alt="Delete Application" title="Delete Application" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+        		{% endfor %}
+        	</td>	
+        </tr>
+      </tbody>
+     </table>
+     {% if userprofile.user_type == 'L' %}
+     <a class="btn btn-danger" href="javascript:confirmsubmit('/experiment/delete_exp/{{experiment.id}}/')"><img src="{{ STATIC_URL }}img/trash.ico"> Delete</a>
+     {% endif %}
+   </div><!-- well -->
+   <div class="modal fade" id="exp_edit">
+    <div class="modal-header">
+      <h3>Experiment Profile: <a href="/experiment/{{experiment.id}}/"> {{experiment.name}}</a> </h3>
+    </div><!-- modal header -->
+    <div class="modal-body">
+      {% include 'experiment/exp_edit.html' %}
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Done">
+      <a href="." class="btn">Cancel</a>
+    </div>
+   </div><!-- modal fade -->
+
+<!-- JavaScript -->
+<script type="text/javascript">
+function confirmsubmit(path) {
+  if (confirm("You sure you want to delete?")) {
+    document.location = path;
+  }
+   return false; 
+  
+}
+</script>
+<script type="text/javascript">
+//initialize modal
+$('#add_member').modal('{
+  keyboard: false
+}')
+</script>
+{% endblock %}

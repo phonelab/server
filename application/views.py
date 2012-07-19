@@ -168,7 +168,6 @@ Upload Application/Experiment Action
 @author Micheal
 """
 def create_or_update_application(request):
-  
   # define default response
   response = { "err": "", "data": "" }
   # create new application

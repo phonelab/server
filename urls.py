@@ -47,8 +47,6 @@ if settings.DEBUG:
     url(r'^accounts/delete_member/(?P<member>\w+)/$', 'users.views.delete_member'),
     #group profile
     url(r'^accounts/group_profile/$', 'users.views.group_profile'),
-    # Edit User Profile Form [GET]
-    url(r'^accounts/(?P<userId>\d+)/edit/$', 'users.views.edit'),
     # Update User Profile Form [POST]
     url(r'^accounts/(?P<userId>\d+)/update/$', 'users.views.update'),
     #signup authorization page
@@ -111,11 +109,24 @@ if settings.DEBUG:
     #
     ## Experiment
     #
+    #All experiments
+    url(r'^experiments/$', 'experiment.views.index' ),
     # Single Experiment
     url(r'^experiment/(?P<expId>\d+)/$', 'experiment.views.show'),
+    #Delete Experiment
+    url(r'^experiment/delete_exp/(?P<expId>\d+)/$', 'experiment.views.delete_exp'),
+    #remove Member
+    url(r'^experiment/delete_member/(?P<expId>\d+)/(?P<member>\w+)/$', 'experiment.views.delete_member'),
+    #Delete Device
+    url(r'^experiment/delete_device/(?P<expId>\d+)/(?P<deviceId>[A-Z0-9]\w+)/$', 'experiment.views.delete_device'),
+    #Delete Application
+    url(r'^experiment/delete_app/(?P<expId>\d+)/(?P<appId>\d+)/$', 'experiment.views.delete_app'),
+    #New Experiment form  [GET]
+    url(r'^experiment/new/$', 'experiment.views.new'),
     # Create or Update experiment [POST]
-    url(r'^experiment/$', 'experiment.views.create_or_update_experiment' ),
-
+    url(r'^experiment/$', 'experiment.views.create_experiment' ),
+    #Update Experiment Profile [POST]
+    url(r'^experiment/update/(?P<expId>\d+)/$', 'experiment.views.update' ),
 
     #
     ## Transaction

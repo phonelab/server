@@ -1,0 +1,69 @@
+ {% extends 'base.html' %}
+ {% block title %}{% endblock %}
+ {% block content %}
+ <h2>Create Experiment</h2>
+ <table class="table">
+ 	<tbody>
+		<form class="form-horizontal" onsubmit="return ValidateForm(this);" method="post" action="/experiment/" enctype="multipart/form-data">
+		<tr>
+      		<td><strong>Name: </strong></td>
+      		<td><input type='text' name='name' id='name'/>
+      		</td>
+    	</tr>
+    	<tr>
+      		<td><strong>Description: </strong></td>
+      		<td><input type='text' name='desc' id='desc'/>
+      		</td>
+    	</tr>
+    	<tr>
+      		<td><strong>Tag: </strong></td>
+      		<td><input type='text' name='Tag' id='Tag'/>
+      		</td>
+    	</tr>
+    	<tr>
+    		<td><strong>Devices: </strong></td>
+    		<td>
+        {% for dev in devices %}
+          <input type='checkbox' id='dev' name='devs' value='{{dev.dev.id}}' {{ dev.get_active_display }} /> 
+          <a href="/device/{{dev.dev.id}}">{{dev.dev.id}}</a>
+          {% if forloop.counter|divisibleby:"3" %}
+            </tr><tr>
+          {% endif %}
+        {% empty %}
+        No devices
+        {% endfor %}
+    	</td>
+      </tr>
+      <tr>
+    		<td><strong>Members: </strong></td>
+    		<td>
+        {% for member in members %}
+          <input type='checkbox' id='member' name='members' value='{{member.user}}' {{ member.user }} /> 
+          {{member.user}}
+          {% if forloop.counter|divisibleby:"3" %}
+            </tr><tr>
+          {% endif %}
+        {% empty %}
+        No Members
+        {% endfor %}
+    	</td>
+      </tr>
+      <tr>
+    		<td><strong>Applications: </strong></td>
+    		<td>
+        {% for app in apps %}
+          <input type='checkbox' id='app' name='apps' value='{{app.id}}' {{ app.get_active_display }} /> 
+          <a href="/application/{{app.id}}">{{app.name}}</a>
+          {% if forloop.counter|divisibleby:"3" %}
+            </tr><tr>
+          {% endif %}
+        {% empty %}
+         No devices
+        {% endfor %}
+    	</td>
+      </tr>
+    </tbody>
+</table>
+<input type="submit" class='btn btn-primary' value="Create" />
+<a onclick="history.back()" class="btn">Cancel</a>
+{% endblock %}

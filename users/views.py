@@ -18,6 +18,7 @@ from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
 from django import forms
 from application.models import Application
+from experiment.models import Experiment
 
 admin_mail = 'tempphonelab@gmail.com'
 
@@ -245,6 +246,8 @@ def profile(request, userId):
   no_of_members = 0
   no_of_devices = 0
   devices={}
+  apps = {}
+  experiments = {}
   # define default response
   response = {"err": "", "data": ""}
   try:
@@ -261,11 +264,17 @@ def profile(request, userId):
 
     #get group its leader and members and its devices
     if(userprofile.user_type== 'M' or userprofile.user_type=='L'):
+
+      # get group information
       group = Group.objects.get(user = userId)
       devices = DeviceProfile.objects.filter(group=group)
       no_of_devices = devices.count()
       leader = get_object_or_404(UserProfile, user_type='L', group=group) 
       no_of_members = UserProfile.objects.filter(user_type='M', group=group).count()
+      apps = Application.objects.filter(group=group)
+      #get experiment information
+      experiments = Experiment.objects.filter(group=group).order_by('id')
+      
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,
@@ -273,38 +282,12 @@ def profile(request, userId):
                'leader': leader,
                'no_of_members': no_of_members,
                'no_of_devices': no_of_devices, 
-               'devices'  : devices },
+               'devices'  : devices,
+               'apps': apps,
+               'experiments': experiments },
              context_instance=RequestContext(request)
              )
   # User does not exist
-  except UserProfile.DoesNotExist: 
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'invalid user'
-    }
-  return json_response_from(response)
-
-"""
-Edit User Profile Form [GET]
-
-@date 05/21/2012
-@param String userId
-
-@author TKI
-"""
-@login_required
-def edit(request, userId):
-  # define default response
-  response = { "err": "", "data": "" }
-  try:
-    # get UserProfile with user foreignkey
-    userprofile = UserProfile.objects.get(user=userId)    
-    return render_to_response(
-             'users/edit.html', 
-             { 'userprofile' : userprofile},
-             context_instance=RequestContext(request)
-             )
-# User does not exist
   except UserProfile.DoesNotExist: 
     response['err'] = {
       'no' : 'err1',
@@ -352,7 +335,7 @@ def update(request, userId):
     # redirect to /accounts/profile/userId
     return HttpResponseRedirect('/accounts/profile/' + userId)
 # User does not exist
-  except Device.DoesNotExist: 
+  except User.DoesNotExist: 
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid user'
@@ -442,7 +425,7 @@ def delete_member(request, member):
   #Update userprofile
   member_profile.group_id = ""
   member_profile.user_type = "P"
-  member_profile.save()
+  
 
   user = request.user
   userprofile = UserProfile.objects.get(user=user)
@@ -452,34 +435,9 @@ def delete_member(request, member):
   c = Context({'user': group_member, 'group': group ,'leader': user, 'site_name': current_site})
   EMAIL_SUBJECT = "Phonelab: Group "+group.name+" Notification"
   EMAIL_BODY = (loader.get_template('users/mails/member_removed.txt')).render(c)
-  TO_EMAIL = [member.email]
+  TO_EMAIL = [member_profile.user.email]
   send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
 
-  
+  member_profile.save()
 
-  #get the group
-  group = Group.objects.get(user = user)
-
-  #get the devices and number of devices
-  devices = DeviceProfile.objects.filter(group=group)
-  no_of_devices = devices.count()
-
-  #get the leader and the members
-  leader = get_object_or_404(UserProfile, user_type='L', group=group)
-  members = UserProfile.objects.filter(user_type='M', group=group)
-
-  #get the apps
-  apps = Application.objects.filter(group=userprofile.group)
-
-  return render_to_response(
-          'users/group_profile.html', 
-             { 'userprofile' : userprofile,
-               'group': group,
-               'apps': apps,
-               'leader': leader,
-               'members': members,
-               'no_of_devices': no_of_devices, 
-               'devices'  : devices },
-             context_instance=RequestContext(request)
-         )
-  return render_to_response
+  return HttpResponseRedirect('/accounts/group_profile/')
