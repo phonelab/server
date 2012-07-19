@@ -3,7 +3,7 @@
 {% block content %}
 <br><br>
   <div class="well">
-    <h2>Experiment Profile: {{experiment.name}} (<a data-toggle="modal" href="#exp_edit">Edit</a>)</h2>
+    <h2>Experiment Profile: {{experiment.name}} {% if userprofile.user_type == 'L' %} (<a data-toggle="modal" href="#exp_edit">Edit</a>){% endif %} </h2>
     <table class="table table-bordered table-striped">
       <tbody>
         <tr>
