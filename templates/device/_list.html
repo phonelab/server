@@ -1,51 +1,19 @@
 <div class="span11 well">
-  <h3><strong>Installed Applications</strong></h3>
-  {% if apps %}
-  <table class="table table-bordered">
+  <h3><strong>Installed Devices</strong></h3>
+  <table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th>name</th>
-        <th>package_name</th>
-        <th>type</th>
-        <th>version</th>
+        <th>Device ID</th>
+        <th>Email</th>
       </tr>
     </thead>
     <tbody>
-      {% for key,app in apps.items %}
+      {% for dev in devs %}
         <tr>
-          <td> {{app.app_object.name}} </td>
-          <td> {{app.app_object.package_name}} </td>
-          <td> {{app.app_object.type}} </td>
-          <td> {{app.app_object.version}} </td>
+          <td><a href='/device/{{dev.id}}/'>{{dev.id}}</a></td>
+          <td>{{dev.email}}</td>
         </tr>
       {% empty %}
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-  There are no applications installed!
-  {% endif %}
-</div>
-<div class="span11 well">
-  <h3><strong>Other Applications</strong></h3>
-  <table class="table table-striped table-bordered">
-    <thead>
-      <tr>
-        <th>name</th>
-        <th>package_name</th>
-        <th>type</th>
-        <th>version</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for key,app in unapps.items %}
-        <tr>
-          <td> {{app.app_object.name}} </td>
-          <td> {{app.app_object.package_name}} </td>
-          <td> {{app.app_object.type}} </td>
-          <td> {{app.app_object.version}} </td>
-        </tr>
-      {% empty %} 
       {% endfor %}
     </tbody>
   </table>
