@@ -62,14 +62,14 @@ def new(request):
 	exp = Experiment()
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
-  	group = Group.objects.get(user = user)
-  	members = UserProfile.objects.filter(group=group)
-  	apps = Application.objects.filter(group=group)
-  	devices = DeviceProfile.objects.filter(group=group)
+  	members = UserProfile.objects.filter(group=userprofile.group, user_type = 'M')
+  	apps = Application.objects.filter(group=userprofile.group)
+  	devices = DeviceProfile.objects.filter(group=userprofile.group)
   	# query the database for all applications
   	return render_to_response(
     	  	'experiment/new_exp_form.html', 
     	  	{
+    	  	'group': userprofile.group,
         	'members': members,
         	'devices'  : devices,
         	'apps': apps,
@@ -91,24 +91,23 @@ Show single experiment
 @login_required
 def show(request, expId):
 	
-	members={}
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
 	experiment = Experiment.objects.get(id = expId)
 	leader_profile = UserProfile.objects.get(user_type='L', group=experiment.group)
 	leader = leader_profile.user
-
-	members = UserProfile.objects.filter(group=experiment.group).exclude(user__in=experiment.user.all())
-	devices = DeviceProfile.objects.filter(group=experiment.group).exclude(dev__in=experiment.dev.all())
-	apps = Application.objects.filter(group=experiment.group).exclude(id__in=experiment.app.all())
+	members_to_add = UserProfile.objects.filter(group=experiment.group, user_type='M').exclude(user__in=experiment.user.all())
+	devices_to_add = DeviceProfile.objects.filter(group=experiment.group).exclude(dev__in=experiment.dev.all())
+	apps_to_add = Application.objects.filter(group=experiment.group).exclude(id__in=experiment.app.all())
 	return render_to_response (
 			'experiment/experiment_profile.html', 
   	  		{'user':user,
   	  		 'userprofile': userprofile,
+  	  		 'group': experiment.group,
   	  		 'leader': leader,
-  	  		 'members': members,
-  	  		 'devices': devices,
-  	  		 'apps': apps,
+  	  		 'members_to_add': members_to_add,
+  	  		 'devices_to_add': devices_to_add,
+  	  		 'apps_to_add': apps_to_add,
   	  		 'experiment': experiment },
       		context_instance=RequestContext(request)
     	  )

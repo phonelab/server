@@ -32,16 +32,16 @@
               <tr>
                 <td><strong>Members: </strong></td>
                 <td>
-                  <a href='/experiment/{{experiment.id}}/'>{{ experiment.user.count }}</a>
+                  <p>{{ experiment.user.count }}</p>
                 </td>
               </tr>
               <tr>
                 <td><strong>Devices: </strong></td>
-                <td><a href='/experiment/{{experiment.id}}/'>{{experiment.dev.count}}</a></td>
+                <td><p>{{experiment.dev.count}}</p></td>
               </tr>
               <tr>
                 <td><strong>Applications: </strong></td>
-                <td><a href='/experiment/{{experiment.id}}/'>{{experiment.app.count}}</a></td>
+                <td><p>{{experiment.app.count}}</p></td>
               </tr>
             </tbody>
           </table>

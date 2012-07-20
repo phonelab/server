@@ -71,13 +71,13 @@
 
             {% if user.is_authenticated %}
             <div class="btn-group pull-right">
-					    <a class="btn btn-primary" href="/accounts/profile/{{user.id}}/">{{ user.username }}</a>
+					    <a class="btn btn-primary" href="/accounts/profile/">{{ user.username }}</a>
 					    <a class="btn btn-primary dropdown-toggle" href="#" data-toggle="dropdown">
 						    <span class="caret"></span>
 					    </a>
 					    <ul class="dropdown-menu">
 						    <li>
-							    <a href="/accounts/profile/{{user.id}}/">
+							    <a href="/accounts/profile/">
 								    <i class="icon-user"></i> Profile
 							    </a>
 						    </li>
@@ -138,7 +138,7 @@
             <div class="well sidebar-nav">
               <ul class="nav nav-list">
               {% if user.is_authenticated %}
-                <li><a href="/accounts/profile/{{user.id}}/">Profile</a></li>
+                <li><a href="/accounts/profile/">Profile</a></li>
                 {% if userprofile.user_type == 'L' or userprofile.user_type == 'M' %}  
                   <li><a href="/experiments/">Experiments</a></li>
                   <li><a data-toggle="collapse" href="#groups">Groups</a></li>

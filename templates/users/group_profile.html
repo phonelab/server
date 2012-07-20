@@ -39,11 +39,11 @@
           <td><strong>Devices (<a href="/devices">{{no_of_devices}}</a>):</strong></td>
           <td>
             <ul class="unstyled">
-            {% for device in devices %}
+           {% for device in devices %}
               <li><a href="/device/{{device.dev}}">{{device.dev}}</a></li>
-            {% endfor %}
-            </ul>
+           {% endfor %}
           </td> 
+        </ul>
         </tr>
         <tr>
           <td><strong>Applications:</strong></td>
@@ -68,7 +68,9 @@
       <h1>Request Devices</h1>
     </div><!-- modal-header -->
     <div class="modal-body">
-      Number of Devices required: <input type='text' name='req_devices' id='member'/>
+      <label for="req_devices"> Number of Devices required: </label>
+      <input id="req_devices" type='text' name='req_devices' id='member' placeholder="Available devices: {{available_devices.count}}"/> 
+
     </div><!-- modal-body -->
     <div class="modal-footer">
       <input type="submit" class='btn btn-primary' value="Request" />
