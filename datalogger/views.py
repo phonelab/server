@@ -64,8 +64,9 @@ def upload_log(request, deviceId):
     try:
       dev = Device.objects.get(meid=deviceId)
       DeviceProfile.objects.filter(dev=dev).update(last_log=now)
-    # success msg
-    response['data'] = "done"
+      # success msg
+      response['data'] = "done"
+    
     # device does not exist
     except Device.DoesNotExist:
       response['err'] = {
@@ -150,11 +151,11 @@ def show_tag(request, deviceId):
   # define default response
   response = { "err": "", "data": "" }
   # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-  if device.count() == 1:
+  try:
+    device = Device.objects.get(id=deviceId)
+    # device exists
     # get log data list from deviceId directory
-    path = os.path.join(RAW_LOG_ROOT, device[0].id)
+    path = os.path.join(RAW_LOG_ROOT, device[0].meid)
     # empty
     filelist = {}
     try:
@@ -163,7 +164,7 @@ def show_tag(request, deviceId):
       sort_nicely(filelist)
       Tagdata = ''
       for file in filelist:
-        filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
+        filename = os.path.join(RAW_LOG_ROOT, device[0].meid, file)
         Logfile = open(filename, 'r+')
         for line in Logfile:
           #Logdata = Logfile.readline()
