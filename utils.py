@@ -99,4 +99,7 @@ def is_valid_device(user, deviceId):
 
   if userprofile.user_type == 'P':
     return DeviceProfile.objects.filter(dev=deviceId).filter(user=user).count() > 0
+   
+  if userprofile.user_type == 'A':
+    return True
   return False

@@ -69,7 +69,7 @@ def index(request):
     device_profiles = DeviceProfile.objects.filter(group = userprofile.group)
     
   for device in device_profiles:
-    devices[device] = Device.objects.filter(id = device.dev)
+    devices[device] = Device.objects.filter(id = device.dev.id)
   
   return render_to_response(
             'device/index.html', 
@@ -115,7 +115,7 @@ def create_or_update_device(request):
       'msg': 'missing mandatory params'
     }
   # get device
-  device = Device.objects.filter(id=params['device_id'])
+  device = Device.objects.filter(meid=params['device_id'])
   # if device exists, update
   if device.count() == 1:
     device = device[0]
@@ -131,7 +131,7 @@ def create_or_update_device(request):
   # device does not exist, insert
   else:
     device = Device(
-        id     = params['device_id'], 
+        meid     = params['device_id'], 
     #    email  = "phonelab@gmail.com", #params['email'] 
         reg_id = params['reg_id']
     )
@@ -158,7 +158,7 @@ def show(request, deviceId):
   userprofile = UserProfile.objects.get(user_id=user.id)
   # define default response
   response = { "err": "", "data": "" }
-  
+
   #check deviceId to control accesses
   if is_valid_device(user, deviceId):
     # get device
@@ -179,7 +179,7 @@ def show(request, deviceId):
           unapps[app.id] = {"app_object": app,}
 
       # get log data list from deviceId directory
-      path = os.path.join(RAW_LOG_ROOT, dev.id)
+      path = os.path.join(RAW_LOG_ROOT, dev.meid)
       # empty
       filelist = {}
       try:
@@ -233,23 +233,23 @@ def edit(request, deviceId):
   #check deviceId to control accesses
   if is_valid_device(user, deviceId):
     # get device
-    device = Device.objects.filter(id=deviceId)
-    # device exists
-    if device.count() == 1:
+    try:
+      device = Device.objects.get(id=deviceId)
+      # device exists
       return render_to_response(
         'device/edit.html', 
           {
-            'device': device[0]
+            'device': device
           },
           context_instance=RequestContext(request)
         )
     # device does not exist
-    else:
+    except Device.DoesNotExist: 
       response['err'] = {
         'no' : 'err1',
         'msg': 'invalid device'
       }
-      return HttpResponseRedirect('/error/')
+    return json_response_from(response)
   else:
     return HttpResponseRedirect('/')
 
@@ -291,7 +291,7 @@ def update(request, deviceId):
     # save device
     device.save()
     # redirect to device/<deviceId>
-    return HttpResponseRedirect('/device/' + device.id)
+    return HttpResponseRedirect('/device/' + str(device.id))
   # device does not exist
   else:
     return HttpResponseRedirect('/error/')
@@ -348,12 +348,11 @@ def status(request, deviceId, statusType):
   #check deviceId to control accesses
   if is_valid_device(user, deviceId):
     # get device
-    device = Device.objects.filter(id=deviceId)
-    # device exists
-
-    if device.count() == 1:
+    try:
+      device = Device.objects.get(id=deviceId)
+      # device exists
       # get log data list from deviceId directory
-      path = os.path.join(RAW_LOG_ROOT, device[0].id)
+      path = os.path.join(RAW_LOG_ROOT, device.meid)
       # empty
       filelist = {}
       tagName = ''
@@ -372,7 +371,7 @@ def status(request, deviceId, statusType):
         sort_nicely(filelist)
         Tagdata = ''
         for file in filelist:
-          filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
+          filename = os.path.join(RAW_LOG_ROOT, device.meid, file)
           Logfile = open(filename, 'r+')
           for line in Logfile:
             #Logdata = Logfile.readline()
@@ -390,7 +389,7 @@ def status(request, deviceId, statusType):
         return render_to_response(
           'device/status.html',
           {
-            'device': device[0],
+            'device': device,
             'TagName': tagName,
             'Tagdata': Tagdata
           },
@@ -404,9 +403,8 @@ def status(request, deviceId, statusType):
             'no' : 'err1', 
             'msg': 'cannot change dir'
           }
-    
     # device does not exist
-    else:
+    except Device.DoesNotExist: 
       response['err'] = {
         'no' : 'err1',
         'msg': 'invalid device'
@@ -458,7 +456,7 @@ def insert_or_update_deviceapplication(request):
   num = 0
   # data check
   try:
-    dev = Device.objects.get(id=request.POST['dev_id'])
+    dev = Device.objects.get(meid=request.POST['dev_id'])
     for app_id in app_ids:
       try:
         app = Application.objects.get(id=app_id)

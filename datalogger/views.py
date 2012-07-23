@@ -61,12 +61,22 @@ def upload_log(request, deviceId):
       fileHandle.write(chunk)
     # close file handle
     fileHandle.close()
-    DeviceProfile.objects.filter(dev=deviceId).update(last_log=now)
+    try:
+      dev = Device.objects.get(meid=deviceId)
+      DeviceProfile.objects.filter(dev=dev).update(last_log=now)
     # success msg
     response['data'] = "done"
+    # device does not exist
+    except Device.DoesNotExist:
+      response['err'] = {
+        'no' : 'err1',
+        'msg': 'invalid device'
+        }
+      return json_response_from(response)
+
   else:
     response["err"] = "err1"
-
+    
   # render json response
   return json_response_from(response)
 
@@ -88,7 +98,7 @@ def show(request, deviceId, logFilename):
 
   if is_valid_device(user, deviceId):
     # get device  
-    device = Device.objects.filter(id=deviceId)
+    device = Device.objects.filter(meid=deviceId)
     # if device exists, update  
     if device.count() == 1:
       # generate file name    
