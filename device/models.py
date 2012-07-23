@@ -19,7 +19,7 @@ class Device(models.Model):
     (u'E', u'ENABLED'),
     (u'D', u'DISABLED'),
   )
-  id              = models.CharField(max_length=15, null=False, primary_key=True)
+  meid            = models.CharField(max_length=15, null=False)
 #  email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=300, null=False)
   collapse_key    = models.CharField(max_length=255, null=True)
