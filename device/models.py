@@ -1,7 +1,6 @@
 from django.db import models
 from django import forms
 from application.models import Application
-from experiment.models import Experiment
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 
@@ -137,7 +136,6 @@ class DeviceProfile(models.Model):
   dev                = models.ForeignKey(Device, unique=True)
   user               = models.ForeignKey(User, blank=True, null=True)
 #  group              = models.ManyToManyField(Group, blank=True, null=True)
-  experiment         = models.ForeignKey(Experiment, blank=True, null=True)
   last_log           = models.DateTimeField(blank=True, null=True)
   phone_no           = models.CharField(max_length=13, blank=True, null=True)
   status             = models.CharField(max_length=1, choices=STATUS_CHOICES)
