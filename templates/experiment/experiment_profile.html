@@ -3,7 +3,7 @@
 {% block content %}
 <br><br>
   <div class="well">
-    <h2>Experiment Profile: {{experiment.name}} (<a data-toggle="modal" href="#exp_edit">Edit</a>)</h2>
+    <h2>Experiment Profile: {{experiment.name}} {% if userprofile.user_type == 'L' %} (<a data-toggle="modal" href="#exp_edit">Edit</a>){% endif %} </h2>
     <table class="table table-bordered table-striped">
       <tbody>
         <tr>
@@ -14,7 +14,7 @@
           <td><strong>Members ({{experiment.user.count}}): </strong></td>
           <td>
           	{% for member in experiment.user.all %}
-          		<li>{{member}} {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_member/{{experiment.id}}/{{member}}/')" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+          		{{member}}{% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_member/{{experiment.id}}/{{member}}/')" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}<br>
 			      {% endfor %}
           </td>
         </tr>
@@ -22,7 +22,7 @@
         	<td><strong>Devices ({{experiment.dev.count}}):</strong></td>
         	<td>
         		{% for device in experiment.dev.all %}
-        			<li><a href="/device/{{device.id}}">{{device}}</a> {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_device/{{experiment.id}}/{{device}}/')" id="device_delete"><img alt="Delete Device" title="Delete Device" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+        			<a href="/device/{{device.id}}">{{device}}</a>{% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_device/{{experiment.id}}/{{device}}/')" id="device_delete"><img alt="Delete Device" title="Delete Device" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}<br> 
         		{% endfor %}
 
         	</td>	
@@ -31,7 +31,7 @@
         	<td><strong>Applications ({{experiment.app.count}}):</strong></td>
         	<td>
         		{% for app in experiment.app.all %}
-        			<li><a href="/application/{{app.id}}">{{app}}</a> {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_app/{{experiment.id}}/{{app.id}}/')" id="app_delete"><img alt="Delete Application" title="Delete Application" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
+        			<a href="/application/{{app.id}}">{{app}}</a> {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_app/{{experiment.id}}/{{app.id}}/')" id="app_delete"><img alt="Delete Application" title="Delete Application" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}<br> 
         		{% endfor %}
         	</td>	
         </tr>

@@ -41,7 +41,7 @@ $('#edit').modal({
             {% else %}
             <div class="well">
             There are no experiments
-            <a href="/experiment/new/" class="btn-small btn-primary">Add Experiment</a>
+            {% if userprofile.user_type == 'L' %} <a href="/experiment/new/" class="btn-small btn-primary">Add Experiment</a>{% endif %}
             </div>
             {% endif %}
           </div><!-- tab-pane -->

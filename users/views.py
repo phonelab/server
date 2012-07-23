@@ -240,7 +240,7 @@ User Profile
 @author TKI
 """
 @login_required
-def profile(request, userId):
+def profile(request):
   group = {}
   leader = {}
   members = {}
@@ -253,11 +253,11 @@ def profile(request, userId):
   response = {"err": "", "data": ""}
   try:
     # get UserProfile with user foreignkey
-    userprofile = UserProfile.objects.get(user=userId)
+    userprofile = UserProfile.objects.get(user=request.user)
 
     if userprofile.user_type == 'P':
       # get DeviceProfile with devprofile foreignkey
-      devices = DeviceProfile.objects.filter(user=userId)
+      devices = DeviceProfile.objects.filter(user=request.user)
 
     if userprofile.user_type == 'A':
       #get all devices
@@ -267,7 +267,7 @@ def profile(request, userId):
     if(userprofile.user_type== 'M' or userprofile.user_type=='L'):
 
       # get group information
-      group = Group.objects.get(user = userId)
+      group = Group.objects.get(user = request.user)
       devices = DeviceProfile.objects.filter(group=group)
       no_of_devices = devices.count()
       leader = get_object_or_404(UserProfile, user_type='L', group=group) 
@@ -368,6 +368,7 @@ def group_profile(request):
   devices = DeviceProfile.objects.filter(group=group)
   no_of_devices = devices.count()
 
+  available_devices = DeviceProfile.objects.filter(status='W')
   #get the leader
   leader = get_object_or_404(UserProfile, user_type='L', group=group)
 
@@ -400,6 +401,7 @@ def group_profile(request):
                'apps': apps,
                'leader': leader,
                'members': members,
+               'available_devices': available_devices,
                'no_of_devices': no_of_devices, 
                'devices'  : devices },
              context_instance=RequestContext(request)

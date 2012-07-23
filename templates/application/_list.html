@@ -15,7 +15,7 @@
     <tbody>
       {% for key,app in apps.items %}
         <tr>
-          <td> {{app.app_object.name}} </td>
+          <td> <a href="/application/{{app.id}}/">{{app.app_object.name}}</a> </td>
 <!--          <td> {{app.app_object.package_name}} </td> -->
           <td> {{app.app_object.get_type_display}} </td>
           <td> {{app.app_object.description}} </td>
@@ -44,7 +44,7 @@
     <tbody>
       {% for key,app in unapps.items %}
         <tr>
-          <td> {{app.app_object.name}} </td>
+          <td> <a href="/application/{{app.id}}">{{app.app_object.name}}</a> </td>
 <!--          <td> {{app.app_object.package_name}} </td> -->
           <td> {{app.app_object.get_type_display}} </td>
           <td> {{app.app_object.description}} </td>

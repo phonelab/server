@@ -193,7 +193,7 @@ LOGGING = {
 }
 # Session and the settings for User processes;
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 AUTH_PROFILE_MODULE = 'users.UserProfile'

@@ -42,7 +42,7 @@ if settings.DEBUG:
     #signup page
     url(r'^register/$', 'users.views.register'),
     #profile page
-    url(r'^accounts/profile/(?P<userId>\d+)/$', 'users.views.profile'),
+    url(r'^accounts/profile/$', 'users.views.profile'),
     #delete member from group
     url(r'^accounts/delete_member/(?P<member>\w+)/$', 'users.views.delete_member'),
     #group profile
