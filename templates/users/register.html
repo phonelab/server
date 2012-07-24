@@ -60,7 +60,7 @@
 
      {% else %}
         
-        <form method="post" action=".">
+        <form method="post" action="." onclick="participant()">
           {% csrf_token %}
           <table class = "table table-striped" id="reg_table">
             <tbody>
@@ -74,4 +74,7 @@
        </form>
      {% endif %}
      </div>
+{% endblock %}
+{% block js %}
+<script src="{{STATIC_URL}}js/participant_registration.js"></script>
 {% endblock %}

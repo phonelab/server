@@ -16,7 +16,7 @@ from settings import FROM_EMAIL, ADMINS
 from lib.helper import json_response_from, json
 from users.models import UserProfile
 from device.models import Device, DeviceProfile
-from users.forms import RegistrationForm
+from users.forms import RegistrationForm, ParticipantForm
 from application.models import Application
 from experiment.models import Experiment
 
@@ -24,6 +24,22 @@ from experiment.models import Experiment
 admin_mail = 'tempphonelab@gmail.com'
 
 #TO = [ email for name, email in ADMINS ]
+
+"""
+Participant Email List
+
+@date 07/23/2012
+
+@author Manoj
+"""
+
+def participant(request):
+
+  if request.method == 'POST':
+    form = ParticipantForm(request.POST)
+    if form.is_valid:
+      
+
 """
 Register New User with activation
 
@@ -233,6 +249,18 @@ def confirm(request, activation_key):
            context_instance=RequestContext(request)
            )
   
+
+"""
+Terms and Conditions
+
+@date 07/23/2012
+
+@author Manoj
+"""
+def terms_and_conditions(request):
+
+  return render_to_response('users/terms_and_conditions.html')
+
 """
 User Profile
 
@@ -273,6 +301,9 @@ def profile(request):
       leader = get_object_or_404(UserProfile, user_type='L', group=group) 
       no_of_members = UserProfile.objects.filter(user_type='M', group=group).count()
       apps = Application.objects.filter(group=group)
+
+      #get the availble no of devices
+      available_devices = DeviceProfile.objects.filter(status='W').exclude(dev__in=devices)
       #get experiment information
       experiments = Experiment.objects.filter(group=group).order_by('id')
       
@@ -284,6 +315,7 @@ def profile(request):
                'no_of_members': no_of_members,
                'no_of_devices': no_of_devices, 
                'devices'  : devices,
+               'available_devices': available_devices,
                'apps': apps,
                'experiments': experiments },
              context_instance=RequestContext(request)
@@ -368,7 +400,7 @@ def group_profile(request):
   devices = DeviceProfile.objects.filter(group=group)
   no_of_devices = devices.count()
 
-  available_devices = DeviceProfile.objects.filter(status='W')
+  
   #get the leader
   leader = get_object_or_404(UserProfile, user_type='L', group=group)
 
@@ -401,7 +433,6 @@ def group_profile(request):
                'apps': apps,
                'leader': leader,
                'members': members,
-               'available_devices': available_devices,
                'no_of_devices': no_of_devices, 
                'devices'  : devices },
              context_instance=RequestContext(request)

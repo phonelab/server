@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+{% block title %}PhoneLab Testbed Web Site{% endblock %}
+{% block content %}
+<h1>Request For Sign UP</h1>
+<form class="form-horizontal" method="post" action=".">
+	<table class = "table table-striped" id="reg_table">
+            <tbody>
+              
+              {{ form.as_p }}
+              
+            </tbody>
+          </table>
+          <input type="submit" class="btn btn-primary" value="Sign Up" />
+          <a onclick="history.back()" class="btn">Cancel</a>
+</form>
+{% endblock %}

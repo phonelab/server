@@ -16,6 +16,7 @@ class RegistrationForm(forms.Form):
   CHOICE = (
     (u'L',u'Leader'), 
     (u'M', u'Member'),
+    (u'P', u'Participant'),
   )
 
   username =forms.CharField(label=u'Username', max_length=30)
@@ -80,8 +81,17 @@ class RegistrationForm(forms.Form):
         raise forms.ValidationError('"%s" is not a registered group.' % groupname )
       return group
 
-    
 
-        
+"""
+Particiapnt email list
+
+@date 07/23/2012
+
+@author Manoj
+"""
+
+class ParticipantForm(forms.Form):
+  name =forms.CharField(label=u'Full Name', max_length=50)
+  email = forms.EmailField(label=u'Email')
 
 

@@ -8,8 +8,10 @@
     <p>
     <br><br>
     {% if not user.is_authenticated %}
+
     <a href="/register" class="btn btn-primary btn-large"><i class="icon-user icon-white"></i> Sign Up</a>
     <a href="/login" class="btn btn-large"><i class="icon-ok"></i> Log In</a>
+    <a data-toggle="modal" href='#participant' class="btn btn-primary"><img src= "{{ STATIC_URL }}img/phone.ico"> Get A Phone</a><br>
     {% else %}
     <br>
     {% endif %}
@@ -47,4 +49,32 @@
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+          <div class="modal fade" id="participant">
+            <form class="modal-form" method="post" action="/participant">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">&times;</a>
+              <h1>Device Request</h1>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td width='20%'><strong>Full Name: </strong></td>
+                    <td><input type='text' name='name' id='name'/></td>
+                  </tr> 
+                  <tr>
+                    <td><strong>Email: </strong></td>
+                    <td><input type='text' name='email' id='email'/></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <input type="submit" class='btn btn-primary' value="Submit" />
+              <a href="." class="btn">Cancel</a>
+            </div>
+            </form>
+          </div>
 {% endblock %}
