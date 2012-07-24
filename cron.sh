@@ -3,5 +3,8 @@
 # Separate Projects would need a copy of this script 
 # with appropriate Settings export statments.
 
-export DJANGO_SETTINGS_MODULE=settings
-python /home/tki/Workspace/PhoneLab/Github/server/cron.py
+PYTHONPATH="${PYTHONPATH}:/home/ec2-user"
+export PYTHONPATH
+export DJANGO_SETTINGS_MODULE=server.settings
+
+python /home/ec2-user/server/cron.py
