@@ -19,7 +19,7 @@ class Device(models.Model):
     (u'E', u'ENABLED'),
     (u'D', u'DISABLED'),
   )
-  id              = models.CharField(max_length=15, null=False, primary_key=True)
+  meid            = models.CharField(max_length=15, null=False)
 #  email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=300, null=False)
   collapse_key    = models.CharField(max_length=255, null=True)
@@ -135,7 +135,7 @@ class DeviceProfile(models.Model):
   )
   dev                = models.ForeignKey(Device, unique=True)
   user               = models.ForeignKey(User, blank=True, null=True)
-  group              = models.ManyToManyField(Group, blank=True, null=True)
+#  group              = models.ManyToManyField(Group, blank=True, null=True)
   last_log           = models.DateTimeField(blank=True, null=True)
   phone_no           = models.CharField(max_length=13, blank=True, null=True)
   status             = models.CharField(max_length=1, choices=STATUS_CHOICES)

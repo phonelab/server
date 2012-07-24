@@ -61,12 +61,23 @@ def upload_log(request, deviceId):
       fileHandle.write(chunk)
     # close file handle
     fileHandle.close()
-    DeviceProfile.objects.filter(dev=deviceId).update(last_log=now)
-    # success msg
-    response['data'] = "done"
+    try:
+      dev = Device.objects.get(meid=deviceId)
+      DeviceProfile.objects.filter(dev=dev).update(last_log=now)
+      # success msg
+      response['data'] = "done"
+    
+    # device does not exist
+    except Device.DoesNotExist:
+      response['err'] = {
+        'no' : 'err1',
+        'msg': 'invalid device'
+        }
+      return json_response_from(response)
+
   else:
     response["err"] = "err1"
-
+    
   # render json response
   return json_response_from(response)
 
@@ -88,7 +99,7 @@ def show(request, deviceId, logFilename):
 
   if is_valid_device(user, deviceId):
     # get device  
-    device = Device.objects.filter(id=deviceId)
+    device = Device.objects.filter(meid=deviceId)
     # if device exists, update  
     if device.count() == 1:
       # generate file name    
@@ -140,11 +151,11 @@ def show_tag(request, deviceId):
   # define default response
   response = { "err": "", "data": "" }
   # get device
-  device = Device.objects.filter(id=deviceId)
-  # device exists
-  if device.count() == 1:
+  try:
+    device = Device.objects.get(id=deviceId)
+    # device exists
     # get log data list from deviceId directory
-    path = os.path.join(RAW_LOG_ROOT, device[0].id)
+    path = os.path.join(RAW_LOG_ROOT, device[0].meid)
     # empty
     filelist = {}
     try:
@@ -153,7 +164,7 @@ def show_tag(request, deviceId):
       sort_nicely(filelist)
       Tagdata = ''
       for file in filelist:
-        filename = os.path.join(RAW_LOG_ROOT, deviceId, file)
+        filename = os.path.join(RAW_LOG_ROOT, device[0].meid, file)
         Logfile = open(filename, 'r+')
         for line in Logfile:
           #Logdata = Logfile.readline()

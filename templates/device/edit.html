@@ -1,8 +1,8 @@
 <!-- Single Device !-->
 {% extends "base.html" %}
-{% block title %}Edit Device: {{device.id}} {% endblock %}
+{% block title %}Edit Device: {{device.meid}} {% endblock %}
 {% block content %}
-<h1>DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a></h1>
+<h1>DeviceID <a href='/device/{{device.id}}'>{{device.meid}}</a></h1>
 <table class="table">
   <tbody>
     <form method="post" action="/device/{{device.id}}/update/">

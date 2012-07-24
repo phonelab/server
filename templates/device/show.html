@@ -1,10 +1,10 @@
 <!-- Single Device !-->
 {% extends "base.html" %}
-{% block title %}DeviceID: {{device.id}} {% endblock %}
+{% block title %}DeviceID: {{device.meid}} {% endblock %}
 {% block content %}
 
 {% if userprofile.user_type == 'A' %}
-<h1>DeviceID: <a href="/device/{{device.id}}/">{{device.id}}</a>(<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
+<h1>DeviceID: <a href="/device/{{device.id}}/">{{device.meid}}</a>(<a data-toggle="modal" href='#edit'>Edit</a>)</h1>
 
 <table class="table table-bordered table-striped">
   <tbody>
@@ -23,13 +23,13 @@
   </tbody>
 </table>
 {% else %}
-<h1>DeviceID: <a href="/device/{{device.id}}/">{{ device.id }}</a></h1>
+<h1>DeviceID: <a href="/device/{{device.id}}/">{{ device.meid }}</a></h1>
 {% endif %}
 <div class="modal fade" id="edit">
   <form class="modal-form" method="post" action="/device/{{device.id}}/update/">
     <div class="modal-header">
       <a class="close" data-dismiss="modal">&times;</a>
-        <h1>DeviceID <a href='/device/{{device.id}}'>{{device.id}}</a></h1>
+        <h1>DeviceID <a href='/device/{{device.id}}'>{{device.meid}}</a></h1>
       </a>
     </div>
     <div class="modal-body">
@@ -83,7 +83,7 @@
       <div class="well">
         <p>
         {% for file in filelist %}
-        <a href="/device/{{device.id}}/{{file}}">{{ file }}</a><br>
+        <a href="/device/{{device.meid}}/{{file}}">{{ file }}</a><br>
 	      {% empty %} There is no log file.
         {% endfor %}
 	      </p>
