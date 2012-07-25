@@ -7,4 +7,5 @@ config_development.py
 config_production.py
 config_staging.py
 *.apk
-cron.sh
+.gitignore
+south.sh
