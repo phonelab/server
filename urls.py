@@ -42,7 +42,7 @@ if settings.DEBUG:
     #signup page
     url(r'^register/$', 'users.views.register'),
     #participant interest form
-    url(r'^participant/$', 'users.views.participant'),
+    url(r'^join/$', 'users.views.participant'),
     #profile page
     url(r'^accounts/profile/$', 'users.views.profile'),
     #delete member from group

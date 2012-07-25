@@ -50,6 +50,7 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('device', ['DeviceProfile'])
 
+
     def backwards(self, orm):
         # Removing unique constraint on 'DeviceApplication', fields ['dev', 'app']
         db.delete_unique('device_deviceapplication', ['dev_id', 'app_id'])
@@ -62,6 +63,7 @@ class Migration(SchemaMigration):
 
         # Deleting model 'DeviceProfile'
         db.delete_table('device_deviceprofile')
+
 
     models = {
         'application.application': {

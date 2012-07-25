@@ -4,6 +4,7 @@ from device.models import Device
 from application.models import Application
 from datetime import datetime
 
+
      
 """
 Class UserProfile
@@ -35,9 +36,11 @@ Class Participant
 @author TKI
 """
 class Participant(models.Model):
-  name           = models.CharField(max_length=50, null=False, unique=True)
+  name           = models.CharField(max_length=50, null=False)
   email          = models.CharField(max_length=30, null=False)
   submitted_time = models.DateTimeField(default=datetime.now())
   approved       = models.BooleanField(default=False)
+
+  
 
 

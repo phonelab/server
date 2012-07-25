@@ -31,11 +31,9 @@ Main page
 @author Taeyeon
 """
 def main_page(request):
-  form = ParticipantForm()
   return render_to_response(
            'index.html',
            { 
-           'form': form,
            'user': request.user },
            context_instance=RequestContext(request)
          )

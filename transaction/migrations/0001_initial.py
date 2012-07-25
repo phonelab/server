@@ -36,6 +36,7 @@ class Migration(SchemaMigration):
         # Adding unique constraint on 'TransactionDevApp', fields ['tid', 'dev', 'app']
         db.create_unique('transaction_transactiondevapp', ['tid_id', 'dev_id', 'app_id'])
 
+
     def backwards(self, orm):
         # Removing unique constraint on 'TransactionDevApp', fields ['tid', 'dev', 'app']
         db.delete_unique('transaction_transactiondevapp', ['tid_id', 'dev_id', 'app_id'])
@@ -45,6 +46,7 @@ class Migration(SchemaMigration):
 
         # Deleting model 'TransactionDevApp'
         db.delete_table('transaction_transactiondevapp')
+
 
     models = {
         'application.application': {

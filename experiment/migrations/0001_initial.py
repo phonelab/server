@@ -53,6 +53,7 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('experiment', ['ExperimentProfile'])
 
+
     def backwards(self, orm):
         # Deleting model 'Experiment'
         db.delete_table('experiment_experiment')
@@ -68,6 +69,7 @@ class Migration(SchemaMigration):
 
         # Deleting model 'ExperimentProfile'
         db.delete_table('experiment_experimentprofile')
+
 
     models = {
         'application.application': {

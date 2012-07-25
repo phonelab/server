@@ -18,9 +18,24 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('users', ['UserProfile'])
 
+        # Adding model 'Participant'
+        db.create_table('users_participant', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('email', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('submitted_time', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2012, 7, 25, 0, 0))),
+            ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('users', ['Participant'])
+
+
     def backwards(self, orm):
         # Deleting model 'UserProfile'
         db.delete_table('users_userprofile')
+
+        # Deleting model 'Participant'
+        db.delete_table('users_participant')
+
 
     models = {
         'auth.group': {
@@ -58,6 +73,14 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+        'users.participant': {
+            'Meta': {'object_name': 'Participant'},
+            'approved': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'email': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'submitted_time': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 7, 25, 0, 0)'})
         },
         'users.userprofile': {
             'Meta': {'object_name': 'UserProfile'},

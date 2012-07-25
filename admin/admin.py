@@ -1,10 +1,13 @@
 from django.contrib import admin
 from django.conf.urls.defaults import *
-from users.models import UserProfile
+from users.models import UserProfile, Participant
 from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
 from experiment.models import Experiment, ExperimentProfile
+from settings import FROM_EMAIL, ADMINS
+from django.template import Context, loader
+from django.core.mail import send_mail
 
 #TODO: change location and implement inline
 #Inline reference: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.InlineModelAdmin
@@ -46,6 +49,25 @@ class UserProfileAdmin(admin.ModelAdmin):
   list_display = ('user', 'user_type', 'activation_key', 'key_expires')
   search_fields = ['^user__username', '=user_type']
 admin.site.register(UserProfile, UserProfileAdmin)
+
+#send email to participants
+def send_email(modeladmin, request, queryset):
+    for obj in queryset:
+      EMAIL_SUBJECT = 'Device Approval'
+      c = Context({'name': obj.name })
+      EMAIL_BODY = (loader.get_template('users/mails/participant_device_approval.txt')).render(c)
+      TO_EMAIL = [obj.email]
+      send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
+    queryset.update(approved=1)
+
+class ParticipantAdmin(admin.ModelAdmin):
+  list_display = ('name', 'email', 'submitted_time', 'approved')
+  search_fields = ['email', 'name']
+  list_filter = ['approved']
+  actions = [send_email]
+  # list_display_links = ['send_email']
+admin.site.register(Participant, ParticipantAdmin)
 
 """
 Show status monitor for admin

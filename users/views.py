@@ -47,7 +47,7 @@ def participant(request):
       participant.save()
 
       return render_to_response (
-               'index.html',
+               'participant_interest_form.html',
                {
                'success': True
                },
@@ -55,13 +55,20 @@ def participant(request):
                )
 
     else: 
-     form = ParticipantForm(request.POST)
+     form = ParticipantForm(request.POST  )
      return render_to_response(
-              'index.html',
-              {'form': form,
-               'err': True},
+              'participant_interest_form.html',
+              {'form': form},
               context_instance=RequestContext(request)
               )
+
+  else:
+    form = ParticipantForm()
+    return render_to_response(
+            'participant_interest_form.html',
+            {'form': form},
+            context_instance=RequestContext(request)
+            )      
 
 
 """

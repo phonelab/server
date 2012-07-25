@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}PhoneLab Testbed Web Site{% endblock %}
+{% block content %}
+{% if success %}
+<div class="alert alert-success">
+Thank You for registering with phonelab. You will recieve an invite soon!<br><br>
+<a href="/" class="btn btn-success">Home</a>
+</div>
+{% else %}
+<h1>Register</h1>
+  <form method="post" name="participant_interest_form" action="/join/">
+    <table class="table">
+      <tbody>
+        {{ form.as_p }}
+      </tbody>
+    </table>
+  <input type="submit" class='btn btn-primary' value="Submit" />
+  <a class="btn" href="/" data-dismiss="modal">Cancel</a>
+  </form>
+{% endif %}
+   
+{% endblock %}

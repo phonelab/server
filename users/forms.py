@@ -29,14 +29,7 @@ class RegistrationForm(forms.Form):
     label=u'Confirm your password',
     widget=forms.PasswordInput()
   )
-
-  user_type = forms.ChoiceField(
-    label=u'User Type',
-    widget=forms.Select(), choices = CHOICE
-  )
   
-  groupname = forms.CharField(label=u'Group Name', max_length=30)
-
   def clean_username(self):
     username = self.cleaned_data['username']
     if not re.search(r'^\w+$', username):
@@ -62,24 +55,6 @@ class RegistrationForm(forms.Form):
     u.is_active = False
     u.save()
     return u
-
-  def clean_groupname(self):
-    user_type = self.cleaned_data['user_type']
-    if user_type == 'L':
-      groupname = self.cleaned_data['groupname']
-      try:
-        group = Group.objects.get(name=groupname)
-      except Group.DoesNotExist:
-        return groupname
-      raise forms.ValidationError('Group name "%s" is not available.' % groupname)
-
-    elif user_type == 'M':
-      groupname = self.cleaned_data['groupname']
-      try:
-        group = Group.objects.get(name=groupname)
-      except Group.DoesNotExist:
-        raise forms.ValidationError('"%s" is not a registered group.' % groupname )
-      return group
 
 
 """

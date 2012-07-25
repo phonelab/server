@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 {% block title %}PhoneLab Testbed Web Site{% endblock %}
 {% block content %}
-{% if success %}
-<div class="alert alert-success">
-Thank You for registering with phonelab. You will recieve an invite soon!
-</div>
-{% endif %}
   <div class='hero-unit' style='padding:30px'>
     <img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:150px"/>
     <h1>PhoneLab:</h1>
@@ -16,7 +11,7 @@ Thank You for registering with phonelab. You will recieve an invite soon!
 
     <a href="/register" class="btn btn-primary btn-large"><i class="icon-user icon-white"></i> Sign Up</a>
     <a href="/login" class="btn btn-large"><i class="icon-ok"></i> Log In</a>
-    <a data-toggle="modal" href='#participant' class="btn btn-primary"><img src= "{{ STATIC_URL }}img/phone.ico"> Get A Phone</a><br>
+    <a href='/join' class="btn btn-small btn-info"><img src= "{{ STATIC_URL }}img/phone.ico"> Get A Phone</a><br>
     {% else %}
     <br>
     {% endif %}
@@ -54,31 +49,4 @@ Thank You for registering with phonelab. You will recieve an invite soon!
     </div>
   </div>
 </div>
-
-<!-- Modal -->
-        {% if err %}
-        <div class="modal" id="participant" style="visibility: visible; opacity: 1; ">
-
-          {% else %}
-          <div class="modal fade" id="participant">
-            {% endif %}
-            <form class="modal-form" method="post" action="/participant/">
-            <div class="modal-header">
-              <a class="close" data-dismiss="modal">&times;</a>
-              <h1>Device Request</h1>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <tbody>
-                  {{ form}}
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-              <input type="submit" class='btn btn-primary' value="Submit" />
-              <a class="btn" href="/" data-dismiss="modal">Cancel</a>
-            </div>
-            </form>
-          </div>
-          <div class="modal-bg" style="cursor: pointer; "></div>
 {% endblock %}
