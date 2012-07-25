@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth.models import User, Group
-from users.models import UserProfile
+from users.models import UserProfile, Participant
 from django.shortcuts import get_object_or_404
  
 """
@@ -93,5 +93,14 @@ Particiapnt email list
 class ParticipantForm(forms.Form):
   name =forms.CharField(label=u'Full Name', max_length=50)
   email = forms.EmailField(label=u'Email')
+
+  def clean_email(self):
+    email = self.cleaned_data['email']
+    try:
+      Participant.objects.get(email=email)
+    except Participant.DoesNotExist:
+      return email
+    raise forms.ValidationError('The email "%s" has already been registered. Thank You!' % email)
+
 
 

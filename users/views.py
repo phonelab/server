@@ -14,7 +14,7 @@ import random, hashlib
 from settings import FROM_EMAIL, ADMINS
 #from django.utils import  simplejson as json
 from lib.helper import json_response_from, json
-from users.models import UserProfile
+from users.models import UserProfile, Participant
 from device.models import Device, DeviceProfile
 from users.forms import RegistrationForm, ParticipantForm
 from application.models import Application
@@ -37,8 +37,32 @@ def participant(request):
 
   if request.method == 'POST':
     form = ParticipantForm(request.POST)
-    if form.is_valid:
-      
+    if form.is_valid():
+
+      participant = Participant(
+                  name = form.cleaned_data['name'],
+                  email = form.cleaned_data['email']
+      )
+
+      participant.save()
+
+      return render_to_response (
+               'index.html',
+               {
+               'success': True
+               },
+               context_instance=RequestContext(request)
+               )
+
+    else: 
+     form = ParticipantForm(request.POST)
+     return render_to_response(
+              'index.html',
+              {'form': form,
+               'err': True},
+              context_instance=RequestContext(request)
+              )
+
 
 """
 Register New User with activation
@@ -250,16 +274,6 @@ def confirm(request, activation_key):
            )
   
 
-"""
-Terms and Conditions
-
-@date 07/23/2012
-
-@author Manoj
-"""
-def terms_and_conditions(request):
-
-  return render_to_response('users/terms_and_conditions.html')
 
 """
 User Profile

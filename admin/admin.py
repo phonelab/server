@@ -78,10 +78,11 @@ class StatusAdmin(admin.ModelAdmin):
 admin.site.register(DeviceProfile, StatusAdmin)
 
 class ExperimentAdmin(admin.ModelAdmin):
-  list_display = ('id', 'group', 'name', 'description', 'tag')
+  list_display = ('id', 'name', 'description', 'tag')
+# list_display = ('id', 'group', 'name', 'description', 'tag')
   #list_display = ('id', 'group', 'user', 'dev', 'app', 'name', 'description', 'tag')
 admin.site.register(Experiment, ExperimentAdmin)
 
 class ExperimentProfileAdmin(admin.ModelAdmin):
-  list_display = ('id', 'eid')
+  list_display = ('id', 'experiment')
 admin.site.register(ExperimentProfile, ExperimentProfileAdmin)

@@ -8,6 +8,7 @@ from lib.helper import json_response_from, json
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime
+from users.forms import ParticipantForm
 
 #from manifest.views import *
 from device.models import Device, DeviceApplication, DeviceProfile
@@ -30,9 +31,12 @@ Main page
 @author Taeyeon
 """
 def main_page(request):
+  form = ParticipantForm()
   return render_to_response(
            'index.html',
-           { 'user': request.user },
+           { 
+           'form': form,
+           'user': request.user },
            context_instance=RequestContext(request)
          )
 

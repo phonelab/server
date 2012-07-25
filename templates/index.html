@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block title %}PhoneLab Testbed Web Site{% endblock %}
 {% block content %}
+{% if success %}
+<div class="alert alert-success">
+Thank You for registering with phonelab. You will recieve an invite soon!
+</div>
+{% endif %}
   <div class='hero-unit' style='padding:30px'>
     <img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:150px"/>
     <h1>PhoneLab:</h1>
@@ -51,8 +56,13 @@
 </div>
 
 <!-- Modal -->
+        {% if err %}
+        <div class="modal" id="participant" style="visibility: visible; opacity: 1; ">
+
+          {% else %}
           <div class="modal fade" id="participant">
-            <form class="modal-form" method="post" action="/participant">
+            {% endif %}
+            <form class="modal-form" method="post" action="/participant/">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">&times;</a>
               <h1>Device Request</h1>
@@ -60,21 +70,15 @@
             <div class="modal-body">
               <table class="table">
                 <tbody>
-                  <tr>
-                    <td width='20%'><strong>Full Name: </strong></td>
-                    <td><input type='text' name='name' id='name'/></td>
-                  </tr> 
-                  <tr>
-                    <td><strong>Email: </strong></td>
-                    <td><input type='text' name='email' id='email'/></td>
-                  </tr>
+                  {{ form}}
                 </tbody>
               </table>
             </div>
             <div class="modal-footer">
               <input type="submit" class='btn btn-primary' value="Submit" />
-              <a href="." class="btn">Cancel</a>
+              <a class="btn" href="/" data-dismiss="modal">Cancel</a>
             </div>
             </form>
           </div>
+          <div class="modal-bg" style="cursor: pointer; "></div>
 {% endblock %}

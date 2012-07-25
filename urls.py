@@ -43,8 +43,6 @@ if settings.DEBUG:
     url(r'^register/$', 'users.views.register'),
     #participant interest form
     url(r'^participant/$', 'users.views.participant'),
-    #terms and conditions
-    url(r'^accounts/terms_and_conditions/$', 'users.views.terms_and_conditions'),
     #profile page
     url(r'^accounts/profile/$', 'users.views.profile'),
     #delete member from group
