@@ -8,6 +8,7 @@ from lib.helper import json_response_from
 from django.conf import settings
 from device.models import Device, DeviceApplication, DeviceProfile
 from application.models import Application
+from experiment.models import Experiment
 from users.models import UserProfile
 from xml.etree import ElementTree
 import os, errno, mimetypes
@@ -68,31 +69,23 @@ Show Application corresponding to user type
 def index(request):
   user = request.user
   userprofile = UserProfile.objects.get(user_id=user.id)
-  
+
+  apps = {} 
   if userprofile.user_type == 'P':
     # query the database for all applications
     apps = Application.objects.all().order_by('-created')
     
-  elif userprofile.user_type == 'M' or 'L':
+  elif userprofile.user_type == 'M' or userprofile.user_type == 'L':
     #query the database for user's own applications
-    apps = Application.objects.filter(group=userprofile.group)
-
-    return render_to_response(
-      'application/index.html', 
-      { 
-        'group': userprofile.group,
-        'apps': apps,
-        'userprofile': userprofile
-      },
-      context_instance=RequestContext(request)
-    )
+    apps = Application.objects.filter(user=experiment.user)
 
   elif userprofile.user_type == 'A':
-    apps = Application.objects.all()
+    apps = Application.objects.all().order_by('-created')
 
   return render_to_response(
       'application/index.html', 
       { 
+#       'group': userprofile.group,
         'apps': apps,
         'userprofile': userprofile
       },
@@ -200,8 +193,6 @@ def create_or_update_application(request):
     if (request.POST):
       filename = os.path.join(RAW_APP_ROOT, str(app.id) + ".apk")
       filedir = os.path.dirname(filename)
-      print filename
-      print filedir
       # create folder for user if it doesn`t exist
       try:
         os.mkdir(filedir)

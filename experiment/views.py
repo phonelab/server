@@ -201,7 +201,7 @@ Delete Experiment
 
 @author Manoj
 """
-
+@login_required
 def delete_exp(request, expId):
 	userprofile = get_object_or_404(UserProfile, user=request.user)
 	if userprofile.user_type == 'L':

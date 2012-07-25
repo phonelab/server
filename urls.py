@@ -75,19 +75,19 @@ if settings.DEBUG:
     # All Devices [GET]
     url(r'^devices/$', 'device.views.index'),
     # Single Device [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/$', 'device.views.show'),
+    url(r'^device/(?P<deviceId>\d+)/$', 'device.views.show'),
     # Edit Device Form [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/edit/$', 'device.views.edit'),
+    url(r'^device/(?P<deviceId>\d+)/edit/$', 'device.views.edit'),
     # Update Device Form [POST]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/$', 'device.views.update'),
+    url(r'^device/(?P<deviceId>\d+)/update/$', 'device.views.update'),
 	# REFACTOR: C2DM [POST]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/c2dm/$', 'device.views.c2dm'),
+    url(r'^device/(?P<deviceId>\d+)/c2dm/$', 'device.views.c2dm'),
     # Log Tag filter[GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/tag/$', 'datalogger.views.show_tag'),
+    url(r'^device/(?P<deviceId>\d+)/tag/$', 'datalogger.views.show_tag'),
     # Phone Status [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
+    url(r'^device/(?P<deviceId>\d+)/status/(?P<statusType>\d{1})/$', 'device.views.status'),
 	# Log Data [GET]
-    url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
+    url(r'^device/(?P<deviceId>\d+)/(?P<logFilename>[0-9]\w+).log$', 'datalogger.views.show'),
 	# Update Status
     # url(r'^device/(?P<deviceId>[A-Z0-9]\w+)/update/status/$', 'device.views.update_status'),
 

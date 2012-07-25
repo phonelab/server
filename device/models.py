@@ -30,6 +30,9 @@ class Device(models.Model):
   created         = models.DateTimeField(auto_now_add=True)
   updated         = models.DateTimeField(auto_now_add=True)
 
+  def __unicode__(self):
+    return self.meid
+
   """
   Send Message to Device
 
@@ -144,3 +147,6 @@ class DeviceProfile(models.Model):
   purpose            = models.CharField(max_length=2, choices=PURPOSE_CHOICES)
   service_type       = models.CharField(max_length=1, choices=TYPE_CHOICES)
   install_permission = models.BooleanField(default=False)
+#For Admin display
+  def dev_meid(self):
+    return self.dev.meid

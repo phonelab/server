@@ -5,6 +5,7 @@
 
 PYTHONPATH="${PYTHONPATH}:/home/ec2-user"
 export PYTHONPATH
+export ENV=staging
 export DJANGO_SETTINGS_MODULE=server.settings
 
 python /home/ec2-user/server/cron.py
