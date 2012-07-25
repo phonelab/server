@@ -32,6 +32,8 @@ def restart():
 def migrate():
   with cd('/home/ec2-user/server'):
     run('python manage.py syncdb')
+#    run('/home/ec2-user/server/south.sh schemamigration')
+#    run('/home/ec2-user/server/south.sh migrate')
 
 def deploy():
   move()
