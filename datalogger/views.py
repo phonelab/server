@@ -195,9 +195,10 @@ def show_tag(request, deviceId):
           'msg': 'cannot change dir'
         }
     
-  else:
+  # device does not exist
+  except Device.DoesNotExist:
     response['err'] = {
       'no' : 'err1',
       'msg': 'invalid device'
-    }
-  return json_response_from(response)
+      }
+    return json_response_from(response)

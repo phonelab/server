@@ -69,12 +69,12 @@ def index(request):
     device_profiles = DeviceProfile.objects.filter(group = userprofile.group)
     
   for device in device_profiles:
-    devices[device] = Device.objects.filter(id = device.dev.id)
+    devices[device] = Device.objects.filter(id = device.dev.id).order_by('-created')
   
   return render_to_response(
             'device/index.html', 
             {    
-                'group': userprofile.group,
+#                'group': userprofile.group,
                 'userprofile': userprofile,
                 'devices': devices
             },   
@@ -201,7 +201,7 @@ def show(request, deviceId):
           'unapps'   : unapps,
           'filelist' : filelist,
           'userprofile': userprofile,
-          'group': userprofile.group
+#          'group': userprofile.group
     	  },
         context_instance=RequestContext(request)
       )
