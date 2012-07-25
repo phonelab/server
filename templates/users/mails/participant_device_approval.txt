@@ -1,0 +1,4 @@
+Hello {{name}},
+Thank You for registering with phonelab. 
+
+PhoneLab

@@ -25,4 +25,24 @@
     </tr>
   </tbody>
 </table>
-</div><!-- well -->
+{% if userprofile.user_type == 'L' %}
+    <a data-toggle="modal" class="btn btn-primary" href="#request_devices">Request Devices</a>
+    {% endif %}
+  </div><!-- well -->
+<div class="modal fade" id="request_devices">
+  <form class="form-horizontal" method="post" action="/accounts/group_profile/">
+    <div class="modal-header">
+      <a class="close" data-dismiss="modal">&times;</a>
+      <h1>Request Devices</h1>
+    </div><!-- modal-header -->
+    <div class="modal-body">
+      <label for="req_devices"> Number of Devices required: </label>
+      <input id="req_devices" type='text' name='req_devices' id='member' placeholder="Available devices: {{available_devices.count}}"/> 
+
+    </div><!-- modal-body -->
+    <div class="modal-footer">
+      <input type="submit" class='btn btn-primary' value="Request" />
+      <a href="." class="btn">Cancel</a>
+    </div>
+  </form>
+  </div><!-- modal -->

@@ -14,7 +14,7 @@
           <td><strong>Members ({{experiment.user.count}}): </strong></td>
           <td>
           	{% for member in experiment.user.all %}
-          		{{member}}{% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_member/{{experiment.id}}/{{member}}/')" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}<br>
+          		{{member}}{% if userprofile.user_type == 'L' %} <a onclick="javascript:confirmsubmit('/experiment/delete_member/{{experiment.id}}/{{member}}/')" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}<br>
 			      {% endfor %}
           </td>
         </tr>
@@ -31,14 +31,14 @@
         	<td><strong>Applications ({{experiment.app.count}}):</strong></td>
         	<td>
         		{% for app in experiment.app.all %}
-        			<a href="/application/{{app.id}}">{{app}}</a> {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_app/{{experiment.id}}/{{app.id}}/')" id="app_delete"><img alt="Delete Application" title="Delete Application" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}<br> 
+        			<a href="/application/{{app.id}}">{{app}}</a> {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/experiment/delete_app/{{experiment.id}}/{{app.id}}')" id="app_delete"><img alt="Delete Application" title="Delete Application" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}<br> 
         		{% endfor %}
         	</td>	
         </tr>
       </tbody>
      </table>
      {% if userprofile.user_type == 'L' %}
-     <a class="btn btn-danger" href="javascript:confirmsubmit('/experiment/delete_exp/{{experiment.id}}/')"><img src="{{ STATIC_URL }}img/trash.ico"> Delete</a>
+     <a class="btn btn-danger" ><img onclick="javascript:confirmsubmit('/experiment/delete_exp/{{experiment.id}}/')" src="{{ STATIC_URL }}img/trash.ico"> Delete</a>
      {% endif %}
    </div><!-- well -->
    <div class="modal fade" id="exp_edit">
@@ -54,16 +54,12 @@
     </div>
    </div><!-- modal fade -->
 
+
+{% endblock %}
+
+{% block js %}
 <!-- JavaScript -->
-<script type="text/javascript">
-function confirmsubmit(path) {
-  if (confirm("You sure you want to delete?")) {
-    document.location = path;
-  }
-   return false; 
-  
-}
-</script>
+<script src="{{STATIC_URL}}js/confirmsubmit.js"></script>
 <script type="text/javascript">
 //initialize modal
 $('#add_member').modal('{

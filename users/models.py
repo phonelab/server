@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from device.models import Device
 from application.models import Application
+from datetime import datetime
+
 
      
 """
@@ -28,21 +30,17 @@ class UserProfile(models.Model):
 
 
 """
-Class UserProfile
+Class Participant
 
 @date 07/23/2012
 @author TKI
 """
-class UserProfile(models.Model):
-  USERTYPE_CHOICES = (
-    (u'A', u'Admin'),
-    (u'L', u'Leader'),
-    (u'M', u'Member'),
-    (u'P', u'Participant'),
-  )
-  name           = models.CharField(max_length=50, null=False, unique=True)
+class Participant(models.Model):
+  name           = models.CharField(max_length=50, null=False)
   email          = models.CharField(max_length=30, null=False)
-  submitted_time = models.DateTimeField()
+  submitted_time = models.DateTimeField(default=datetime.now())
   approved       = models.BooleanField(default=False)
+
+  
 
 
