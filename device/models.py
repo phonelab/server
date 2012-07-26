@@ -169,3 +169,5 @@ class DeviceStatus(models.Model):
   status_type        = models.CharField(max_length=1, choices=STATUS_CHOICES)
   status_value       = models.CharField(max_length=1, null=False)
   timestamp          = models.DateTimeField(blank=True, null=True)
+  def dev_meid(self):
+    return self.dev.meid
