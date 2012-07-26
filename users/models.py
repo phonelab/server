@@ -15,8 +15,7 @@ Class UserProfile
 class UserProfile(models.Model):
   USERTYPE_CHOICES = (
     (u'A', u'Admin'),
-    (u'L', u'Leader'),
-    (u'M', u'Member'),
+    (u'E', u'Experimenter'),
     (u'P', u'Participant'),
   )
   user           = models.ForeignKey(User, unique=True)
@@ -36,10 +35,22 @@ Class Participant
 @author TKI
 """
 class Participant(models.Model):
+  STUDENT_CHOICES = (
+    (u'F', 'Freshman'),
+    (u'SO', 'Sophomore'),
+    (u'J', 'Junior'),
+    (u'SE', 'Senior'),
+    (u'G', 'Graduate'),
+    (u'P','PhD'),
+    )
   name           = models.CharField(max_length=50, null=False)
   email          = models.CharField(max_length=30, null=False)
   submitted_time = models.DateTimeField(default=datetime.now())
   approved       = models.BooleanField(default=False)
+  student_status = models.CharField(max_length=2, null=False, choices=STUDENT_CHOICES)
+
+  # def batch(self):
+
 
   
 
