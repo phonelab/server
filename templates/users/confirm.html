@@ -10,15 +10,17 @@
         <a class="close" data-dismiss="alert">&times;</a>
         <strong>The account has already been activated. The username is "{{ req_user.username }}"</strong>
       </div>
-    {% elif expired %}
+    {% endif %}
+    {% if expired %}
       <div class="alert alert-error">
         <a class="close" data-dismiss="alert">&times;</a>
         <p><strong>The activation key has been expired</strong><br><br>
         <a href="/" class="btn btn-danger">Home</a>
         </p>
       </div>
-    {% else activated %}
-      <!-- {% if user_type == 'L' %} -->
+    {% endif %}
+    {% if activated %}
+      {% comment %} {% if user_type == 'L' %} {% endcomment %}
       <div class="alert alert-success">
         <a class="close" data-dismiss="alert">&times;</a> 
         <p><strong>Activation Success</strong><br><br>

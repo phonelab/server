@@ -220,7 +220,7 @@ def confirm(request, activation_key):
   userprofile.user.save()
   return render_to_response(
           'users/confirm.html', 
-          {'activated': True,}
+          {'activated': True}
          )
   
 
