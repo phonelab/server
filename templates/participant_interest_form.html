@@ -7,35 +7,33 @@
 	<a href="/" class="btn btn-success">Home</a>
 	</div>
 	{% else %}
-	<div class="row">
-		<div class="span5">
-			<br><br><img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:180px"/>
-		</div>
+	<div class="container">
+	<div class="well row" style="background-color: #DDDDDD" >
 		<div class="span2">
+				<br><br><img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:150px"/>
+		</div>	
+		<div class="span6 pull-right" style="font-size: 26px; line-height:110%; ">
+				<br><br><strong style="font-size: 30px">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <br><br><strong style="font-size: 34px ;">PhoneLab. Only at UB CSE.</strong>
 		</div>
+		
+		
 		<div class="span4">
 			<div class="well">
-			<h2>Reserve Your Free Phone</h2>
-		  	<form class="form" method="post" name="participant_interest_form" action="/join/">
-		    	{{form}}
+				<h2>Reserve Your Free Phone</h2>
+			  	<form class="form" method="post" name="participant_interest_form" action="/join/">
+			    	{{form}}
 
-		    	<br><input type="submit" class='btn btn-info' value="Submit" />
-		  		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
-		  	</form>
-	</div>
+			    	<br><input type="submit" class='btn btn-info' value="Submit" />
+			  		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
+			  	</form>
+			</div>
 		</div>
-		
-	</div>
-<hr>
-		<div  class="span" style="font-size: 18px; "><strong style="font-size: 22px">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <strong>PhoneLab. Only at UB CSE.</strong>
-			
-
-		<br><br>PhoneLab is an open-access large-scale participatory smartphone testbed located at SUNY Buffalo.
-
-		
-		<br>
+		</div>
+	<hr>
+		<div style="font-size: 18px; ">
+			<br><br><strong>PhoneLab</strong> is an open-access large-scale participatory smartphone testbed located at SUNY Buffalo.		
 		<p style="font-size: 18px;">
-			In exchange for participation you will receive:
+			<br>In exchange for participation you will receive:
 			<ul>
 				<li><strong><i>Free</i></strong> unlimited voice, data, and messaging for one year</li>
 				<li><strong><i>Free</i></strong>  Nexus S smartphone</li>
@@ -44,10 +42,35 @@
 				<li>The chance to participate in ongoing smartphone research</li>
 			</ul>
 		</p>
-
+		<hr>
+		<h3>FAQ</h3>
+		<ol>
+			<li>
+				How much will I have to participate?
+			<br>
+				Your active participation in PhoneLab will be limited to a few hours a month. Most of the time you’ll just be using your phone normally.
+			</li>
+			<br>
+			<li>What’s in it for me?
+				<br>
+			First, we give you a free brand new Nexus S smartphone. Second, during your first year in the testbed you receive unlimited voice, data and messaging absolutely free. You will never receive a bill. Finally, after your first year we will transition you into a special deely-discounted plan offered by Sprint only to PhoneLab participants and you’ll continue to save money each month. Over four years in PhoneLab, you’ll save over $2,000.</li><br>
+			<li>So who’s paying for my phone?
+				<br>
+			PhoneLab is funded by the National Science Foundation—your tax dollars at work—and made possible by generous discounts provided by Sprint.</li><br>
+			<li>Am I required to participate in experiments?
+				<br>
+			Yes, PhoneLab participants are required to continue to participate in some experiments. You may, however, decline to participate in specific experiments if you do not feel comfortable with the data that they are collecting about you.</li><br>
+			<li>
+			How will I know what information experiments are collecting about me?<br>
+			When experiments begin to run they will display the standard Android permissions dialog indicating what permissions the experiment is requesting. If you do not feel comfortable with the permissions requested by an experiment, you may decline to participate.
+		</li><br>
+			<li>
+			Is PhoneLab safe?<br>
+			Yes. Experimental applications may only use data that you grant them access to. In addition, all experiments must be approved by a university Institutional Review Board (IRB) for human subjects procedures compliance before they may be run on PhoneLab. Together with the IRB, the PhoneLab team will ensure that experiments only collect data absolutely necessary to test their hypotheses. These extra controls make PhoneLab applications substantially safer than ones that you download online through the Android Marketplace or other app store.
+		</li>
 	  
 	</div>
-	
+	</div>
 	{% endif %}
 	   
 	{% endblock %}
