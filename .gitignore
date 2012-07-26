@@ -9,4 +9,4 @@ config_staging.py
 *.apk
 .gitignore
 south.sh
-\*/migrations/*
+*/migrations/*
