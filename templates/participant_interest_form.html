@@ -7,22 +7,47 @@
 	<a href="/" class="btn btn-success">Home</a>
 	</div>
 	{% else %}
-	<div class="span5">
-		<h1>Register</h1>
-	  <form method="post" name="participant_interest_form" action="/join/">
-	    {% for field in form %}
-	        <div class="fieldWrapper">
-	            {{ field.errors }}
+	<div class="row">
+		<div class="span5">
+			<br><br><img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:180px"/>
+		</div>
+		<div class="span2">
+		</div>
+		<div class="span4">
+			<div class="well">
+			<h2>Reserve Your Free Phone</h2>
+		  	<form class="form" method="post" name="participant_interest_form" action="/join/">
+		    	{{form}}
 
-	            {{ field.label_tag }} {{ field }}
-	        </div>
-	    {% endfor %}
-	  <input type="submit" class='btn btn-primary' value="Submit" />
-	  <a class="btn" href="/" data-dismiss="modal">Cancel</a>
-	  </form>
+		    	<br><input type="submit" class='btn btn-info' value="Submit" />
+		  		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
+		  	</form>
 	</div>
-	<dic class="span7">
-	</div>	
+		</div>
+		
+	</div>
+<hr>
+		<div  class="span" style="font-size: 18px; "><strong style="font-size: 22px">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <strong>PhoneLab. Only at UB CSE.</strong>
+			
+
+		<br><br>PhoneLab is an open-access large-scale participatory smartphone testbed located at SUNY Buffalo.
+
+		
+		<br>
+		<p style="font-size: 18px;">
+			In exchange for participation you will receive:
+			<ul>
+				<li><strong><i>Free</i></strong> unlimited voice, data, and messaging for one year</li>
+				<li><strong><i>Free</i></strong>  Nexus S smartphone</li>
+				<li>Discounted service in future years</li>
+				<li>Over $2,000 in estimated savings over four years</li>
+				<li>The chance to participate in ongoing smartphone research</li>
+			</ul>
+		</p>
+
+	  
+	</div>
+	
 	{% endif %}
 	   
 	{% endblock %}
