@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from users.models import UserProfile, Participant
 from django.shortcuts import get_object_or_404
+from django.forms.widgets import RadioSelect 
  
 """
 RigistrationForm
@@ -14,8 +15,7 @@ RigistrationForm
 class RegistrationForm(forms.Form):
 
   CHOICE = (
-    (u'L',u'Leader'), 
-    (u'M', u'Member'),
+    (u'E',u'Experimenter'), 
     (u'P', u'Participant'),
   )
 
@@ -29,7 +29,7 @@ class RegistrationForm(forms.Form):
     label=u'Confirm your password',
     widget=forms.PasswordInput()
   )
-  
+  user_type = forms.ChoiceField(choices=CHOICE)
   def clean_username(self):
     username = self.cleaned_data['username']
     if not re.search(r'^\w+$', username):
@@ -64,10 +64,18 @@ Particiapnt email list
 
 @author Manoj
 """
-
+STUDENT_CHOICES = (
+  (u'F', u'Freshman'),
+  (u'SO', u'Sophomore'),
+  (u'J', u'Junior'),
+  (u'SE', u'Senior'),
+  (u'G', u'Graduate'),
+  (u'P', u'PhD'),
+  )
 class ParticipantForm(forms.Form):
   name =forms.CharField(label=u'Full Name', max_length=50)
   email = forms.EmailField(label=u'Email')
+  student_status = forms.ChoiceField(choices=STUDENT_CHOICES, label=u'During 2012-2013 you will be?')
 
   def clean_email(self):
     email = self.cleaned_data['email']
@@ -76,6 +84,9 @@ class ParticipantForm(forms.Form):
     except Participant.DoesNotExist:
       return email
     raise forms.ValidationError('The email "%s" has already been registered. Thank You!' % email)
+
+  
+    
 
 
 

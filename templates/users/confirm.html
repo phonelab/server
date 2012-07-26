@@ -1,64 +1,32 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block title %}User Signup Confirmation{% endblock %}
-    {% block content %}
-      <div class="page-header">
-        <h1>User Registration</h1>
+{% block content %}
+  <div class="page-header">
+  <h1>User Registration</h1>
+  </div>
+  <div class="div8">
+    {% if has_account %}
+      <div class="alert alert-info">
+        <a class="close" data-dismiss="alert">&times;</a>
+        <strong>The account has already been activated. The username is "{{ req_user.username }}"</strong>
       </div>
-   
-     <div class="div8">
-     {% if has_account %}
-       <div class="alert alert-info">
-       <a class="close" data-dismiss="alert">&times;</a>
-       <strong>The account has already been activated. The username is "{{ req_user.username }}"</strong>
-       </div>
-     {% elif expired %}
-       <div class="alert alert-error">
-       <a class="close" data-dismiss="alert">&times;</a>
-       <p><strong>The activation key has been expired</strong><br><br>
-       <a href="/" class="btn btn-danger">Home</a>
-       </p>
+    {% elif expired %}
+      <div class="alert alert-error">
+        <a class="close" data-dismiss="alert">&times;</a>
+        <p><strong>The activation key has been expired</strong><br><br>
+        <a href="/" class="btn btn-danger">Home</a>
+        </p>
       </div>
-     {% else %}
-      {% if user_type == 'L' %}
-        {% if activated %}
-          <div class="alert alert-success">
-            <a class="close" data-dismiss="alert">&times;</a> 
-            <p><strong>Activation Success</strong><br><br>
-            Your account is active.<br>
-            Please, login <br>
-            <a href="/login" class="btn btn-success">Log In</a>
-            </p>
-          </div>
-        {% else %}
-          <div class="alert alert-success">
-            <a class="close" data-dismiss="alert">&times;</a>
-            <p><strong>Activation Success</strong><br><br>
-            Authorization email has been sent to {{ req_user.email }}.<br>
-            Thank You <br>
-            </p>
-          </div>
-        {% endif %}
-      {% elif user_type == 'M' %}
-        {% if activated %}
-          <div class="alert alert-success">
-            <a class="close" data-dismiss="alert">&times;</a>
-            <p><strong>Activation Success</strong><br><br>
-            Your account is active.<br>
-            Please, login <br>
-            <a href="/login" class="btn btn-success">Log In</a>
-            </p>
-          </div>
-        {% else %}
-          <div class="alert alert-success">
-            <a class="close" data-dismiss="alert">&times;</a>
-            <p><strong>Activation Success</strong><br><br>
-            Authorization email has been sent to {{ req_user.email }}.<br>
-            Thank You <br>
-            </p>
-          </div>
-        {% endif %}
-     {% endif %}
+    {% else activated %}
+      <!-- {% if user_type == 'L' %} -->
+      <div class="alert alert-success">
+        <a class="close" data-dismiss="alert">&times;</a> 
+        <p><strong>Activation Success</strong><br><br>
+          Your account is active.<br>
+          Please, login <br>
+          <a href="/login" class="btn btn-success">Log In</a>
+        </p>
+      </div>
     {% endif %}
-     </div>
-  
+  </div>
 {% endblock %}

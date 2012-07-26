@@ -62,10 +62,10 @@ def send_email(modeladmin, request, queryset):
     queryset.update(approved=1)
 
 class ParticipantAdmin(admin.ModelAdmin):
-  list_display = ('name', 'email', 'submitted_time', 'approved')
+  list_display = ('name', 'email', 'submitted_time', 'student_status')
   search_fields = ['email', 'name']
-  list_filter = ['approved']
-  actions = [send_email]
+  list_filter = ['student_status']
+  #actions = [send_email]
   # list_display_links = ['send_email']
 admin.site.register(Participant, ParticipantAdmin)
 

@@ -15,7 +15,6 @@
        </div>
      {% elif created %}
     
-      {% if user_type == "P" %}
        <div class="alert alert-success">
         <a class="close" data-dismiss="alert">&times;</a>
         <p><strong>Verify Your Email Address</strong><br><br>
@@ -25,42 +24,10 @@
         <a href="/" class="btn btn-success">Home</a>
         </p>
        </div>
-       {% elif user_type == "L" %}
-        <div class="alert alert-success">
-          <a class="close" data-dismiss="alert">&times;</a>
-          <p><strong>Requires Administrator authorization</strong><br><br>
-       
-          An authorization request has been sent to the administrator. Please check {{ mail }} for the confirmation. Thank You<br>
-          <a href="/" class="btn btn-success">Home</a>
-          </p>
-        </div>
-        {% elif user_type == "M" %}
-         <div class="alert alert-success">
-          <a class="close" data-dismiss="alert">&times;</a>
-          <p><strong>Requires Leader authorization</strong><br><br>
-       
-          An authorization request has been sent to the Leader. Please check {{ mail }} for the confirmation. Thank You<br>
-          <a href="/" class="btn btn-success">Home</a>
-          </p>
-         </div>
-        {% endif %}
-        {% elif not_leader %} 
-          <div class="alert alert-success">
-            <a class="close" data-dismiss="alert">&times;</a>
-            <p>Please Check you leader's username. The User {{ leader_name }} is not a leader of any registered experiment</p>
-          </div>
-          <a onclick="history.back()" class="btn">Back</a>
-        {% elif no_such_user %}
-          <div class="alert alert-success">
-            <a class="close" data-dismiss="alert">&times;</a>
-            <p>Please Check your leader's username. {{ leader_name }}, is not a leader of any registered experiment.</p>
-          </div>
-          <a onclick="history.back()" class="btn">Back</a>
-        
 
      {% else %}
         
-        <form method="post" action="." onclick="participant()">
+        <form method="post" action=".">
           {% csrf_token %}
           <table class = "table table-striped" id="reg_table">
             <tbody>
@@ -74,7 +41,4 @@
        </form>
      {% endif %}
      </div>
-{% endblock %}
-{% block js %}
-<script src="{{STATIC_URL}}js/participant_registration.js"></script>
 {% endblock %}

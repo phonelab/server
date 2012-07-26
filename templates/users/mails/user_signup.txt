@@ -1,8 +1,6 @@
 {% load url from future %}
-Hello, {{ user }}, thank you for signing up for an phone-lab.org account!
-
-Your Group name: {{ group.name }}
+Hello, {{ user.username }}, thank you for signing up for an phone-lab.org account!
 
 To activate your account, click this link within 48 hours:
 
-http://{{ site_name }}/accounts/confirm/{{ key}}
+http://{{ site_name }}/accounts/confirm/{{ key }}

@@ -41,7 +41,8 @@ def participant(request):
 
       participant = Participant(
                   name = form.cleaned_data['name'],
-                  email = form.cleaned_data['email']
+                  email = form.cleaned_data['email'],
+                  student_status = form.cleaned_data['student_status']
       )
 
       participant.save()
@@ -91,66 +92,34 @@ def register(request):
     form = RegistrationForm(request.POST)
     if form.is_valid(): 
       # Find the user type
+      user = form.save(form)
       user_type = form.cleaned_data['user_type']
-      
-      if(user_type=='L'):
-        groupname = form.cleaned_data['groupname']
-        user = form.save(form)
-        # Build the activation key for their account                                                                                                                    
-        salt = hashlib.md5(str(random.random())).hexdigest()[:5]
-        activation_key = hashlib.md5(salt+user.username).hexdigest()
-        key_expires = datetime.today() + timedelta(2)
-        new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
-        current_site = Site.objects.get_current()
+      # Build the activation key for their account                                                                                                                    
+      salt = hashlib.md5(str(random.random())).hexdigest()[:5]
+      activation_key = hashlib.md5(salt+user.username).hexdigest()
+      key_expires = datetime.today() + timedelta(2)
+      new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
+      current_site = Site.objects.get_current()
  
-        EMAIL_SUBJECT = 'Signup Authorization for an experiment Leader'
-        c = Context({'user': user.username, 'group': groupname, 'email':user.email, 'key': new_profile.activation_key, 'site_name': current_site})
-        EMAIL_BODY = (loader.get_template('users/mails/leader_request.txt')).render(c)
-        TO_EMAIL = [admin_mail]
-        send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+      EMAIL_SUBJECT = 'Phonelab Email Verification'
+      c = Context({'user': user, 'key': new_profile.activation_key, 'site_name': current_site})
+      EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
+      TO_EMAIL = [user.email]
+      send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
       
-        # Create and save their profile                                                                                                                                 
-        new_profile.save()
+      # Create and save their profile                                                                                                                                 
+      new_profile.save()
         
-        return render_to_response(
-                'users/register.html',
-                { 'created': True,
-                'user_type': user_type,
-                'mail'   : user.email },
-                context_instance=RequestContext(request)
-              )
+      return render_to_response(
+              'users/register.html',
+              { 'created': True,
+              'user_type': user_type,
+              'mail'   : user.email },
+              context_instance=RequestContext(request)
+            )
 
 
-      elif(user_type=='M'):
-        
-
-        # Experiment leader name
-        group = form.cleaned_data['groupname']
-        leader_profile = get_object_or_404(UserProfile, group=group, user_type='L' )
-        leader = leader_profile.user
-        user = form.save(form)
-        # Build the activation key for their account                                                                                                                    
-        salt = hashlib.md5(str(random.random())).hexdigest()[:5]
-        activation_key = hashlib.md5(salt+user.username).hexdigest()
-        key_expires = datetime.today() + timedelta(2)
-        new_profile = UserProfile(user=user, activation_key=activation_key, key_expires=key_expires, user_type = user_type)
-        current_site = Site.objects.get_current()
-
-        EMAIL_SUBJECT = 'Phonelab: Member request for '+ group.name
-        c = Context({'user': user.username, 'email':user.email, 'group': group.name, 'leader_name':leader.username, 'key': new_profile.activation_key, 'site_name': current_site})
-        EMAIL_BODY = (loader.get_template('users/mails/member_request.txt')).render(c)
-        TO_EMAIL = [leader.email]
-        send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
       
-        # Create and save their profile                                                                                                                                 
-        new_profile.save()
-        return render_to_response(
-                'users/register.html',
-                { 'created': True,
-                'user_type': user_type,
-                'mail'   : user.email },
-                context_instance=RequestContext(request)
-              )
   else:
     form = RegistrationForm()
        
@@ -231,54 +200,28 @@ Email activation
 """
 
 def confirm(request, activation_key):
-  user_profile = get_object_or_404(UserProfile, activation_key=activation_key)
-  user = user_profile.user
-
-  if user.is_active:
+  
+  if request.user.is_authenticated():
     return render_to_response(
              'users/confirm.html', 
-             {'has_account': True,
-              'req_user': user},
+             {'has_account': True},
              context_instance=RequestContext(request)
            )
   
-  if user_profile.key_expires < datetime.today():
+  userprofile = get_object_or_404(UserProfile, activation_key=activation_key)
+  if userprofile.key_expires < datetime.today():
     return render_to_response(
              'users/confirm.html', 
              {'expired': True},
              context_instance=RequestContext(request)
            )
 
-  if user_profile.user_type == 'M':
-    user.is_active = True
-    user.save()
-    return render_to_response(
-           'users/confirm.html',
-           {'req_user': user,
-           'activated': True,
-           'user_type': user_profile.user_type},
-           context_instance=RequestContext(request)
-          )
-
-  if user_profile.user_type == 'L':
-    user.is_active = True
-    user.save()
-    return render_to_response(
-           'users/confirm.html',
-           {'req_user': user,
-           'activated': True,
-           'user_type': user_profile.user_type},
-           context_instance=RequestContext(request)
-          )
-
-
-  
+  userprofile.user.is_active = True
+  userprofile.user.save()
   return render_to_response(
-           'users/confirm.html', 
-           {'activated': True,
-            'user_type': user_profile.user_type},
-           context_instance=RequestContext(request)
-           )
+          'users/confirm.html', 
+          {'activated': True,}
+         )
   
 
 
@@ -304,7 +247,7 @@ def profile(request):
     # get UserProfile with user foreignkey
     userprofile = UserProfile.objects.get(user=request.user)
 
-    if userprofile.user_type == 'P':
+    if userprofile.user_type == 'E':
       # get DeviceProfile with devprofile foreignkey
       devices = DeviceProfile.objects.filter(user=request.user)
 
@@ -313,20 +256,19 @@ def profile(request):
       devprofiles = DeviceProfile.objects.all()
 
     #get group its leader and members and its devices
-    if(userprofile.user_type== 'M' or userprofile.user_type=='L'):
+    if(userprofile.user_type== 'E'):
 
       # get group information
-      group = Group.objects.get(user = request.user)
-      devices = DeviceProfile.objects.filter(group=group)
+      devices = DeviceProfile.objects.all()
       no_of_devices = devices.count()
-      leader = get_object_or_404(UserProfile, user_type='L', group=group) 
-      no_of_members = UserProfile.objects.filter(user_type='M', group=group).count()
-      apps = Application.objects.filter(group=group)
+      # leader = get_object_or_404(UserProfile, user_type='L', group=group) 
+      # no_of_members = UserProfile.objects.filter(user_type='M', group=group).count()
+      # apps = Application.objects.filter(group=group)
 
       #get the availble no of devices
       available_devices = DeviceProfile.objects.filter(status='W').exclude(dev__in=devices)
       #get experiment information
-      experiments = Experiment.objects.filter(group=group).order_by('id')
+      # experiments = Experiment.objects.filter(group=group).order_by('id')
       
     return render_to_response(
              'users/profile.html', 

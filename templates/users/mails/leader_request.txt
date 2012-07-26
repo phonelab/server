@@ -1,11 +1,10 @@
 {% load url from future %}
-Hello Admin,
+Hello {{user.username}},
 
 The following user requires authorization to start an experiment group
 
-Group Name: {{ group }}
-Username: {{ user }}
-Email: {{ email }} 
+Username: {{ user.username }}
+Email: {{ user.email }} 
 
 Please click the following link to authorize the user.
 
