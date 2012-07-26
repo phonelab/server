@@ -150,3 +150,22 @@ class DeviceProfile(models.Model):
 #For Admin display
   def dev_meid(self):
     return self.dev.meid
+
+
+
+"""
+Class DeviceStatus
+
+@data 07/23/2012
+@author TKI
+"""
+class DeviceStatus(models.Model):
+  STATUS_CHOICES = (
+    (u'H', u'Heartbeat'),
+    (u'O', u'OTA feedback'),
+    (u'R', u'Reserved'),
+  )
+  dev                = models.ForeignKey(Device, unique=True)
+  status_type        = models.CharField(max_length=1, choices=STATUS_CHOICES)
+  status_value       = models.CharField(max_length=1, null=False)
+  timestamp          = models.DateTimeField(blank=True, null=True)

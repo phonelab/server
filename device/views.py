@@ -11,7 +11,7 @@ from datetime import datetime
 from users.forms import ParticipantForm
 
 #from manifest.views import *
-from device.models import Device, DeviceApplication, DeviceProfile
+from device.models import Device, DeviceApplication, DeviceProfile, DeviceStatus
 from users.models import UserProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
@@ -519,6 +519,64 @@ def insert_or_update_deviceapplication(request):
           'msg': 'invalid application'
         }
         return json_response_from(response)
+  # device does not exist
+  except Device.DoesNotExist:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'invalid device'
+      }
+    return json_response_from(response)
+  
+  return json_response_from(response)
+
+"""
+Update DeviceStatus DB [POST]
+@date 07/26/2012
+
+@param device_id
+@param status_type (0: heart beat, 1: OTA feedback, 2: reserved)
+@param status_value (0 => 0: no problem , 1: There is some wrong)
+@param status_value (1 => )
+
+# Insert DeviceApplication DB using POST method
+# curl -X POST -d "device_id=A000002A000000&status_type=H&status_value=0" http://107.20.190.88/devicestatus/
+# curl -X POST -d "device_id=A000002A000000&status_type=H&status_value=0" http://localhost:8000/devicestatus/
+
+@author TKI
+"""
+def device_status(request): 
+  # define default response
+  response = { "error": "", "data": "" }
+  # return if GET request
+  if request.method == 'GET':
+    response['error'] = {
+      'no' : 'err0',
+      'msg': 'sorry no gets'
+    }
+    return json_response_from(response)
+  # params checking
+  if not (request.POST.has_key('device_id') and request.POST.has_key('status_type') \
+          and request.POST.has_key('status_value'):
+    response['error'] = {
+      'no' : 'err1',
+      'msg': 'missing mandatory params'
+    }
+    return json_response_from(response)
+
+  # data check
+  try:
+    dev = Device.objects.get(meid=request.POST['device_id'])
+	  if request.POST.[status_type] == 'H':
+      devicestatus = DeviceStatus.objects.get(dev=dev)
+      devicestatus.
+      devicestatus.timestamp = datetime.now()
+      
+	  if request.POST.[status_type] == 'O':
+	  if request.POST.[status_type] == 'R':
+
+
+
+
   # device does not exist
   except Device.DoesNotExist:
     response['err'] = {
