@@ -556,7 +556,7 @@ def device_status(request):
     return json_response_from(response)
   # params checking
   if not (request.POST.has_key('device_id') and request.POST.has_key('status_type') \
-          and request.POST.has_key('status_value'):
+          and request.POST.has_key('status_value')):
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
@@ -566,16 +566,16 @@ def device_status(request):
   # data check
   try:
     dev = Device.objects.get(meid=request.POST['device_id'])
-	  if request.POST.[status_type] == 'H':
-      devicestatus = DeviceStatus.objects.get(dev=dev)
-      devicestatus.
-      devicestatus.timestamp = datetime.now()
-      
-	  if request.POST.[status_type] == 'O':
-	  if request.POST.[status_type] == 'R':
-
-
-
+    print request.POST['status_type']
+    print request.POST['status_value']
+    if request.POST['status_type'] == "H":
+      devicestatus = DeviceStatus(
+        dev          = dev,
+        status_type  = request.POST['status_type'],
+        status_value = request.POST['status_value'],
+        timestamp    = datetime.now()
+      )
+      devicestatus.save()  
 
   # device does not exist
   except Device.DoesNotExist:
