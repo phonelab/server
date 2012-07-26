@@ -99,11 +99,11 @@ def show(request, deviceId, logFilename):
 
   if is_valid_device(user, deviceId):
     # get device  
-    device = Device.objects.filter(meid=deviceId)
+    device = Device.objects.filter(id=deviceId)
     # if device exists, update  
     if device.count() == 1:
       # generate file name    
-      filename = os.path.join(RAW_LOG_ROOT, deviceId, logFilename + ".log")		
+      filename = os.path.join(RAW_LOG_ROOT, device[0].meid, logFilename + ".log")		
       if os.path.isfile(filename):			
         # open log file
         Logfile = open(filename, 'r+')

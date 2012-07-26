@@ -83,7 +83,7 @@
       <div class="well">
         <p>
         {% for file in filelist %}
-        <a href="/device/{{device.meid}}/{{file}}">{{ file }}</a><br>
+        <a href="/device/{{device.id}}/{{file}}">{{ file }}</a><br>
 	      {% empty %} There is no log file.
         {% endfor %}
 	      </p>
