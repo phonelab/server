@@ -32,23 +32,27 @@ def download_manifest(request, deviceId):
   response = { "error": "", "data": "" }
   try:
     #if device exists
-    dev = Device.objects.get(id=deviceId) 
+    dev = Device.objects.get(meid=deviceId) 
     app_list = {}
     apps = {}
     tags = {}
     # get apps of particular device
-    for o in TransactionDevApp.objects.filter(dev=dev.id).filter(result="N").values('app', 'action'):
+    print dev
+    for o in TransactionDevApp.objects.filter(dev=dev).filter(result="N").values('app', 'action'):
     # get list of apps to download
       for app in Application.objects.filter(id=o['app']):
         if o['action'] == "I":
           apps[app.id] = {"app_object": app, "app_status": "install"}
         else:  
           apps[app.id] = {"app_object": app, "app_status": "uninstall"}
+      print "Here" 
     #get tag names from experiments
-    deviceprofile = DeviceProfile.objects.get(dev=dev)
-    for group in deviceprofile.group.all():
-      for experiment in Experiment.objects.filter(group=group.id):
-        tags[group.id] = experiment.tag
+      for dev in Experiment.dev.all():
+        print dev.meid
+#    deviceprofile = Experiment.objects.get(dev=dev)
+#    for device in deviceprofile.group.all():
+#      for experiment in Experiment.objects.filter(=group.id):
+#        tags[group.id] = experiment.tag
       
     return render(
       request,
