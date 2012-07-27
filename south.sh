@@ -29,7 +29,6 @@ then
   python manage.py schemamigration app.experiment --auto
   python manage.py schemamigration app.transaction --auto
   python manage.py schemamigration app.users --auto
-  mkdir test
 elif [ "$1" == "migrate" ]
 then
   python manage.py migrate app.application
