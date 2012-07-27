@@ -214,14 +214,14 @@ def create_or_update_application(request):
       fileHandle.close()
       #pulling package name from apk file
       #apktool extract apk file to a directory
-      os.system('bin/apktool d ' + filename)
-      with open(str(app.id) + '/AndroidManifest.xml', 'rt') as f:
-        tree = ElementTree.parse(f)
-      for node in tree.iter('manifest'):
-        package = node.attrib.get('package')
-      Application.objects.filter(id=app.id).update(package_name=package)
+#      os.system('bin/apktool d ' + filename)
+#      with open(str(app.id) + '/AndroidManifest.xml', 'rt') as f:
+#        tree = ElementTree.parse(f)
+#      for node in tree.iter('manifest'):
+#        package = node.attrib.get('package')
+#      Application.objects.filter(id=app.id).update(package_name=package)
       #remove the directory 
-      os.system('rm -rf ' + str(app.id))
+#      os.system('rm -rf ' + str(app.id))
       # success msg
       response['data'] = "done"
     else:

@@ -22,6 +22,7 @@ class Transaction(models.Model):
 #  status             = models.CharField(max_length=1, choices=STATUS_CHOICES, null=False)
   start              = models.DateTimeField(auto_now_add=True)
   end                = models.DateTimeField(blank=True, null=True)
+  processed          = models.BooleanField(default=False)
 # last_manifest_send = models.DateTimeField()
   def __unicode__(self):
     return str(self.id)

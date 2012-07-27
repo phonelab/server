@@ -147,6 +147,7 @@ class DeviceProfile(models.Model):
   purpose            = models.CharField(max_length=2, choices=PURPOSE_CHOICES)
   service_type       = models.CharField(max_length=1, choices=TYPE_CHOICES)
   install_permission = models.BooleanField(default=False)
+  battery_load       = models.IntegerField(blank=True, null=True)
 #For Admin display
   def dev_meid(self):
     return self.dev.meid

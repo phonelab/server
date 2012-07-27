@@ -4,6 +4,12 @@ from application.models import Application
 from device.models import Device
 
 class Experiment(models.Model):
+  def irb_count():
+    no = Experiment.objects.count()
+    if no == None:
+      return 1
+    else:
+      return no + 1
 #  group       = models.ForeignKey(Group)
   user        = models.ManyToManyField(User)
   dev         = models.ManyToManyField(Device)
@@ -13,6 +19,8 @@ class Experiment(models.Model):
   tag         = models.CharField(max_length=10, null=False)
   period      = models.CharField(max_length=5, null=False)
   active      = models.BooleanField(default=False)
+  irb         = models.IntegerField(default=irb_count)
+  
 
 class ExperimentProfile(models.Model):
   experiment  = models.ForeignKey(Experiment)
