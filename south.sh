@@ -29,6 +29,7 @@ then
   python manage.py schemamigration app.experiment --auto
   python manage.py schemamigration app.transaction --auto
   python manage.py schemamigration app.users --auto
+  echo "finishing schemamigration"
 elif [ "$1" == "migrate" ]
 then
   python manage.py migrate app.application
