@@ -330,7 +330,7 @@ def update(request, userId):
     user.save()
     userprofile.save()
     # redirect to /accounts/profile/userId
-    return HttpResponseRedirect('/accounts/profile/' + userId)
+    return HttpResponseRedirect('/accounts/profile/')
 # User does not exist
   except User.DoesNotExist: 
     response['err'] = {

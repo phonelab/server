@@ -33,16 +33,13 @@ def index(request):
 
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
-	group = userprofile.group
-
-	experiments = Experiment.objects.filter(group=group).order_by('id')
+	
+	experiments = Experiment.objects.filter(user=user).order_by('id')
 
 	return render_to_response(
 			'experiment/exp_page.html',
 			{
-			 'user': user,
 			 'userprofile': userprofile,
-			 'group': group,
 			 'experiments':experiments
 			},
 			context_instance=RequestContext(request)
@@ -62,18 +59,10 @@ def new(request):
 	exp = Experiment()
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
-  	members = UserProfile.objects.filter(group=userprofile.group, user_type = 'M')
-  	apps = Application.objects.filter(group=userprofile.group)
-  	devices = DeviceProfile.objects.filter(group=userprofile.group)
   	# query the database for all applications
   	return render_to_response(
     	  	'experiment/new_exp_form.html', 
     	  	{
-    	  	'group': userprofile.group,
-        	'members': members,
-        	'devices'  : devices,
-        	'apps': apps,
-       	 	'exp': exp,
        	 	'userprofile': userprofile
       	  	},
       		context_instance=RequestContext(request)

@@ -67,7 +67,7 @@ def index(request):
   if userprofile.user_type == 'A':
     device_profiles = DeviceProfile.objects.all()
 
-  if userprofile.user_type == 'M' or userprofile.user_type == 'L':
+  if userprofile.user_type == 'E':
     device_profiles = DeviceProfile.objects.filter(group = userprofile.group)
     
   for device in device_profiles:
@@ -76,7 +76,6 @@ def index(request):
   return render_to_response(
             'device/index.html', 
             {    
-#                'group': userprofile.group,
                 'userprofile': userprofile,
                 'devices': devices
             },   
