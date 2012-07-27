@@ -14,7 +14,7 @@ def production():
 
 def move():
   stop()
-  with cd('/home/ec2-user/server')
+  with cd('/home/ec2-user/server'):
     run('./south.sh convert')
   run('rm -rf server')
   run("git clone git://github.com/phonelab/server.git")
