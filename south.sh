@@ -12,18 +12,18 @@ then
   python manage.py convert_to_south app.experiment
   python manage.py convert_to_south app.transaction
   python manage.py convert_to_south app.users
-  mv server/application/migrations /home/ec2-user/application/migrations
-  mv server/device/migrations /home/ec2-user/device/migrations
-  mv server/experiment/migrations /home/ec2-user/experiment/migrations
-  mv server/transaction/migrations /home/ec2-user/application/transaction/migrations
-  mv server/users/migrations /home/ec2-user/application/users/migrations
+  mv /home/ec2-user/server/application/migrations/ /home/ec2-user/south/application/
+  mv /home/ec2-user/server/device/migrations/ /home/ec2-user/south/device/
+  mv /home/ec2-user/server/experiment/migrations/ /home/ec2-user/south/experiment/
+  mv /home/ec2-user/server/transaction/migrations/ /home/ec2-user/south/transaction/
+  mv /home/ec2-user/server/users/migrations/ /home/ec2-user/south/users/
 elif [ "$1" == "schemamigration" ]
 then
-  mv /home/ec2-user/application/migrations server/application/migrations 
-  mv /home/ec2-user/device/migrations server/device/migrations
-  mv /home/ec2-user/experiment/migrations server/experiment/migrations
-  mv /home/ec2-user/transaction/migrations server/transaction/migrations
-  mv /home/ec2-user/users/migrations server/users/migrations
+  mv /home/ec2-user/south/application/migrations/ /home/ec2-user/server/application/
+  mv /home/ec2-user/south/device/migrations/ /home/ec2-user/server/device/
+  mv /home/ec2-user/south/experiment/migrations/ /home/ec2-user/server/experiment/
+  mv /home/ec2-user/south/transaction/migrations/ /home/ec2-user/server/transaction/
+  mv /home/ec2-user/south/users/migrations/ /home/ec2-user/server/users/
   python manage.py schemamigration app.application --auto
   python manage.py schemamigration app.device --auto
   python manage.py schemamigration app.experiment --auto
