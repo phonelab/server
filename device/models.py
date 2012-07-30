@@ -166,7 +166,7 @@ class DeviceStatus(models.Model):
     (u'O', u'OTA feedback'),
     (u'R', u'Reserved'),
   )
-  dev                = models.ForeignKey(Device, unique=True)
+  dev                = models.ForeignKey(Device)
   status_type        = models.CharField(max_length=1, choices=STATUS_CHOICES)
   status_value       = models.CharField(max_length=1, null=False)
   timestamp          = models.DateTimeField(blank=True, null=True)

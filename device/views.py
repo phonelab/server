@@ -566,9 +566,14 @@ def device_status(request):
   # data check
   try:
     dev = Device.objects.get(meid=request.POST['device_id'])
-    print request.POST['status_type']
-    print request.POST['status_value']
     if request.POST['status_type'] == "H":
+#      devicestatus = DeviceStatus.objects.filter(dev=dev)
+#      if devicestatus:
+#        devicestatus.status_type = request.POST['status_type']
+#        devicestatus.status_value = request.POST['status_value']
+#        devicestatus.timestamp = datetime.now()
+#      else:
+#        print "here"
       devicestatus = DeviceStatus(
         dev          = dev,
         status_type  = request.POST['status_type'],
@@ -585,4 +590,6 @@ def device_status(request):
       }
     return json_response_from(response)
   
+  # device
+  response['data'] = dev.meid
   return json_response_from(response)
