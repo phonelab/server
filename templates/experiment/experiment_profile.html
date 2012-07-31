@@ -2,28 +2,34 @@
 
 {% block content %}
 <br><br>
+{% if no_member %}
+<div class='alert alert-danger'>
+Sorry! No such registered user!
+</div>
+{% endif %}
+{% if success %}
+<div class='alert alert-success'>
+An invite has been sent to the user. Thank You!
+</div>
+{% endif %}
   <div class="well">
     <h2>Experiment Profile: {{experiment.name}} {% if userprofile.user_type == 'E' %} (<a data-toggle="modal" href="#exp_edit">Edit</a>){% endif %} </h2>
     <table class="table table-bordered table-striped">
       <tbody>
         <tr>
-          <td><strong>Leader Name: </strong></td>
-          <td>{{ leader.username }}</td>
-        </tr>
-        <tr>
           <td><strong>Members ({{experiment.user.count}}): </strong></td>
           <td>
+            <a data-toggle='modal' class='btn btn-primary btn-mini pull-right' href='#invite_member'>Invite Member</a>
           	{% for member in experiment.user.all %}
           		{{member}}<br>
 			      {% endfor %}
+
           </td>
         </tr>
         <tr>
-        	<td><strong>Devices ({{experiment.dev.count}}):</strong></td>
+        	<td><strong>Devices:</strong></td>
         	<td>
-        		{% for device in experiment.dev.all %}
-        			<a href="/device/{{device.id}}">{{device}}</a><br> 
-        		{% endfor %}
+        		{{experiment.dev.count}} 
 
         	</td>	
         </tr>
@@ -39,6 +45,20 @@
      </table>
      
    </div><!-- well -->
+   <div class='modal fade' id='invite_member'>
+    <form class='modal-form' method='POST' action='/experiment/add_member/{{experiment.id}}/'>
+    <div class='modal-header'>
+      <h3>Invite Member</h3>
+    </div>
+    <div class='modal-body'>
+      Member Username: <input type='text' name='member' id='id_member'>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Add">
+      <a href="." class="btn">Cancel</a>
+    </div>
+   </div>
+
    <div class="modal fade" id="exp_edit">
     <div class="modal-header">
       <h3>Experiment Profile: <a href="/experiment/{{experiment.id}}/"> {{experiment.name}}</a> </h3>
@@ -61,6 +81,9 @@
 <script type="text/javascript">
 //initialize modal
 $('#add_member').modal('{
+  keyboard: false
+}')
+$('#invite_member').modal('{
   keyboard: false
 }')
 </script>

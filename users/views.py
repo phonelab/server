@@ -249,10 +249,6 @@ def profile(request):
     # get UserProfile with user foreignkey
     userprofile = UserProfile.objects.get(user=request.user)
 
-    if userprofile.user_type == 'E':
-      # get DeviceProfile with devprofile foreignkey
-      devices = DeviceProfile.objects.filter(user=request.user)
-
     if userprofile.user_type == 'A':
       #get all devices
       devprofiles = DeviceProfile.objects.all()
@@ -263,10 +259,7 @@ def profile(request):
       # get group information
       devices = DeviceProfile.objects.all()
       no_of_devices = devices.count()
-      # leader = get_object_or_404(UserProfile, user_type='L', group=group) 
-      # no_of_members = UserProfile.objects.filter(user_type='M', group=group).count()
-      # apps = Application.objects.filter(group=group)
-
+      experiments = Experiment.objects.filter(user=request.user)
       #get the availble no of devices
       available_devices = DeviceProfile.objects.filter(status='W').exclude(dev__in=devices)
       #get experiment information

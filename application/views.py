@@ -118,7 +118,6 @@ def show(request, appId):
     return render_to_response(
   		'application/show.html', 
   		{
-        'group': userprofile.group,
         'userprofile': userprofile,
   			'app' : app,
         'devs': devs

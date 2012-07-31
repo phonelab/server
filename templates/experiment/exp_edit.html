@@ -8,9 +8,8 @@
           	<tr>
     			<td><strong>Members: </strong></td>
     			<td>
-        			{% for member in members_to_add %}
-          				<input type='checkbox' id='members' name='members' value='{{member.user}}' {{ member.user }} />
-          				{{member.user}}
+        			{% for member in experiment.user.all %}
+          				{{member}}
           				{% if forloop.counter|divisibleby:"3" %}
             			</tr><tr>
           				{% endif %}
@@ -22,23 +21,15 @@
             <tr>
     			<td><strong>Devices: </strong></td>
     			<td>
-        			{% for dev in devices_to_add %}
-          			<input type='checkbox' id='dev' name='devs' value='{{dev.dev.id}}' {{ dev.get_active_display }} /> 
-          			<a href="/device/{{dev.dev.id}}">{{dev.dev.id}}</a>
-          			{% if forloop.counter|divisibleby:"3" %}
-            			</tr><tr>
-          			{% endif %}
-        			{% empty %}
-        				No devices
-        			{% endfor %}
+          		
+              	{{experiment.dev.count}}</a>
     			</td>
       		</tr>
       		<tr>
     			<td><strong>Applications: </strong></td>
     			<td>
-        			{% for app in apps_to_add %}
-          			<input type='checkbox' id='app' name='apps' value='{{app.id}}' {{ app.get_active_display }} /> 
-          			<a href="/application/{{app.id}}">{{app.name}}</a>
+        			{% for app in experiment.app.all %}
+          			<a href="/application/{{app.id}}">{{app.name}}</a><br>
           			{% if forloop.counter|divisibleby:"3" %}
             			</tr><tr>
           			{% endif %}

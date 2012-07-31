@@ -2,8 +2,9 @@
  {% block title %}PhoneLab Testbed Web Site{% endblock %}
  {% block content %}
  <h2>Create Experiment</h2>
+ <form class="form-horizontal" onsubmit="return ValidateForm(this);" method="post" action="/experiment/" enctype="multipart/form-data">
  <table class="table" id='NewExpTable'>
-  <form class="form-horizontal" onsubmit="return ValidateForm(this);" method="post" action="/experiment/" enctype="multipart/form-data">
+  
  	<tbody>
 		
 		<tr>
@@ -72,34 +73,16 @@
   }
 
   function addApplication() {
-    // var row = document.getElementById('id_approw');
+    var row = document.getElementById('id_approw');
     var table = document.getElementById('NewExpTable');
-    // var clone = row.cloneNode(true);
-    // rows = table.lastElementChild.getElementsByTagName('tr');
-    // appcount = rows.length - 5;
-    // // clone.name = 'approw';
-    // // clone.id = 'id_approw';
-    // fields = clone.lastElementChild.children;
-    // // fields[0].name = 'appname';
-    // // fields[0].id = 'appname';
-    // fields[0].value = '7.apk';
-    // // fields[1].name = 'appdesc';
-    // // fields[1].id = 'id_appdesc';
-    // fields[1].value = 'sdji,';
-    // // fields[2].name = 'apptype';
-    // // fields[2].id = 'id_apptype';
-    // fields[2].value = 'I';
-    // fields[4].parentNode.removeChild(fields[4]);
-    // table.lastElementChild.appendChild(row);
-
-    var row = document.createElement("tr")
-    var data1 = document.createElement("td")
-    data1.appendChild(document.createTextNode("Applications"))
-    var data2 = document.createElement("td")
-    data2.appendChild (document.createTextNode("Column2"))
-    row.appendChild(data1);
-    row.appendChild(data2);
-    tbody.appendChild(row);
+    var clone = row.cloneNode(true);
+    fields = clone.lastElementChild.children;
+    fields[0].value = '';
+    fields[1].value = '';
+    fields[2].value = '';
+    fields[4].parentNode.removeChild(fields[4]);
+    table.lastElementChild.appendChild(clone);
+    
   }
 
   function ValidateForm(form){
