@@ -42,7 +42,8 @@ def participant(request):
       participant = Participant(
                   name = form.cleaned_data['name'],
                   email = form.cleaned_data['email'],
-                  student_status = form.cleaned_data['student_status']
+                  student_status = form.cleaned_data['student_status'],
+                  submitted_time = datetime.now()
       )
 
       participant.save()

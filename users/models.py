@@ -45,7 +45,7 @@ class Participant(models.Model):
     )
   name           = models.CharField(max_length=50, null=False)
   email          = models.CharField(max_length=30, null=False)
-  submitted_time = models.DateTimeField(default=datetime.now())
+  submitted_time = models.DateTimeField()
   approved       = models.BooleanField(default=False)
   student_status = models.CharField(max_length=2, choices=STUDENT_CHOICES)
 

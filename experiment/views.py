@@ -8,6 +8,10 @@ from application.models import Application
 from device.models import DeviceProfile, Device
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from datetime import datetime
+import os, errno, mimetypes
+from django.conf import settings
+RAW_APP_ROOT = settings.RAW_APP_ROOT
 
 # usage: @user_passes_test(is_leader, login_url='/login')
 # usage: @user_passes_test(is_member, login_url='/login')
@@ -83,20 +87,20 @@ def show(request, expId):
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
 	experiment = Experiment.objects.get(id = expId)
-	leader_profile = UserProfile.objects.get(user_type='L', group=experiment.group)
+	leader_profile = UserProfile.objects.get(user=user)
 	leader = leader_profile.user
-	members_to_add = UserProfile.objects.filter(group=experiment.group, user_type='M').exclude(user__in=experiment.user.all())
-	devices_to_add = DeviceProfile.objects.filter(group=experiment.group).exclude(dev__in=experiment.dev.all())
-	apps_to_add = Application.objects.filter(group=experiment.group).exclude(id__in=experiment.app.all())
+	# members_to_add = UserProfile.objects.filter(group=experiment.group, user_type='M').exclude(user__in=experiment.user.all())
+	# devices_to_add = DeviceProfile.objects.filter(group=experiment.group).exclude(dev__in=experiment.dev.all())
+	# apps_to_add = Application.objects.filter(group=experiment.group).exclude(id__in=experiment.app.all())
 	return render_to_response (
 			'experiment/experiment_profile.html', 
   	  		{'user':user,
   	  		 'userprofile': userprofile,
-  	  		 'group': experiment.group,
+  	  		 # 'group': experiment.group,
   	  		 'leader': leader,
-  	  		 'members_to_add': members_to_add,
-  	  		 'devices_to_add': devices_to_add,
-  	  		 'apps_to_add': apps_to_add,
+  	  		 # 'members_to_add': members_to_add,
+  	  		 # 'devices_to_add': devices_to_add,
+  	  		 # 'apps_to_add': apps_to_add,
   	  		 'experiment': experiment },
       		context_instance=RequestContext(request)
     	  )
@@ -110,38 +114,103 @@ Create new experiment
 """
 
 def create_experiment(request):
-	user = request.user
-	userprofile = UserProfile.objects.get(user=user)
-	group = Group.objects.get(user=user)
-	leader = UserProfile.objects.get(user_type='L', group=group) 
+
+	# define default response
+	response = { "err": "", "data": "" }
+
+	#initialize a counter for apps
+	i = 0
+	j = 0
+
+	#initialize filename
+	filenames = {}
+	filedirs = {}
 
 	if request.POST:
+		# Save Experiment
 		exp = Experiment (
-			group = group,
-			name = request.POST['name'],
-			description = request.POST['desc'],
-			tag = request.POST['Tag']
+			name = request.POST['expname'],
+			description = request.POST['expdesc'],
+			tag = request.POST['exptag'],
+			period = request.POST['duration'],
 			)
 		exp.save()
+		exp.user.add(request.user)
 
-		members = request.POST.getlist('members')
-		devs = request.POST.getlist('devs')
-		apps = request.POST.getlist('apps')
+		
+		devs = Device.objects.all()
+		appnames = request.POST.getlist('appname')
+		appdescs = request.POST.getlist('appdesc')
+		apptypes = request.POST.getlist('apptype')
+		print appnames
+		print appdescs
+		print apptypes
 
-		for member in members:
-			exp.user.add(User.objects.get(username=member))
-
-		for dev in devs:
+		for dev in devs:	
 			exp.dev.add(dev)
 
-		for app in apps:
-			exp.app.add(app)
+		for app in appnames:
 
+			application = Application()
+	        application.user = request.user
+	        application.name = appnames[i]
+	        #package_name = params['package_name'],
+	        #intent_name  = params['intent_name'],
+	        application.description   = appdescs[i]
+	        application.type          = apptypes[i]
+	        application.active        = "E"
+	        #version      = params["version"],
+
+	    	application.save()
+	    	exp.app.add(application)
+
+	    	filename = os.path.join(RAW_APP_ROOT, str(application.id) + ".apk")
+	    	filedir = os.path.dirname(filename)
+	    	filenames[app] = filename
+	    	filedirs[app] = filedir
+	    	i+1
+
+		print filenames
+		print filedirs
 		exp.save()
-		exp_profile = ExperimentProfile (eid=exp)
+		exp_profile = ExperimentProfile (experiment=exp)
+		exp_profile.starttime = datetime.now()
+		exp_profile.endtime = datetime.now()
 		exp_profile.save()
 
-		return HttpResponseRedirect('/experiment/' + str(exp.id))
+		
+		print request.FILES.getlist('upload')
+
+		for afile in request.FILES.getlist('upload'):
+			print afile
+			# create folder for user if it doesn`t exist
+			try:
+				print appnames[j]
+				print filedirs[appnames[j]]
+				os.mkdir(filedirs[appnames[j]])
+			except OSError, e:
+				if e.errno != errno.EEXIST:
+				  print "some problem in creating dir"
+				  response['err'] = {
+				    'no' : 'err1', 
+				    'msg': 'cannot create dir, failed upload'
+				  }
+				  raise
+			# get file handle
+			fileHandle = open(filenames[appnames[j]], 'wb+')
+			# write it out
+			for chunk in afile.chunks():
+				#        print chunk
+				fileHandle.write(chunk)
+				# close file handle
+			fileHandle.close()
+			response['data'] = "done"
+			j+1
+	else:
+		response["err"] = "err1"
+
+
+	return HttpResponseRedirect('/experiment/' + str(exp.id))
 
 """
 Update Experiment Profile

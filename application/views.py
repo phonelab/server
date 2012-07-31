@@ -185,9 +185,7 @@ def create_or_update_application(request):
         active        = "E"
         #version      = params["version"],
     )
-    userprofile = UserProfile.objects.get(user = request.user)
-    if userprofile.user_type=='E':
-      app.group = userprofile.group
+    
     app.save()
     # Verify Filename is coming in post
     if (request.POST):

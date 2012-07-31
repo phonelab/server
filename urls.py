@@ -40,7 +40,7 @@ if settings.DEBUG:
     #logout page
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
     #signup page
-    url(r'^register/$', 'users.views.register'),
+    #url(r'^register/$', 'users.views.register'),
     #participant interest form
     url(r'^join/$', 'users.views.participant'),
     #profile page
