@@ -32,6 +32,7 @@ def download_manifest(request, deviceId):
   response = { "error": "", "data": "" }
   try:
     #if device exists
+    print deviceId
     dev = Device.objects.get(meid=deviceId) 
     app_list = {}
     apps = {}

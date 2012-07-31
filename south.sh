@@ -12,13 +12,24 @@ then
   python manage.py convert_to_south app.experiment
   python manage.py convert_to_south app.transaction
   python manage.py convert_to_south app.users
+  mv /home/ec2-user/server/application/migrations/ /home/ec2-user/south/application/
+  mv /home/ec2-user/server/device/migrations/ /home/ec2-user/south/device/
+  mv /home/ec2-user/server/experiment/migrations/ /home/ec2-user/south/experiment/
+  mv /home/ec2-user/server/transaction/migrations/ /home/ec2-user/south/transaction/
+  mv /home/ec2-user/server/users/migrations/ /home/ec2-user/south/users/
 elif [ "$1" == "schemamigration" ]
 then
+  mv /home/ec2-user/south/application/migrations/ /home/ec2-user/server/application/
+  mv /home/ec2-user/south/device/migrations/ /home/ec2-user/server/device/
+  mv /home/ec2-user/south/experiment/migrations/ /home/ec2-user/server/experiment/
+  mv /home/ec2-user/south/transaction/migrations/ /home/ec2-user/server/transaction/
+  mv /home/ec2-user/south/users/migrations/ /home/ec2-user/server/users/
   python manage.py schemamigration app.application --auto
   python manage.py schemamigration app.device --auto
   python manage.py schemamigration app.experiment --auto
   python manage.py schemamigration app.transaction --auto
   python manage.py schemamigration app.users --auto
+  echo "finishing schemamigration"
 elif [ "$1" == "migrate" ]
 then
   python manage.py migrate app.application

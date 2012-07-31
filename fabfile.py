@@ -14,6 +14,8 @@ def production():
 
 def move():
   stop()
+  with cd('/home/ec2-user/server'):
+    run('./south.sh convert')
   run('rm -rf server')
   run("git clone git://github.com/phonelab/server.git")
   if os.environ.get("ENV") == "production":
@@ -31,9 +33,9 @@ def restart():
 
 def migrate():
   with cd('/home/ec2-user/server'):
-    run('python manage.py syncdb')
-#    run('/home/ec2-user/server/south.sh schemamigration')
-#    run('/home/ec2-user/server/south.sh migrate')
+#    run('python manage.py syncdb')
+    run('./south.sh schemamigration')
+    run('./south.sh migrate')
 
 def deploy():
   move()
