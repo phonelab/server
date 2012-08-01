@@ -27,12 +27,12 @@ admin.site.register(Device, DeviceAdmin)
 #admin.site.register(Device)
 
 class HeartbeatStatusAdmin(admin.ModelAdmin):
-  list_display = ('dev_meid', 'status_value', 'timestamp')
+  list_display = ('dev_meid', 'status_value', 'build_version', 'latitude', 'longitude', 'timestamp')
   search_fields = ['dev__meid']
 admin.site.register(HeartbeatStatus, HeartbeatStatusAdmin)
 
 class OtaStatusAdmin(admin.ModelAdmin):
-  list_display = ('dev_meid', 'status_value', 'build_version', 'timestamp')
+  list_display = ('dev_meid', 'status_value', 'timestamp')
   search_fields = ['dev__meid']
 admin.site.register(OtaStatus, OtaStatusAdmin)
 

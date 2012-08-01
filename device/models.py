@@ -163,6 +163,9 @@ Class HeartbeatStatus
 class HeartbeatStatus(models.Model):
   dev                = models.ForeignKey(Device)
   status_value       = models.CharField(max_length=1, null=False)
+  build_version      = models.CharField(max_length=80, blank=True, null=True) 
+  latitude           = models.CharField(max_length=15, blank=True, null=True) 
+  longitude          = models.CharField(max_length=15, blank=True, null=True)  
   timestamp          = models.DateTimeField(blank=True, null=True)
   def dev_meid(self):
     return self.dev.meid
@@ -177,7 +180,6 @@ Class OtaStatus
 class OtaStatus(models.Model):
   dev                = models.ForeignKey(Device)
   status_value       = models.CharField(max_length=1, null=False)
-  build_version      = models.CharField(max_length=80, blank=True, null=True) 
   timestamp          = models.DateTimeField(blank=True, null=True)
   def dev_meid(self):
     return self.dev.meid

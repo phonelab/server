@@ -87,12 +87,13 @@ def index(request):
 
 @date 01/29/2012
 
-@param id IMEI number
+@param id IMEI or MEID number
 @param email email
 @param reg_id Registration Id
-
+@param phone_no phone number
 # Create new device
 # curl -X POST -d "device_id=123&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
+# curl -X POST -d "device_id=123&reg_id=some_id" http://107.20.190.88/device/
 
 @api public
 
@@ -111,11 +112,12 @@ def create_or_update_device(request):
   # get params from POST
   params = request.POST
   # error checking
-  if (params['device_id'] == "" or params['reg_id'] == ""):
+  if (params['device_id'] == "" or params['reg_id'] == "" or params['phone_no'] == ""):
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
     }
+  
   # get device
   device = Device.objects.filter(meid=params['device_id'])
   # if device exists, update
@@ -130,15 +132,22 @@ def create_or_update_device(request):
     # update
     if ('update_interval' in params and device.update_interval != params['update_interval']):
       device.update_interval = params['update_interval']
+    
   # device does not exist, insert
   else:
     device = Device(
         meid     = params['device_id'], 
     #    email  = "phonelab@gmail.com", #params['email'] 
-        reg_id = params['reg_id']
+        reg_id = params['reg_id'],
+        active = "E"
     )
   # save device
   device.save()
+  deviceprofile = DeviceProfile()
+  deviceprofile.dev = device
+  if params['device_id'].startswith('A0000', 0, 5):
+    deviceprofile.phone_no = params['phone_no']
+  deviceprofile.save()
   
   # device
   response['data'] = device
@@ -577,20 +586,23 @@ def device_status(request):
     #Heartbeat 
     if request.POST['status_type'] == "H":
       heartbeat = HeartbeatStatus(
-        dev          = dev,
-        status_value = request.POST['status_value'],
-        timestamp    = datetime.now()
+        dev           = dev,
+        status_value  = request.POST['status_value'],
+        build_version = request.POST['build_version'],
+        latitude      = request.POST['latitude'],
+        longitude     = request.POST['longitude'],
+        timestamp     = datetime.now()
       )
       heartbeat.save()      
     #OTA 1: download completed, 2: signal before a phone goes into recovery, 3: build_version 
-    if request.POST['status_type'] == "O":
-      ota = OtaStatus()
-      ota.dev = dev
-      ota.status_value  = request.POST['status_value']
-      ota.timestamp = datetime.now()
-      if request.POST['status_value'] == "3":
-        ota.build_version = request.POST['build_version']
-      ota.save()      
+#    if request.POST['status_type'] == "O":
+#      ota = OtaStatus()
+#      ota.dev = dev
+#      ota.status_value  = request.POST['status_value']
+#      ota.timestamp = datetime.now()
+#      if request.POST['status_value'] == "3":
+#        ota.build_version = request.POST['build_version']
+#      ota.save()      
   # device does not exist
   except Device.DoesNotExist:
     response['err'] = {
