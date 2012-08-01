@@ -155,20 +155,29 @@ class DeviceProfile(models.Model):
 
 
 """
-Class DeviceStatus
+Class HeartbeatStatus
 
 @data 07/23/2012
 @author TKI
 """
-class DeviceStatus(models.Model):
-  STATUS_CHOICES = (
-    (u'H', u'Heartbeat'),
-    (u'O', u'OTA feedback'),
-    (u'R', u'Reserved'),
-  )
+class HeartbeatStatus(models.Model):
   dev                = models.ForeignKey(Device)
-  status_type        = models.CharField(max_length=1, choices=STATUS_CHOICES)
   status_value       = models.CharField(max_length=1, null=False)
+  timestamp          = models.DateTimeField(blank=True, null=True)
+  def dev_meid(self):
+    return self.dev.meid
+
+
+"""
+Class OtaStatus
+
+@data 07/31/2012
+@author TKI
+"""
+class OtaStatus(models.Model):
+  dev                = models.ForeignKey(Device)
+  status_value       = models.CharField(max_length=1, null=False)
+  build_version      = models.CharField(max_length=80, blank=True, null=True) 
   timestamp          = models.DateTimeField(blank=True, null=True)
   def dev_meid(self):
     return self.dev.meid
