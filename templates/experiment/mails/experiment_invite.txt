@@ -1,0 +1,11 @@
+{% load url from future %}
+Hello {{member}},
+
+You have been invited to join the PhoneLab Experiment "{{experiment.name}}" by {{user}}.
+
+Please click on the link below to join!
+
+http://{{ site_name }}/experiment/join_member/{{experiment.id}}/{{member.id}}
+
+Thank You 
+PhoneLab

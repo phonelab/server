@@ -1,69 +1,105 @@
  {% extends 'base.html' %}
- {% block title %}{% endblock %}
+ {% block title %}PhoneLab Testbed Web Site{% endblock %}
  {% block content %}
  <h2>Create Experiment</h2>
- <table class="table">
+ <form class="form-horizontal" onsubmit="return ValidateForm(this);" method="post" action="/experiment/" enctype="multipart/form-data">
+ <table class="table" id='NewExpTable'>
+  
  	<tbody>
-		<form class="form-horizontal" onsubmit="return ValidateForm(this);" method="post" action="/experiment/" enctype="multipart/form-data">
+		
 		<tr>
-      		<td><strong>Name: </strong></td>
-      		<td><input type='text' name='name' id='name'/>
+      		<td width="20%"><strong>Name: </strong></td>
+      		<td><input type='text' name='expname' id='id_expname'/>
       		</td>
     	</tr>
     	<tr>
       		<td><strong>Description: </strong></td>
-      		<td><input type='text' name='desc' id='desc'/>
+      		<td><input type='text' name='expdesc' id='id_expdesc'/>
       		</td>
     	</tr>
     	<tr>
       		<td><strong>Tag: </strong></td>
-      		<td><input type='text' name='Tag' id='Tag'/>
+      		<td><input type='text' name='exptag' id='id_exptag'/>
       		</td>
     	</tr>
     	<tr>
-    		<td><strong>Devices: </strong></td>
+    		<td><strong>Number of Devices: </strong></td>
     		<td>
-        {% for dev in devices %}
-          <input type='checkbox' id='dev' name='devs' value='{{dev.dev.id}}' {{ dev.get_active_display }} /> 
-          <a href="/device/{{dev.dev.id}}">{{dev.dev.id}}</a>
-          {% if forloop.counter|divisibleby:"3" %}
-            </tr><tr>
-          {% endif %}
-        {% empty %}
-        No devices
-        {% endfor %}
+        <input type='text' id='id_dev' name='devs'>
     	</td>
       </tr>
-      <tr>
-    		<td><strong>Members: </strong></td>
-    		<td>
-        {% for member in members %}
-          <input type='checkbox' id='member' name='members' value='{{member.user}}' {{ member.user }} /> 
-          {{member.user}}
-          {% if forloop.counter|divisibleby:"3" %}
-            </tr><tr>
-          {% endif %}
-        {% empty %}
-        No Members
-        {% endfor %}
-    	</td>
+      <tr colspan='3'>
+        <td><strong>Experiment Duration: </strong></td>
+        <td>
+          <input class="input-small" type="text" id="id_duratuon" name="duration" >
+          <select class='input-small'> 
+            <option>Days</option>
+            <option>Weeks</option>
+            <option>Months</option>
+          </select>
+          <span class="help-block">This duration will start when the admin approves your experiment.</span>
+          
+        </td>
       </tr>
-      <tr>
+      <tr id='id_approw' name='approw' rowspan="4">
     		<td><strong>Applications: </strong></td>
-    		<td>
-        {% for app in apps %}
-          <input type='checkbox' id='app' name='apps' value='{{app.id}}' {{ app.get_active_display }} /> 
-          <a href="/application/{{app.id}}">{{app.name}}</a>
-          {% if forloop.counter|divisibleby:"3" %}
-            </tr><tr>
-          {% endif %}
-        {% empty %}
-         No Applications
-        {% endfor %}
+        <td>
+          <input class='input-small' type='text' name='appname' id='appname' placeholder='Name' value=""/>
+          <input class='input-small' type='text' name='appdesc' id='appdesc' placeholder='Description'  value='' />
+          <select class='input-small' name='apptype' id='apptype'>
+            <option value='B'>Background</option>
+            <option value='I'>Interactive</option>
+          </select>
+          <input class='input-small' type='file' name='upload' id='upload' onchange="check_file()" /><img src= '{{STATIC_URL }}img/add_new_app.ico' onclick='addApplication()'>
+        </td>
     	</td>
       </tr>
     </tbody>
+
 </table>
 <input type="submit" class='btn btn-primary' value="Create" />
 <a onclick="history.back()" class="btn">Cancel</a>
+</form>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+  function check_file(){
+    str = document.getElementById('upload').value.toUpperCase();
+    suffix = ".APK";
+    if(!(str.indexOf(suffix, str.length - suffix.length) !== -1)){
+      alert('File type not allowed,\nAllowed file: *.apk');
+      document.getElementById('upload').value='';
+    }
+  }
+
+  function addApplication() {
+    var row = document.getElementById('id_approw');
+    var table = document.getElementById('NewExpTable');
+    var clone = row.cloneNode(true);
+    fields = clone.lastElementChild.children;
+    fields[0].value = '';
+    fields[1].value = '';
+    fields[2].value = '';
+    fields[4].parentNode.removeChild(fields[4]);
+    table.lastElementChild.appendChild(clone);
+    
+  }
+
+  function ValidateForm(form){
+     if((form.name.value.length == 0) || (form.name.value == null)) 
+     { 
+       alert('Please enter name in the name field') 
+       form.name.focus(); 
+       return false; 
+     } 
+     if((form.upload.value.length == 0) || (form.name.value == null)) 
+     { 
+       alert('Please choose a apk file in the upload field') 
+       form.name.focus(); 
+       return false; 
+     } 
+     return true;
+   }  
+ 
+  </script>
 {% endblock %}

@@ -17,46 +17,5 @@
   </div><!-- alert-error -->
   {% endif %}
   <br><br>
-  <div class="well">
-    <h2>Group Profile: <a href="/accounts/group_profile/">{{group.name}}</a></h2>
-    <table class="table table-bordered table-striped">
-      <tbody>
-        <tr>
-          <td><strong>Leader Name: </strong></td>
-          <td>{{ leader.user.username }}</td>
-        </tr>
-        <tr>
-          <td><strong>Members:</strong></td>
-          <td>
-            <ul class="unstyled">
-            {% for member in members %}
-              <li>{{ member.user.username }} {% if userprofile.user_type == 'L' %} <a href="javascript:confirmsubmit('/accounts/delete_member/{{member.user}}')" id="member_delete"><img alt="Delete Member" title="Delete Member" src="{{STATIC_URL}}img/delete.ico"></a>{% endif %}</li>
-            {% endfor %}
-            </ul>
-          </td>
-        </tr> 
-        <tr>
-          <td><strong>Devices (<a href="/devices">{{no_of_devices}}</a>):</strong></td>
-          <td>
-            <ul class="unstyled">
-           {% for device in devices %}
-              <li><a href="/device/{{device.dev}}">{{device.dev}}</a></li>
-           {% endfor %}
-          </td> 
-        </ul>
-        </tr>
-        <tr>
-          <td><strong>Applications:</strong></td>
-          <td>
-            <ul class="unstyled">
-            {% for app in apps %}
-              <li><a href="/application/{{app.id}}">{{ app.name }}</a></li>
-            {% endfor %}
-            </ul>
-          </td>
-        </tr> 
-      </tbody>
-    </table>
-  </div><!-- well -->
 
 {% endblock %}

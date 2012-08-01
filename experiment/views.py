@@ -3,11 +3,18 @@ from django.contrib.auth.models import User, Group
 from django.shortcuts import render_to_response, get_object_or_404
 from users.models import UserProfile
 from experiment.models import Experiment, ExperimentProfile
-from django.template import RequestContext
+from django.template import RequestContext, Context, loader
+from django.core.mail import send_mail
+from django.contrib.sites.models import Site
+from settings import FROM_EMAIL, ADMINS
 from application.models import Application
 from device.models import DeviceProfile, Device
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from datetime import datetime
+import os, errno, mimetypes
+from django.conf import settings
+RAW_APP_ROOT = settings.RAW_APP_ROOT
 
 # usage: @user_passes_test(is_leader, login_url='/login')
 # usage: @user_passes_test(is_member, login_url='/login')
@@ -33,16 +40,13 @@ def index(request):
 
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
-	group = userprofile.group
-
-	experiments = Experiment.objects.filter(group=group).order_by('id')
+	
+	experiments = Experiment.objects.filter(user=user).order_by('id')
 
 	return render_to_response(
 			'experiment/exp_page.html',
 			{
-			 'user': user,
 			 'userprofile': userprofile,
-			 'group': group,
 			 'experiments':experiments
 			},
 			context_instance=RequestContext(request)
@@ -62,18 +66,10 @@ def new(request):
 	exp = Experiment()
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
-  	members = UserProfile.objects.filter(group=userprofile.group, user_type = 'M')
-  	apps = Application.objects.filter(group=userprofile.group)
-  	devices = DeviceProfile.objects.filter(group=userprofile.group)
   	# query the database for all applications
   	return render_to_response(
     	  	'experiment/new_exp_form.html', 
     	  	{
-    	  	'group': userprofile.group,
-        	'members': members,
-        	'devices'  : devices,
-        	'apps': apps,
-       	 	'exp': exp,
        	 	'userprofile': userprofile
       	  	},
       		context_instance=RequestContext(request)
@@ -94,20 +90,17 @@ def show(request, expId):
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
 	experiment = Experiment.objects.get(id = expId)
-	leader_profile = UserProfile.objects.get(user_type='L', group=experiment.group)
-	leader = leader_profile.user
-	members_to_add = UserProfile.objects.filter(group=experiment.group, user_type='M').exclude(user__in=experiment.user.all())
-	devices_to_add = DeviceProfile.objects.filter(group=experiment.group).exclude(dev__in=experiment.dev.all())
-	apps_to_add = Application.objects.filter(group=experiment.group).exclude(id__in=experiment.app.all())
+	# members_to_add = UserProfile.objects.filter(group=experiment.group, user_type='M').exclude(user__in=experiment.user.all())
+	# devices_to_add = DeviceProfile.objects.filter(group=experiment.group).exclude(dev__in=experiment.dev.all())
+	# apps_to_add = Application.objects.filter(group=experiment.group).exclude(id__in=experiment.app.all())
 	return render_to_response (
 			'experiment/experiment_profile.html', 
-  	  		{'user':user,
+  	  		{
   	  		 'userprofile': userprofile,
-  	  		 'group': experiment.group,
-  	  		 'leader': leader,
-  	  		 'members_to_add': members_to_add,
-  	  		 'devices_to_add': devices_to_add,
-  	  		 'apps_to_add': apps_to_add,
+  	  		 # 'group': experiment.group,
+  	  		 # 'members_to_add': members_to_add,
+  	  		 # 'devices_to_add': devices_to_add,
+  	  		 # 'apps_to_add': apps_to_add,
   	  		 'experiment': experiment },
       		context_instance=RequestContext(request)
     	  )
@@ -121,38 +114,93 @@ Create new experiment
 """
 
 def create_experiment(request):
-	user = request.user
-	userprofile = UserProfile.objects.get(user=user)
-	group = Group.objects.get(user=user)
-	leader = UserProfile.objects.get(user_type='L', group=group) 
+
+	# define default response
+	response = { "err": "", "data": "" }
+
+	#initialize a counter for apps
+	i = 0
+	j = 0
+
+	#initialize filename
+	filenames = {}
+	filedirs = {}
 
 	if request.POST:
+
+		# Save Experiment
 		exp = Experiment (
-			group = group,
-			name = request.POST['name'],
-			description = request.POST['desc'],
-			tag = request.POST['Tag']
+			name = request.POST['expname'],
+			description = request.POST['expdesc'],
+			tag = request.POST['exptag'],
+			period = request.POST['duration'],
 			)
 		exp.save()
+		exp.user.add(request.user)
 
-		members = request.POST.getlist('members')
-		devs = request.POST.getlist('devs')
-		apps = request.POST.getlist('apps')
-
-		for member in members:
-			exp.user.add(User.objects.get(username=member))
-
-		for dev in devs:
+		
+		devs = Device.objects.all()
+		appnames = request.POST.getlist('appname')
+		appdescs = request.POST.getlist('appdesc')
+		apptypes = request.POST.getlist('apptype')
+		
+		for dev in devs:	
 			exp.dev.add(dev)
 
-		for app in apps:
-			exp.app.add(app)
+		for app in appnames:
+			
+			application = Application(
+	        				user = request.user,
+	        				name = app,
+					        #package_name = params['package_name'],
+					        #intent_name  = params['intent_name'],
+					        description   = appdescs[i],
+					        type          = apptypes[i],
+					        active        = "E"
+					      )
+					        
+					        #version      = params["version"],
+			application.save()
+			exp.app.add(application)
+			i = i+1
+			filename = os.path.join(RAW_APP_ROOT, str(application.id) + ".apk")
+			filedir = os.path.dirname(filename)
+			filenames[app] = filename
+			filedirs[app] = filedir
 
 		exp.save()
-		exp_profile = ExperimentProfile (eid=exp)
+		exp_profile = ExperimentProfile (experiment=exp)
+		exp_profile.starttime = datetime.now()
+		exp_profile.endtime = datetime.now()
 		exp_profile.save()
 
-		return HttpResponseRedirect('/experiment/' + str(exp.id))
+		for afile in request.FILES.getlist('upload'):
+			# create folder for user if it doesn`t exist
+			try:
+				os.mkdir(filedirs[appnames[j]])
+			except OSError, e:
+				if e.errno != errno.EEXIST:
+				  response['err'] = {
+				    'no' : 'err1', 
+				    'msg': 'cannot create dir, failed upload'
+				  }
+				  raise
+
+			# get file handle
+			fileHandle = open(filenames[appnames[j]], 'wb+')
+			# write it out
+			for chunk in afile.chunks():
+				fileHandle.write(chunk)
+			# close file handle
+			fileHandle.close()
+			j = j+1
+			response['data'] = "done"
+			
+	else:
+		response["err"] = "err1"
+
+
+	return HttpResponseRedirect('/experiment/' + str(exp.id))
 
 """
 Update Experiment Profile
@@ -225,19 +273,35 @@ Delete a member
 @author Manoj
 """
 @login_required
-def delete_member(request, expId, member):
+def add_member(request, expId):
 
 	userprofile = get_object_or_404(UserProfile, user=request.user)
-	if userprofile.user_type == 'L':
-		member = User.objects.get(username=member)
-		experiment = Experiment.objects.get(id=expId)
-		experiment.user.remove(member)
+	experiment = Experiment.objects.get(id = expId)
+	membername = request.POST['member']
+	try:
+		member = User.objects.get(username=membername)
+	
+	except User.DoesNotExist: 
+		return render_to_response ('experiment/experiment_profile.html', 
+  	  		 {'userprofile': userprofile,
+  	  		 'no_member': True,
+  	  		 'experiment': experiment },
+      		context_instance=RequestContext(request)
+    	  )
 
-		return HttpResponseRedirect('/experiment/' + expId)
+	current_site = Site.objects.get_current()
+	EMAIL_SUBJECT = 'Invitation to join Phonelab Experiment'
+  	c = Context({'user': request.user, 'experiment': experiment, 'member': member, 'site_name': current_site})
+  	EMAIL_BODY = (loader.get_template('experiment/mails/experiment_invite.txt')).render(c)
+  	TO_EMAIL = [member.email]
+  	send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
 
-	else:
-
-		return HttpResponseRedirect('/')
+	return render_to_response ('experiment/experiment_profile.html', 
+  	  		 {'userprofile': userprofile,
+  	  		 'success': True,
+  	  		 'experiment': experiment },
+      		context_instance=RequestContext(request)
+    	  )
 
 
 """
@@ -250,18 +314,14 @@ Delete a Device
 @author Manoj
 """
 @login_required
-def delete_device(request, expId, deviceId):
+def join_member	(request, expId, userId):
 
-	userprofile = get_object_or_404(UserProfile, user=request.user)
-	if userprofile.user_type == 'L':
-		device = Device.objects.get(id=deviceId)
-		experiment = Experiment.objects.get(id=expId)
-		experiment.dev.remove(device)
+	user = User.objects.get(id=userId)
+	experiment = Experiment.objects.get(id=expId)
+	experiment.user.add(user)
+	experiment.save()
 	
-		return HttpResponseRedirect('/experiment/' + expId)
-
-	else:
-		return HttpResponseRedirect('/')
+	return HttpResponseRedirect('/experiment/' + expId)
 
 
 """

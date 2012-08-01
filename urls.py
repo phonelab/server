@@ -40,7 +40,7 @@ if settings.DEBUG:
     #logout page
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
     #signup page
-    url(r'^register/$', 'users.views.register'),
+    #url(r'^register/$', 'users.views.register'),
     #participant interest form
     url(r'^join/$', 'users.views.participant'),
     #profile page
@@ -118,11 +118,11 @@ if settings.DEBUG:
     #Delete Experiment
     url(r'^experiment/delete_exp/(?P<expId>\d+)/$', 'experiment.views.delete_exp'),
     #remove Member
-    url(r'^experiment/delete_member/(?P<expId>\d+)/(?P<member>\w+)/$', 'experiment.views.delete_member'),
+    url(r'^experiment/add_member/(?P<expId>\d+)/$', 'experiment.views.add_member'),
     #Delete Device
-    url(r'^experiment/delete_device/(?P<expId>\d+)/(?P<deviceId>[A-Z0-9]\w+)/$', 'experiment.views.delete_device'),
+    url(r'^experiment/join_member/(?P<expId>\d+)/(?P<userId>\d+)/$', 'experiment.views.join_member'),
     #Delete Application
-    url(r'^experiment/delete_app/(?P<expId>\d+)/(?P<appId>\d+)/$', 'experiment.views.delete_app'),
+    #url(r'^experiment/delete_app/(?P<expId>\d+)/(?P<appId>\d+)/$', 'experiment.views.delete_app'),
     #New Experiment form  [GET]
     url(r'^experiment/new/$', 'experiment.views.new'),
     # Create or Update experiment [POST]

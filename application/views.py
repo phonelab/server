@@ -75,9 +75,9 @@ def index(request):
     # query the database for all applications
     apps = Application.objects.all().order_by('-created')
     
-  elif userprofile.user_type == 'M' or userprofile.user_type == 'L':
+  elif userprofile.user_type == 'E':
     #query the database for user's own applications
-    apps = Application.objects.filter(user=experiment.user)
+    apps = Application.objects.filter(user=user)
 
   elif userprofile.user_type == 'A':
     apps = Application.objects.all().order_by('-created')
@@ -118,7 +118,6 @@ def show(request, appId):
     return render_to_response(
   		'application/show.html', 
   		{
-        'group': userprofile.group,
         'userprofile': userprofile,
   			'app' : app,
         'devs': devs
@@ -185,9 +184,7 @@ def create_or_update_application(request):
         active        = "E"
         #version      = params["version"],
     )
-    userprofile = UserProfile.objects.get(user = request.user)
-    if userprofile.user_type=='M' or userprofile.user_type == 'L':
-      app.group = userprofile.group
+    
     app.save()
     # Verify Filename is coming in post
     if (request.POST):

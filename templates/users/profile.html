@@ -17,10 +17,7 @@ $('#edit').modal({
           <li class="active">
             <a href="#userprofile" data-toggle="pill">User Profile</a>
           </li>
-          {% if userprofile.user_type == 'L' or userprofile.user_type == 'M'  %}
-            <li>
-              <a href="#group" data-toggle="pill">Groups</a>
-            </li>
+          {% if userprofile.user_type == 'E' %}
             <li>
               <a href="#experiments" data-toggle="pill">Experiments</a>
             </li>
@@ -32,22 +29,20 @@ $('#edit').modal({
               {% include 'users/user_tab.html' %}
             </div><!-- well -->
           </div><!-- tav-pane -->
-          <div class="tab-pane" id="group" >
-            {% include 'users/group_tab.html' %}
-          </div><!-- tab-pane -->
           <div class="tab-pane" id="experiments" >
             {% if experiments %}
             {% include 'experiment/experiment_tab.html' %}
             {% else %}
             <div class="well">
             There are no experiments
-            {% if userprofile.user_type == 'L' %} <a href="/experiment/new/" class="btn-small btn-primary">Add Experiment</a>{% endif %}
+             <a href="/experiment/new/" class="btn-small btn-primary">Add Experiment</a>
             </div>
             {% endif %}
           </div><!-- tab-pane -->
         </div><!-- tab-content -->
       </div><!-- span9 -->
-    
+
+{% comment %}
 <div class="span">
 <h2>Device Profile:</h2>
 <ul class="nav nav-tabs">
@@ -103,4 +98,5 @@ $('#edit').modal({
   {% endfor %}
 </div><!-- tab-content -->
 </div><!-- span -->
+{% endcomment %}
 {% endblock %}

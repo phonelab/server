@@ -10,3 +10,4 @@ config_staging.py
 .gitignore
 south.sh
 */migrations/*
+*/apps/*
