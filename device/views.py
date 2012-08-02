@@ -11,7 +11,8 @@ from datetime import datetime
 from users.forms import ParticipantForm
 
 #from manifest.views import *
-from device.models import Device, DeviceApplication, DeviceProfile, DeviceStatus
+from device.models import Device, DeviceApplication, DeviceProfile
+from device.models import HeartbeatStatus, OtaStatus
 from users.models import UserProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
@@ -86,12 +87,13 @@ def index(request):
 
 @date 01/29/2012
 
-@param id IMEI number
+@param id IMEI or MEID number
 @param email email
 @param reg_id Registration Id
-
+@param phone_no phone number
 # Create new device
 # curl -X POST -d "device_id=123&email=micheala@buffalo.edu&reg_id=some_id" http://107.20.190.88/device/
+# curl -X POST -d "device_id=123&reg_id=some_id" http://107.20.190.88/device/
 
 @api public
 
@@ -110,11 +112,12 @@ def create_or_update_device(request):
   # get params from POST
   params = request.POST
   # error checking
-  if (params['device_id'] == "" or params['reg_id'] == ""):
+  if (params['device_id'] == "" or params['reg_id'] == "" or params['phone_no'] == ""):
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
     }
+  
   # get device
   device = Device.objects.filter(meid=params['device_id'])
   # if device exists, update
@@ -129,15 +132,22 @@ def create_or_update_device(request):
     # update
     if ('update_interval' in params and device.update_interval != params['update_interval']):
       device.update_interval = params['update_interval']
+    
   # device does not exist, insert
   else:
     device = Device(
         meid     = params['device_id'], 
     #    email  = "phonelab@gmail.com", #params['email'] 
-        reg_id = params['reg_id']
+        reg_id = params['reg_id'],
+        active = "E"
     )
   # save device
   device.save()
+  deviceprofile = DeviceProfile()
+  deviceprofile.dev = device
+  if params['device_id'].startswith('A0000', 0, 5):
+    deviceprofile.phone_no = params['phone_no']
+  deviceprofile.save()
   
   # device
   response['data'] = device
@@ -533,9 +543,10 @@ Update DeviceStatus DB [POST]
 @date 07/26/2012
 
 @param device_id
-@param status_type (0: heart beat, 1: OTA feedback, 2: reserved)
-@param status_value (0 => 0: no problem , 1: There is some wrong)
-@param status_value (1 => )
+@param status_type (H: heart beat, O: OTA feedback, Ob: new build version 2: reserved)
+@param status_value (H => 0: no problem , 1: There is some wrong)
+@param status_value (O => 1: download completed, 2)
+@param status_value (Ob => new build version, string type)
 
 # Insert DeviceApplication DB using POST method
 # curl -X POST -d "device_id=A000002A000000&status_type=H&status_value=0" http://107.20.190.88/devicestatus/
@@ -555,32 +566,43 @@ def device_status(request):
     return json_response_from(response)
   # params checking
   if not (request.POST.has_key('device_id') and request.POST.has_key('status_type') \
-          and request.POST.has_key('status_value')):
+          and request.POST.has_key('status_value')): 
     response['error'] = {
       'no' : 'err1',
       'msg': 'missing mandatory params'
     }
     return json_response_from(response)
+#  if not (request.POST['status_type'] == "O" and request.POST['status_value'] == "3" \
+#          and request.POST.has_key('build_version')):
+#    response['error'] = {
+#      'no' : 'err1',
+#      'msg': 'missing mandatory params'
+#    }
+#    return json_response_from(response)
 
   # data check
   try:
     dev = Device.objects.get(meid=request.POST['device_id'])
+    #Heartbeat 
     if request.POST['status_type'] == "H":
-#      devicestatus = DeviceStatus.objects.filter(dev=dev)
-#      if devicestatus:
-#        devicestatus.status_type = request.POST['status_type']
-#        devicestatus.status_value = request.POST['status_value']
-#        devicestatus.timestamp = datetime.now()
-#      else:
-#        print "here"
-      devicestatus = DeviceStatus(
-        dev          = dev,
-        status_type  = request.POST['status_type'],
-        status_value = request.POST['status_value'],
-        timestamp    = datetime.now()
+      heartbeat = HeartbeatStatus(
+        dev           = dev,
+        status_value  = request.POST['status_value'],
+        build_version = request.POST['build_version'],
+        latitude      = request.POST['latitude'],
+        longitude     = request.POST['longitude'],
+        timestamp     = datetime.now()
       )
-      devicestatus.save()  
-
+      heartbeat.save()      
+    #OTA 1: download completed, 2: signal before a phone goes into recovery, 3: build_version 
+#    if request.POST['status_type'] == "O":
+#      ota = OtaStatus()
+#      ota.dev = dev
+#      ota.status_value  = request.POST['status_value']
+#      ota.timestamp = datetime.now()
+#      if request.POST['status_value'] == "3":
+#        ota.build_version = request.POST['build_version']
+#      ota.save()      
   # device does not exist
   except Device.DoesNotExist:
     response['err'] = {
@@ -592,3 +614,18 @@ def device_status(request):
   # device
   response['data'] = dev.meid
   return json_response_from(response)
+
+
+"""
+Request_device 
+@date 07/31/2012
+
+@param number of devices
+@return QuerySet of devices
+@Usage: for obj in request_device("10"):
+          do something
+@author TKI
+"""
+def request_devices(number):
+  #check a battery_load to calculate
+  return DeviceProfile.objects.order_by('battery_load')[0:number]

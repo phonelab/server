@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.conf.urls.defaults import *
 from users.models import UserProfile, Participant
-from device.models import Device, DeviceApplication, DeviceProfile, DeviceStatus
+from device.models import Device, DeviceApplication, DeviceProfile
+from device.models import HeartbeatStatus, OtaStatus
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
 from experiment.models import Experiment, ExperimentProfile
@@ -28,10 +29,15 @@ class DeviceAdmin(admin.ModelAdmin):
 admin.site.register(Device, DeviceAdmin)
 #admin.site.register(Device)
 
-class DeviceStatusAdmin(admin.ModelAdmin):
-  list_display = ('dev_meid', 'status_type', 'status_value', 'timestamp')
+class HeartbeatStatusAdmin(admin.ModelAdmin):
+  list_display = ('dev_meid', 'status_value', 'build_version', 'latitude', 'longitude', 'timestamp')
   search_fields = ['dev__meid']
-admin.site.register(DeviceStatus, DeviceStatusAdmin)
+admin.site.register(HeartbeatStatus, HeartbeatStatusAdmin)
+
+class OtaStatusAdmin(admin.ModelAdmin):
+  list_display = ('dev_meid', 'status_value', 'timestamp')
+  search_fields = ['dev__meid']
+admin.site.register(OtaStatus, OtaStatusAdmin)
 
 class ApplicationAdmin(admin.ModelAdmin):
   list_display = ('id', 'name', 'package_name', 'type')
