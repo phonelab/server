@@ -8,7 +8,10 @@ from transaction.models import Transaction, TransactionDevApp
 from experiment.models import Experiment, ExperimentProfile
 from settings import FROM_EMAIL, ADMINS
 from django.template import Context, loader
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from lib.helper import json_response_from, json
+from datetime import datetime, timedelta
 
 #TODO: change location and implement inline
 #Inline reference: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.InlineModelAdmin
@@ -114,8 +117,68 @@ class StatusAdmin(admin.ModelAdmin):
 #    )
 admin.site.register(DeviceProfile, StatusAdmin)
 
+#admin experiment approval
+def approve_experiment(modeladmin, request, queryset):
+  for obj in queryset:
+    # define default response
+    response = { "err": "", "data": "" }
+    # return if GET request
+    if request.method == 'GET':
+      response['err'] = {
+        'no' : 'err0',
+        'msg': 'sorry no gets'
+      }
+      return HttpResponseRedirect('/error/')
+
+    dev_ids = obj.dev.all()
+    app_ids = obj.app.all()
+    transact = Transaction()
+    transact.eid = obj
+    transact.user = User.objects.get(id__in=obj.user.all)
+    transact.total = len(dev_ids) * len(app_ids)
+    transact.progress = 0
+
+  #Check Data Validation
+  for dev_id in dev_ids:
+    for app_id in app_ids:
+      #check FailureAlready(F1)
+      if DeviceApplication.objects.filter(dev=dev_id).filter(app=app_id):
+        response['err'] = {
+          'no' : 'err1',
+          'msg': 'The application is already installed'
+        }
+        return json_response_from(response)
+  
+  #insert the data from POST method
+  for dev_id in dev_ids:
+    for app_id in app_ids:
+      transact.save()
+      t_id = transact.id
+      trndevapp = TransactionDevApp()
+      trndevapp.tid = Transaction.objects.get(id=t_id)
+      trndevapp.dev = dev_id
+      trndevapp.app = app_id
+      trndevapp.action = 'I'
+      trndevapp.result = "N" # N is N/A
+      trndevapp.save()
+      Device.objects.filter(id=dev_id.id).update(active="D")
+
+  msg = "new_manifest"
+  for dev_id in dev_ids:
+    Device.objects.get(id=dev_id.id).send_message(payload=json({"message": msg}))
+
+  eprofile = ExperimentProfile.objects.get(experiment=obj)
+  eprofile.starttime = datetime.now
+  endtime = datetime.now + datetime.timedelta(days=obj.period)
+  print endtime
+  eprofile.endtime = endtime
+  eprofile.save
+  queryset.update(active=1)         
+
 class ExperimentAdmin(admin.ModelAdmin):
-  list_display = ('id', 'name', 'description', 'tag')
+  list_display = ('id', 'name', 'description', 'tag', 'irb', 'active')
+  actions = [approve_experiment]
+  list_filter = ['active']
 admin.site.register(Experiment, ExperimentAdmin)
 
 class ExperimentProfileAdmin(admin.ModelAdmin):

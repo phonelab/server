@@ -11,6 +11,8 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 # Application Path
 RAW_APP_ROOT = os.path.join(SITE_ROOT, 'application', 'apps')
+#IRB Letter path
+RAW_IRB_ROOT = os.path.join(SITE_ROOT, 'experiment', 'IRBletters')
 # Env variable
 ENV = os.environ.get("ENV") or "development"
 
