@@ -2,7 +2,7 @@
 #DATABASE_NAME = 'phonelab_staging'
 DATABASE_ENGINE = 'django.db.backends.postgresql_psycopg2'
 DATABASE_NAME = 'phonelab'
-
+ 
 DATABASES = {
     'default': {
         'ENGINE'    : DATABASE_ENGINE, # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
