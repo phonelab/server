@@ -15,6 +15,7 @@ from datetime import datetime
 import os, errno, mimetypes
 from django.conf import settings
 RAW_APP_ROOT = settings.RAW_APP_ROOT
+RAW_IRB_ROOT = settings.RAW_IRB_ROOT
 
 # usage: @user_passes_test(is_leader, login_url='/login')
 # usage: @user_passes_test(is_member, login_url='/login')
@@ -27,6 +28,7 @@ def is_leader(user):
   if user:
     return UserProfile.objects.filter(user=user).filter(user_type=L) > 0
   return False
+
 
 """
 List all Experiments
@@ -128,16 +130,47 @@ def create_experiment(request):
 
 	if request.POST:
 
+		period = request.POST['duration']
+		unit = request.POST['dur_unit']
+		
+		if unit == 'W':
+			period = int(period)*7
+		elif unit == 'M':
+			period = int(period)*30
+
 		# Save Experiment
 		exp = Experiment (
 			name = request.POST['expname'],
 			description = request.POST['expdesc'],
 			tag = request.POST['exptag'],
-			period = request.POST['duration'],
+			period = period,
 			)
 		exp.save()
-		exp.user.add(request.user)
 
+		#save IRB Letter
+		irbname = os.path.join(RAW_IRB_ROOT, str(exp.irb))
+		irbdir = os.path.dirname(irbname)
+
+		try:
+			os.mkdir(irbdir)
+		except OSError, e:
+			if e.errno != errno.EEXIST:
+			  response['err'] = {
+			    'no' : 'err1', 
+			    'msg': 'cannot create dir, failed upload'
+			  }
+			  raise
+
+		# get file handle
+		fileHandle = open(irbname, 'wb+')
+		for chunk in request.FILES['irbletter'].chunks():	
+			# write it out
+			fileHandle.write(chunk)
+		# close file handle
+		fileHandle.close()
+		response['data'] = "done"
+
+		exp.user.add(request.user)
 		
 		devs = Device.objects.all()
 		appnames = request.POST.getlist('appname')
@@ -169,10 +202,11 @@ def create_experiment(request):
 			filedirs[app] = filedir
 
 		exp.save()
-		exp_profile = ExperimentProfile (experiment=exp)
-		exp_profile.starttime = datetime.now()
-		exp_profile.endtime = datetime.now()
-		exp_profile.save()
+
+		# exp_profile = ExperimentProfile (experiment=exp)
+		# exp_profile.starttime = datetime.now()
+		# exp_profile.endtime = datetime.now()
+		# exp_profile.save()
 
 		for afile in request.FILES.getlist('upload'):
 			# create folder for user if it doesn`t exist

@@ -32,15 +32,21 @@
         <td><strong>Experiment Duration: </strong></td>
         <td>
           <input class="input-small" type="text" id="id_duratuon" name="duration" >
-          <select class='input-small'> 
-            <option>Days</option>
-            <option>Weeks</option>
-            <option>Months</option>
+          <select class='input-small'name='dur_unit'> 
+            <option value='D'>Days</option>
+            <option value='W'>Weeks</option>
+            <option value = 'M'>Months</option>
           </select>
           <span class="help-block">This duration will start when the admin approves your experiment.</span>
           
         </td>
       </tr>
+      <tr>
+        <td><strong>IRB Letter: </strong></td>
+        <td>
+          <input type='file' name='irbletter' id='irbletter'>
+        </td>
+      </tr> 
       <tr id='id_approw' name='approw' rowspan="4">
     		<td><strong>Applications: </strong></td>
         <td>
@@ -86,13 +92,13 @@
   }
 
   function ValidateForm(form){
-     if((form.name.value.length == 0) || (form.name.value == null)) 
+     if((form.expname.value.length == 0) || (form.expname.value == null)) 
      { 
        alert('Please enter name in the name field') 
        form.name.focus(); 
        return false; 
      } 
-     if((form.upload.value.length == 0) || (form.name.value == null)) 
+     if((form.upload.value.length == 0) || (form.upload.value == null)) 
      { 
        alert('Please choose a apk file in the upload field') 
        form.name.focus(); 
