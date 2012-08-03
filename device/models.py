@@ -183,3 +183,21 @@ class OtaStatus(models.Model):
   timestamp          = models.DateTimeField(blank=True, null=True)
   def dev_meid(self):
     return self.dev.meid
+
+
+"""
+Class OtaInfo
+
+@data 08/03/2012
+@author TKI
+"""
+class OtaInfo(models.Model):
+  FLAG_CHOICES = (
+    (u'S', u'Set'),
+    (u'U', u'Unset'),
+  )
+  version            = models.CharField(max_length=80, blank=True, null=True) 
+  flag               = models.CharField(max_length=1, choices=FLAG_CHOICES)
+  timestamp          = models.DateTimeField(blank=True, null=True)
+  def dev_meid(self):
+    return self.dev.meid
