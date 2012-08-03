@@ -45,7 +45,15 @@ def participant(request):
                   student_status = form.cleaned_data['student_status'],
                   submitted_time = datetime.now()
       )
-
+      exp_year = '20'+form.cleaned_data['expected_grad_year']
+      exp_month = form.cleaned_data['expected_grad_month']
+      expected_grad = exp_year+'-'+exp_month+'-01'
+      participant.expected_grad = expected_grad
+      print participant.name
+      print participant.email
+      print participant.student_status
+      print participant.submitted_time
+      print participant.expected_grad
       participant.save()
 
       return render_to_response (

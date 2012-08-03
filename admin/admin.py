@@ -76,7 +76,7 @@ def send_email(modeladmin, request, queryset):
     queryset.update(approved=1)
 
 class ParticipantAdmin(admin.ModelAdmin):
-  list_display = ('name', 'email', 'submitted_time', 'student_status')
+  list_display = ('name', 'email', 'student_status', 'expected_grad', 'submitted_time')
   search_fields = ['email', 'name']
   list_filter = ['student_status']
   actions = [send_email]
@@ -168,11 +168,12 @@ def approve_experiment(modeladmin, request, queryset):
     Device.objects.get(id=dev_id.id).send_message(payload=json({"message": msg}))
 
   eprofile = ExperimentProfile.objects.get(experiment=obj)
-  eprofile.starttime = datetime.now
-  endtime = datetime.now + datetime.timedelta(days=obj.period)
+  eprofile.starttime = datetime.now()
+  print obj.period
+  endtime = datetime.now() + timedelta(int(obj.period))
   print endtime
   eprofile.endtime = endtime
-  eprofile.save
+  eprofile.save()
   queryset.update(active=1)         
 
 class ExperimentAdmin(admin.ModelAdmin):
