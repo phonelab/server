@@ -203,10 +203,10 @@ def create_experiment(request):
 
 		exp.save()
 
-		# exp_profile = ExperimentProfile (experiment=exp)
-		# exp_profile.starttime = datetime.now()
-		# exp_profile.endtime = datetime.now()
-		# exp_profile.save()
+		exp_profile = ExperimentProfile (experiment=exp)
+		exp_profile.starttime = datetime.now()
+		exp_profile.endtime = datetime.now()
+		exp_profile.save()
 
 		for afile in request.FILES.getlist('upload'):
 			# create folder for user if it doesn`t exist

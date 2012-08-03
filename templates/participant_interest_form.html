@@ -7,13 +7,13 @@
 	<a href="/" class="btn btn-success">Home</a>
 	</div>
 	{% else %}
-	<div class="container">
+	<!-- <div class="container"> -->
 	<div class="well row" style="background-color: #DDDDDD" >
 		<div class="span2">
-				<br><br><img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:150px"/>
+				<br><br><br><img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:180px"/>
 		</div>	
 		<div class="span6 pull-right" style="font-size: 26px; line-height:110%; ">
-				<br><br><strong style="font-size: 30px">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <br><br><strong style="font-size: 34px ;">PhoneLab. Only at UB CSE.</strong>
+				<br><br><br><strong style="font-size: 30px">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <br><br><strong style="font-size: 34px ;">PhoneLab. Only at UB CSE.</strong>
 		</div>
 		
 		
@@ -21,9 +21,28 @@
 			<div class="well">
 				<h2>Reserve Your Free Phone</h2>
 			  	<form class="form" method="post" name="participant_interest_form" action="/join/">
-			    	{{form}}
+			    	<div class='fieldWrapper'>
+			    		{{form.name.errors}}
+			    		Name: <br>{{form.name}}
+			    	</div>
+			    	<div class='fieldWrapper'>
+			    		{{form.email.errors}}
+			    		Email: <br>{{form.email}}
+			    	</div>
+			    	<div class='fieldWrapper'>
+			    		{{form.student_status.errors}}
+			    		Status:<br> {{form.student_status}}
+			    	</div>
+			    	<div class='fieldWrapper'>
 
-			    	<br><input type="submit" class='btn btn-info' value="Submit" />
+			    		Expected Graduation:<br> {{form.expected_grad_month.errors}} {{form.expected_grad_month}} &nbsp; {{form.expected_grad_year.errors}} {{form.expected_grad_year}}
+			    	</div>
+			    	<!-- <select class='input-small' name='month' id='month'>
+			    		<option>February</option>
+			    		<option>June</option>
+			    		<option>September</option>
+			    	 </select> -->
+			    	<input type="submit" class='btn btn-info' value="Submit" />
 			  		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
 			  	</form>
 			</div>
@@ -100,7 +119,7 @@
 			<strong> Ans.</strong> Yes. Experimental applications may only use data that you grant them access to. In addition, all experiments must be approved by a university Institutional Review Board (IRB) for human subjects procedures compliance before they may be run on PhoneLab. Together with the IRB, the PhoneLab team will ensure that experiments only collect data absolutely necessary to test their hypotheses. These extra controls make PhoneLab applications substantially safer than ones that you download online through the Android Marketplace or other app store.
 	  	</p>
 	</div>
-	</div>
+	<!-- </div> -->
 	{% endif %}
 	   
 	{% endblock %}
