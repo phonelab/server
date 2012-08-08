@@ -19,15 +19,22 @@ ENV = os.environ.get("ENV") or "development"
 #django_cron 
 CRON_POLLING_FREQUENCY = 60
 
-# Email setting
+# GEmail setting
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_HOST_USER = 'phonelab.activation'
+#EMAIL_HOST_PASSWORD = 'phonelab2012'
+#EMAIL_PORT = 587
+#FROM_EMAIL = EMAIL_HOST_USER
+
+# Amazon ses Email setting
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-
-EMAIL_HOST_USER = 'phonelab.activation'
-EMAIL_HOST_PASSWORD = 'phonelab2012'
-
-EMAIL_PORT = 587
-FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+EMAIL_HOST_USER = 'AKIAIDSLZDH6UL3PJJMQ'
+EMAIL_HOST_PASSWORD = 'Avkt1coRYp2ZPClhP2oVNtO91sjqM3JaStMu5fB7AU6d'
+EMAIL_PORT = 465
+FROM_EMAIL = 'join@phone-lab.org'
 
 #Movile setting
 MOBILE_UTILS_SETTINGS = {
