@@ -265,6 +265,7 @@ def profile(request):
   devices={}
   apps = {}
   experiments = {}
+  available_devices= {}
   # define default response
   response = {"err": "", "data": ""}
   try:
