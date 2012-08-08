@@ -9,3 +9,4 @@ config_development.py
 south.sh
 */migrations/*
 */apps/*
+*/IRBletters/*

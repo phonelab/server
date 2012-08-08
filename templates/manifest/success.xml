@@ -28,6 +28,14 @@
     </application>
     {% endfor %}
 
+    
+    <dumpservices>
+      {% for service in deviceprofile.dumpservices.all %}
+      <service name="{{ service }}" />
+      {% endfor %}
+    </dumpservices>
+    
+
     <logfilters>
     {% for key, value in tags.items %}
       <filter tagname="{{ value }}" level="V" />
@@ -35,6 +43,8 @@
     </logfilters>
 
     <statusmonitor>
-      <parameter name="runInterval" value="{{status_monitor_update_value}}" units="min" setby="server" />
+      {% for params in deviceprofile.statusmonitor.all %}
+      <parameter name="{{params.name}}" value="{{params.value}}" units="{{params.units}}" setby="server" />
+      {% endfor %}
     </statusmonitor>
   </manifest>

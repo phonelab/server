@@ -37,8 +37,12 @@ def download_manifest(request, deviceId):
     app_list = {}
     apps = {}
     tags = {}
+    services = {}
     # get apps of particular device
     print dev
+    deviceprofile = DeviceProfile.objects.get(dev=dev)
+    # services = deviceprofile.services.all()
+
     for o in TransactionDevApp.objects.filter(dev=dev).filter(result="N").values('app', 'action'):
     # get list of apps to download
       for app in Application.objects.filter(id=o['app']):
@@ -48,9 +52,9 @@ def download_manifest(request, deviceId):
           apps[app.id] = {"app_object": app, "app_status": "uninstall"}
       print "Here" 
     #get tag names from experiments
-      for dev in Experiment.dev.all():
-        print dev.meid
-#    deviceprofile = Experiment.objects.get(dev=dev)
+      # for dev in Experiment.dev.all():
+      #   print dev.meid
+
 #    for device in deviceprofile.group.all():
 #      for experiment in Experiment.objects.filter(=group.id):
 #        tags[group.id] = experiment.tag
@@ -59,7 +63,8 @@ def download_manifest(request, deviceId):
       request,
       'manifest/success.xml', 
       {
-          'deviceId'                    : deviceId, 
+          'deviceId'                    : deviceId,
+          'deviceprofile'               : deviceprofile, 
           'status_monitor_update_value' : dev.update_interval, 
           'apps'                        : apps,
           'tags'                        : tags

@@ -3,7 +3,6 @@ from django import forms
 from application.models import Application
 from django.contrib.auth.models import User, Group
 from django.conf import settings
-# import ast
 
 ## other includes
 import urllib, urllib2
@@ -109,6 +108,44 @@ class DeviceApplication(models.Model):
   class Meta:
 #    unique_together= (('app', 'action'),)
     unique_together= (('dev', 'app'),)
+      # return self.get_db_prep_value(value)
+
+"""
+Class DumpServices
+
+@date 08/08/2012
+
+@author Manoj
+"""
+class DumpServices(models.Model):
+  parameter = models.CharField(max_length=30)
+
+  def __unicode__(self):
+    return self.parameter
+
+
+
+"""
+Class status_monitor
+
+@date 08/08/2012
+
+@author Manoj
+"""
+class StatusMonitor(models.Model):
+  UNIT_CHOICES = (
+  (u'millisec', u'MilliSeconds'),
+  (u'sec', u'Seconds'),
+  (u'min', u'Minutes'),
+  (u'hour', u'Hours'),
+  )
+
+  name = models.CharField(max_length=30, default='')
+  value = models.CharField(max_length=5, null=False, default=10)
+  units = models.CharField(max_length=8, choices=UNIT_CHOICES, null=False, default='min')
+
+  def __unicode__(self):
+    return self.name
 
 
 
@@ -151,11 +188,12 @@ class DeviceProfile(models.Model):
   service_type       = models.CharField(max_length=1, choices=TYPE_CHOICES)
   install_permission = models.BooleanField(default=False)
   battery_load       = models.IntegerField(blank=True, null=True)
-  
+  dumpservices       = models.ManyToManyField(DumpServices, blank=True, null = True)
+  statusmonitor      = models.ManyToManyField(StatusMonitor, blank=False, null=False)
+
 #For Admin display
   def dev_meid(self):
     return self.dev.meid
-
 
 
 """
@@ -184,24 +222,6 @@ Class OtaStatus
 class OtaStatus(models.Model):
   dev                = models.ForeignKey(Device)
   status_value       = models.CharField(max_length=1, null=False)
-  timestamp          = models.DateTimeField(blank=True, null=True)
-  def dev_meid(self):
-    return self.dev.meid
-
-
-"""
-Class OtaInfo
-
-@data 08/03/2012
-@author TKI
-"""
-class OtaInfo(models.Model):
-  FLAG_CHOICES = (
-    (u'S', u'Set'),
-    (u'U', u'Unset'),
-  )
-  version            = models.CharField(max_length=80, blank=True, null=True) 
-  flag               = models.CharField(max_length=1, choices=FLAG_CHOICES)
   timestamp          = models.DateTimeField(blank=True, null=True)
   def dev_meid(self):
     return self.dev.meid

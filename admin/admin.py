@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.conf.urls.defaults import *
 from users.models import UserProfile, Participant
-from device.models import Device, DeviceApplication, DeviceProfile
+from device.models import Device, DeviceApplication, DeviceProfile, DumpServices, StatusMonitor
 from device.models import HeartbeatStatus, OtaStatus
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
@@ -63,6 +63,14 @@ class UserProfileAdmin(admin.ModelAdmin):
   list_display = ('user', 'user_type', 'activation_key', 'key_expires')
   search_fields = ['^user__username', '=user_type']
 admin.site.register(UserProfile, UserProfileAdmin)
+
+class DumpServicesAdmin(admin.ModelAdmin):
+  list_display = ('id', 'parameter')
+admin.site.register(DumpServices, DumpServicesAdmin)
+
+class StatusMonitorAdmin(admin.ModelAdmin):
+  list_display = ('id', 'name', 'value', 'units')
+admin.site.register(StatusMonitor, StatusMonitorAdmin)
 
 #send email to participants
 def send_email(modeladmin, request, queryset):

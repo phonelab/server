@@ -12,7 +12,7 @@ from users.forms import ParticipantForm
 
 #from manifest.views import *
 from device.models import Device, DeviceApplication, DeviceProfile
-from device.models import HeartbeatStatus, OtaStatus
+from device.models import HeartbeatStatus, OtaStatus, StatusMonitor
 from users.models import UserProfile
 from application.models import Application
 from transaction.models import Transaction, TransactionDevApp
@@ -144,6 +144,15 @@ def create_or_update_device(request):
   # save device
   device.save()
   deviceprofile = DeviceProfile()
+  # create monitor interval in StatusMonitor class
+  statusmonitor = StatusMonitor(
+                    name = 'monitorInterval',
+                    value = '10',
+                    units = 'MN')
+  statusmonitor.save()
+
+  deviceprofile.statusmonitor.add(statusmonitor)
+  
   deviceprofile.dev = device
   if params['device_id'].startswith('A0000', 0, 5):
     deviceprofile.phone_no = params['phone_no']
