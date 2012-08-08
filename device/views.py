@@ -132,7 +132,7 @@ def create_or_update_device(request):
     # update
     if ('update_interval' in params and device.update_interval != params['update_interval']):
       device.update_interval = params['update_interval']
-    
+    device.save()
   # device does not exist, insert
   else:
     device = Device(
@@ -141,25 +141,26 @@ def create_or_update_device(request):
         reg_id = params['reg_id'],
         active = "E"
     )
-  # save device
-  device.save()
-  deviceprofile = DeviceProfile()
-  # create monitor interval in StatusMonitor class
-  statusmonitor = StatusMonitor(
-                    name = 'monitorInterval',
-                    value = '10',
-                    units = 'MN')
-  statusmonitor.save()
+    device.save()
+    # create monitor interval in StatusMonitor class
+    statusmonitor = StatusMonitor(
+                      name = 'monitorInterval',
+                      value = '10',
+                      units = 'min')
+    statusmonitor.save()
+    deviceprofile = DeviceProfile()    
+    deviceprofile.statusmonitor.add(statusmonitor)
+    
 
-  deviceprofile.statusmonitor.add(statusmonitor)
   
-  deviceprofile.dev = device
-  if params['device_id'].startswith('A0000', 0, 5):
-    deviceprofile.phone_no = params['phone_no']
-  deviceprofile.save()
-  
-  # device
-  response['data'] = device
+
+    deviceprofile.dev = device
+    if params['device_id'].startswith('A0000', 0, 5):
+      deviceprofile.phone_no = params['phone_no']
+    deviceprofile.save()
+    
+    # device
+    response['data'] = device
   # render json response
   return json_response_from(response)
 
