@@ -14,8 +14,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from datetime import datetime
 import os, errno, mimetypes
 from django.conf import settings
+from django.core.servers.basehttp import FileWrapper
+from django.utils.encoding import smart_str
 RAW_APP_ROOT = settings.RAW_APP_ROOT
 RAW_IRB_ROOT = settings.RAW_IRB_ROOT
+
+admin_mail = 'tempphonelab@gmail.com'
 
 # usage: @user_passes_test(is_leader, login_url='/login')
 # usage: @user_passes_test(is_member, login_url='/login')
@@ -29,6 +33,42 @@ def is_leader(user):
     return UserProfile.objects.filter(user=user).filter(user_type=L) > 0
   return False
 
+
+"""
+Download IRB Letter
+
+@date 08/06/2012
+
+@param irbId
+
+@author Manoj
+"""
+@login_required
+def download_irb(request, irbId):
+	# define default response
+  response = { "err": "", "data": "" }
+  # return if GET request
+  if request.method == 'POST':
+    response['err'] = {
+      'no' : 'err0',
+      'msg': 'sorry no POST'
+    }
+    return HttpResponseRedirect('/error/')
+  # Get irb
+  # irb = Experiment.objects.filter(irb=irbId)
+  # if application exists, render download
+  path = os.path.join(RAW_IRB_ROOT, str(irbId)+'.pdf')
+  wrapper = FileWrapper(open(path, "r"))
+  content_type = mimetypes.guess_type(path)[0]
+  response = HttpResponse(wrapper, content_type = content_type) 
+  response['Content-Length'] = os.path.getsize(path)
+  response['Content-Disposition'] = 'attachment; filename=%s' %smart_str(os.path.basename(path))
+  return response
+  if app.count() != 1:
+    response['err'] = {
+      'no' : 'err1',
+      'msg': 'application doesn`t exist'
+    }
 
 """
 List all Experiments
@@ -147,8 +187,10 @@ def create_experiment(request):
 			)
 		exp.save()
 
+		file_type = request.FILES['irbletter'].content_type.split('/')[1]
+		print request.FILES['irbletter'].content_type
 		#save IRB Letter
-		irbname = os.path.join(RAW_IRB_ROOT, str(exp.irb))
+		irbname = os.path.join(RAW_IRB_ROOT, str(exp.irb)+'.'+file_type)
 		irbdir = os.path.dirname(irbname)
 
 		try:
@@ -229,7 +271,14 @@ def create_experiment(request):
 			fileHandle.close()
 			j = j+1
 			response['data'] = "done"
-			
+		
+   		current_site = Site.objects.get_current()
+	 	EMAIL_SUBJECT = 'Phonelab Experiment Authorization'
+	 	c = Context({'user': request.user, 'exp': exp, 'site_name': current_site})
+	  	EMAIL_BODY = (loader.get_template('experiment/mails/exp_authorization_request.txt')).render(c)
+	  	TO_EMAIL = [admin_mail]
+	  	send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
 	else:
 		response["err"] = "err1"
 

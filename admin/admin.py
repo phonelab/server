@@ -67,7 +67,7 @@ admin.site.register(UserProfile, UserProfileAdmin)
 #send email to participants
 def send_email(modeladmin, request, queryset):
     for obj in queryset:
-      EMAIL_SUBJECT = 'Device Approval'
+      EMAIL_SUBJECT = 'Email RequestContext'
       c = Context({'name': obj.name })
       EMAIL_BODY = (loader.get_template('users/mails/participant_device_approval.txt')).render(c)
       TO_EMAIL = [obj.email]

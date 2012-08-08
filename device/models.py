@@ -3,6 +3,7 @@ from django import forms
 from application.models import Application
 from django.contrib.auth.models import User, Group
 from django.conf import settings
+# import ast
 
 ## other includes
 import urllib, urllib2
@@ -109,6 +110,8 @@ class DeviceApplication(models.Model):
 #    unique_together= (('app', 'action'),)
     unique_together= (('dev', 'app'),)
 
+
+
 """
 Class DeviceProfile
 
@@ -148,6 +151,7 @@ class DeviceProfile(models.Model):
   service_type       = models.CharField(max_length=1, choices=TYPE_CHOICES)
   install_permission = models.BooleanField(default=False)
   battery_load       = models.IntegerField(blank=True, null=True)
+  
 #For Admin display
   def dev_meid(self):
     return self.dev.meid

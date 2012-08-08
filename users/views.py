@@ -26,6 +26,20 @@ admin_mail = 'tempphonelab@gmail.com'
 #TO = [ email for name, email in ADMINS ]
 
 """
+Detailed information for Participants
+
+@date 08/07/2012/
+
+@author Manoj
+"""
+def info(request):
+  return render_to_response(
+          'info.html',
+          {},
+          context_instance = RequestContext(request)
+         )
+
+"""
 Participant Email List
 
 @date 07/23/2012

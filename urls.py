@@ -41,6 +41,8 @@ if settings.DEBUG:
     url(r'^logout/$', logout, {'next_page': '/'}, name='logout'),
     #signup page
     #url(r'^register/$', 'users.views.register'),
+    # Information for participants
+    url(r'^info/$', 'users.views.info'),
     #participant interest form
     url(r'^join/$', 'users.views.participant'),
     #profile page
@@ -129,6 +131,8 @@ if settings.DEBUG:
     url(r'^experiment/$', 'experiment.views.create_experiment' ),
     #Update Experiment Profile [POST]
     url(r'^experiment/update/(?P<expId>\d+)/$', 'experiment.views.update' ),
+    # download IRB Letter
+    url(r'^experiment/irb/(?P<irbId>\d+).pdf/$', 'experiment.views.download_irb' ),
 
     #
     ## Transaction

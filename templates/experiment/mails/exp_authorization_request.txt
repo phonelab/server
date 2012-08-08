@@ -1,0 +1,10 @@
+{% load url from future %}
+Hello Admin,
+
+{{user.username}} wants to create an experiment. Please find the experiments details below.
+
+Application: http://{{ site_name }}/application/{{app.id}}.apk
+
+IRB Letter: http://{{ site_name }}/experiment/irb/{{exp.irb}}
+
+Thank You 
