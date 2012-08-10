@@ -13,6 +13,8 @@ RAW_LOG_ROOT = os.path.join(SITE_ROOT, 'datalogger', 'logs')
 RAW_APP_ROOT = os.path.join(SITE_ROOT, 'application', 'apps')
 #IRB Letter path
 RAW_IRB_ROOT = os.path.join(SITE_ROOT, 'experiment', 'IRBletters')
+#Participant agreement path
+RAW_AGREEMENT_ROOT = os.path.join(SITE_ROOT, 'users', 'Participant_Agreement')
 # Env variable
 ENV = os.environ.get("ENV") or "development"
 

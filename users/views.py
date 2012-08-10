@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
 from django import forms
 import random, hashlib
-
+import os, errno, mimetypes
 from settings import FROM_EMAIL, ADMINS
 #from django.utils import  simplejson as json
 from lib.helper import json_response_from, json
@@ -18,8 +18,13 @@ from users.models import UserProfile, Participant
 from device.models import Device, DeviceProfile
 from users.forms import RegistrationForm, ParticipantForm
 from application.models import Application
+from django.core.servers.basehttp import FileWrapper
+from django.http import HttpResponse, HttpResponseRedirect
+from django.utils.encoding import smart_str
 from experiment.models import Experiment
+from django.conf import settings
 
+RAW_AGREEMENT_ROOT = settings.RAW_AGREEMENT_ROOT
 
 admin_mail = 'tempphonelab@gmail.com'
 
@@ -38,6 +43,23 @@ def info(request):
           {},
           context_instance = RequestContext(request)
          )
+
+"""
+Download Participan Agreement
+
+@date 08/10/2012
+
+@author Manoj
+"""
+def download_agreement(request):
+  path = os.path.join(RAW_AGREEMENT_ROOT, 'agreement.pdf')
+
+  wrapper = FileWrapper(open(path, "r"))
+  content_type = mimetypes.guess_type(path)[0]
+  response = HttpResponse(wrapper, content_type = content_type) 
+  response['Content-Length'] = os.path.getsize(path)
+  response['Content-Disposition'] = 'attachment; filename=%s' %smart_str(os.path.basename(path))
+  return response
 
 """
 Participant Email List
