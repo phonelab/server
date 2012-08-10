@@ -553,9 +553,8 @@ Update DeviceStatus DB [POST]
 @date 07/26/2012
 
 @param device_id
-@param status_type (H: heart beat, O: OTA feedback, Ob: new build version 2: reserved)
-@param status_value (H => 0: no problem , 1: There is some wrong)
-@param status_value (O => 1: download completed, 2)
+@param status_value (0: no problem , 1: There is some wrong)
+@param status_value (1: download completed, 2)
 @param status_value (Ob => new build version, string type)
 
 # Insert DeviceApplication DB using POST method
