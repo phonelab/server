@@ -1,6 +1,7 @@
 	{% extends "base.html" %}
 	{% block title %}PhoneLab Testbed Web Site{% endblock %}
 	{% block content %}
+	<body style='color: #000000; background: url(/static/img/blue_bg.jpg) no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover;background-size: cover;'>
 	{% if success %}
 	<div class="alert alert-success">
 	Thank You for registering with phonelab. You will recieve an invite soon!<br><br>
@@ -8,118 +9,112 @@
 	</div>
 	{% else %}
 	<!-- <div class="container"> -->
-	<div class="well row" style="background-color: #DDDDDD" >
+	<div class="row">
 		<div class="span2">
-				<br><br><br><img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:180px"/>
+				<br><br><img alt='PhoneLab Image' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:180px"/>
 		</div>	
-		<div class="span6 pull-right" style="font-size: 26px; line-height:110%; ">
-				<br><br><br><strong style="font-size: 30px">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <br><br><strong style="font-size: 34px ;">PhoneLab. Only at UB CSE.</strong>
+		<div class="span6" style="color: #000000; font-size: 26px; ">
+				<br><br><br><p style="font-size: 24px; line-height:110%;"><strong style="color: #053361 ; font-size: 30px;">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <br><br><strong style="color: #053361 ; font-size: 34px ;">PhoneLab. Only at UB CSE.</strong></p>
 		</div>
 		
 		
-		<div class="span4">
-			<div class="well">
-				<h2>Reserve Your Free Phone</h2>
+		<div class="span4" style="text-align: left;">
+			 <!-- <div class="well">  -->
+				<h2 style="color: #053361">Reserve Your Free Phone</h2>
 			  	<form class="form" method="post" name="participant_interest_form" action="/join/">
 			    	<div class='fieldWrapper'>
-			    		{{form.name.errors}}
-			    		Name: <br>{{form.name}}
+			    		
+			    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.name.errors}}{{form.name}}
 			    	</div>
 			    	<div class='fieldWrapper'>
-			    		{{form.email.errors}}
-			    		Email: <br>{{form.email}}
+						
+			    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.email.errors}}{{form.email}}
 			    	</div>
 			    	<div class='fieldWrapper'>
-			    		{{form.student_status.errors}}
-			    		Status:<br> {{form.student_status}}
+			    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.student_status.errors}}{{form.student_status}}
 			    	</div>
 			    	<div class='fieldWrapper'>
 
-			    		Expected Graduation:<br> {{form.expected_grad_month.errors}} {{form.expected_grad_month}} &nbsp; {{form.expected_grad_year.errors}} {{form.expected_grad_year}}
+			    		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Graduation: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{form.expected_grad_month.errors}} {{form.expected_grad_month}} &nbsp; {{form.expected_grad_year.errors}} {{form.expected_grad_year}}
 			    	</div>
-			    	<!-- <select class='input-small' name='month' id='month'>
-			    		<option>February</option>
-			    		<option>June</option>
-			    		<option>September</option>
-			    	 </select> -->
-			    	<input type="submit" class='btn btn-info' value="Submit" />
-			  		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
+			    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class='btn btn-info' value="Submit" />
+			  		&nbsp;<a class="btn" href="/" data-dismiss="modal">Cancel</a>
 			  	</form>
-			</div>
+			 <!-- </div>  -->
 		</div>
 		</div>
 	<hr>
-		<div style="font-size: 18px; ">
-			<strong>PhoneLab</strong> is an open-access large-scale participatory smartphone testbed located at SUNY Buffalo.<br><br>In exchange for participation you will receive:
+		<div style="font-size: 18px; color: #000000 ">
+			<strong style="color: #3E4D0C ;">PhoneLab</strong> is an open-access large-scale participatory smartphone testbed located at SUNY Buffalo.<br><br>In exchange for participation you will receive:
 			<p style='line-height: 110% ;'>
 			<ul >
-				<li style='line-height: 130% ;'><strong><i>Free</i></strong> unlimited voice, data, and messaging for one year</li>
-				<li style='line-height: 130% ;'><strong><i>Free</i></strong>  Nexus S smartphone</li>
+				<li style='line-height: 130% ;'><strong style="color: #3E4D0C ;"><i>Free</i></strong> unlimited voice, data, and messaging for one year</li>
+				<li style='line-height: 130% ;'><strong style="color: #3E4D0C ;"><i>Free</i></strong>  Nexus S smartphone</li>
 				<li style='line-height: 130% ;'>Discounted service in future years</li>
 				<li style='line-height: 130% ;'>Over $2,000 in estimated savings over four years</li>
 				<li style='line-height: 130% ;'>The chance to participate in ongoing smartphone research</li>
 			</ul>
 		</p>
 		<hr>
-		<h3>FAQ</h3>
+		<h3 style="color: #3E4D0C ;">FAQ</h3>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q1. How much will I have to participate?</i></strong>
+			<strong style="color: #053361"><i>Q1. How much will I have to participate?</i></strong>
 			<br>
-			<strong>Ans.</strong> Your active participation in PhoneLab will be limited to a few hours a month. Most of the time you’ll just be using your phone normally.
+			<strong style="color: #3E4D0C">Ans.</strong> Your active participation in PhoneLab will be limited to a few hours a month. Most of the time you’ll just be using your phone normally.
 		</p>
 			<br>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q2. How long do I have to remain a part of the testbed?</i></strong>
+			<strong style="color: #053361"><i>Q2. How long do I have to remain a part of the testbed?</i></strong>
 			<br>
-			<strong>Ans. </strong>We are preferring students willing to continue to participate in PhoneLab for three or four years, and so we actively recruiting freshman, sophomores, and incoming PhD students. We want participants to stick around so that we can provide a stable pool to experimenters and so that the testbed grows in size.
+			<strong style="color: #3E4D0C">Ans. </strong>We are preferring students willing to continue to participate in PhoneLab for three or four years, and so we actively recruiting freshman, sophomores, and incoming PhD students. We want participants to stick around so that we can provide a stable pool to experimenters and so that the testbed grows in size.
 		</p><br>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q3. If I leave the testbed after one year, can I keep the Android smartphone?</i></strong><br>
-			<strong>Ans. </strong>No. If you leave after one year, we will require you to return your smartphone so that it can be used by another participant.
+			<strong style="color: #053361"><i>Q3. If I leave the testbed after one year, can I keep the Android smartphone?</i></strong><br>
+			<strong style="color: #3E4D0C">Ans. </strong>No. If you leave after one year, we will require you to return your smartphone so that it can be used by another participant.
 		</p><br>
 		<p style='line-height: 140%; font-size: 18px ;'>
-			<strong><i>Q4. I’m already on a family plan. Should I join the testbed?</i></strong>
+			<strong style="color: #053361"><i>Q4. I’m already on a family plan. Should I join the testbed?</i></strong>
 			<br>
-			<strong>Ans. </strong>We’re offering free voice and data for one year and deep discounts in future years. At some point you will leave your family plan, and maybe now is the time to do it? Give your parents and siblings back your share of the minutes, texts, and megabytes!
+			<strong style="color: #3E4D0C">Ans. </strong>We’re offering free voice and data for one year and deep discounts in future years. At some point you will leave your family plan, and maybe now is the time to do it? Give your parents and siblings back your share of the minutes, texts, and megabytes!
 		</p><br>
 		<p style='line-height: 140%; font-size: 18px ;'>
-			<strong><i>Q5. I don’t want to change my number! Can I still be a part of the testbed?</i></strong>
+			<strong style="color: #053361"><i>Q5. I don’t want to change my number! Can I still be a part of the testbed?</i></strong>
 			<br>
-			<strong>Ans. </strong>Yes! You can definitely port your number to Google Voice and then associate your new phone with your Google Voice account. This is probably the most flexible option, since it allows you to easily switch numbers in the future. We are also exploring whether you will be able to port your number directly to Sprint if you so desire.
+			<strong style="color: #3E4D0C">Ans. </strong>Yes! You can definitely port your number to Google Voice and then associate your new phone with your Google Voice account. This is probably the most flexible option, since it allows you to easily switch numbers in the future. We are also exploring whether you will be able to port your number directly to Sprint if you so desire.
 		</p><br>	
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q6. What’s in it for me?</i></strong>
+			<strong style="color: #053361"><i>Q6. What’s in it for me?</i></strong>
 			<br>
-			<strong> Ans.</strong> First, we’ll provide a brand new Android Nexus S smartphone for you to use. Second, during your first year in the testbed you receive unlimited voice, data and messaging absolutely free. You will never receive a bill. Finally, after your first year we will transition you into a special deely-discounted plan offered by Sprint only to PhoneLab participants and you’ll continue to save money each month. Over four years in PhoneLab, you’ll save over $2,000.
+			<strong style="color: #3E4D0C"> Ans.</strong> First, we’ll provide a brand new Android Nexus S smartphone for you to use. Second, during your first year in the testbed you receive unlimited voice, data and messaging absolutely free. You will never receive a bill. Finally, after your first year we will transition you into a special deely-discounted plan offered by Sprint only to PhoneLab participants and you’ll continue to save money each month. Over four years in PhoneLab, you’ll save over $2,000.
 		</p><br>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q7. So who’s paying for my phone?</i></strong>
+			<strong style="color: #053361"><i>Q7. So who’s paying for my phone?</i></strong>
 			<br>
-			<strong>Ans.</strong> PhoneLab is funded by the National Science Foundation—your tax dollars at work—and made possible by generous discounts provided by Sprint.
+			<strong style="color: #3E4D0C">Ans.</strong> PhoneLab is funded by the National Science Foundation—your tax dollars at work—and made possible by generous discounts provided by Sprint.
 		</p><br>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q8. Am I required to participate in experiments?</i></strong>
+			<strong style="color: #053361"><i>Q8. Am I required to participate in experiments?</i></strong>
 			<br>
-			<strong>Ans. </strong>Yes, PhoneLab participants are required to continue to participate in some experiments. You may, however, decline to participate in specific experiments if you do not feel comfortable with the data that they are collecting about you.
+			<strong style="color: #3E4D0C">Ans. </strong>Yes, PhoneLab participants are required to continue to participate in some experiments. You may, however, decline to participate in specific experiments if you do not feel comfortable with the data that they are collecting about you.
 		</p><br>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q9. What does participation entail?</i></strong>
+			<strong style="color: #053361"><i>Q9. What does participation entail?</i></strong>
 			<br>
-			<strong>Ans. </strong>For at most a few hours a month you’ll use your phone to interact with experimental applications. All participation will happen using your phone, not in any other way: no reports, mandatory meetings, or anything like that. Here’s some examples of things you might do as a PhoneLab participant:<br>
+			<strong style="color: #3E4D0C">Ans. </strong>For at most a few hours a month you’ll use your phone to interact with experimental applications. All participation will happen using your phone, not in any other way: no reports, mandatory meetings, or anything like that. Here’s some examples of things you might do as a PhoneLab participant:<br>
 				<p style='line-height: 140% ; font-size: 18px;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>a.</b> Complete a survey on your phone.<br>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>b.</b>Use a geotagging smartphone application on campus.</br>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>c.</b>Evaluate a new classroom interaction application in one of your UB courses.</p>
 		</p><br>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q10. How will I know what information experiments are collecting about me?</i></strong><br>
-			<strong>Ans.</strong> When experiments begin to run they will display the standard Android permissions dialog indicating what permissions the experiment is requesting. If you do not feel comfortable with the permissions requested by an experiment, you may decline to participate.
+			<strong style="color: #053361"><i>Q10. How will I know what information experiments are collecting about me?</i></strong><br>
+			<strong style="color: #3E4D0C">Ans.</strong> When experiments begin to run they will display the standard Android permissions dialog indicating what permissions the experiment is requesting. If you do not feel comfortable with the permissions requested by an experiment, you may decline to participate.
 		</p><br>
 		<p style='line-height: 140% ; font-size: 18px;'>
-			<strong><i>Q11. Is PhoneLab safe?</i></strong><br>
-			<strong> Ans.</strong> Yes. Experimental applications may only use data that you grant them access to. In addition, all experiments must be approved by a university Institutional Review Board (IRB) for human subjects procedures compliance before they may be run on PhoneLab. Together with the IRB, the PhoneLab team will ensure that experiments only collect data absolutely necessary to test their hypotheses. These extra controls make PhoneLab applications substantially safer than ones that you download online through the Android Marketplace or other app store.
+			<strong style="color: #053361"><i>Q11. Is PhoneLab safe?</i></strong><br>
+			<strong style="color: #3E4D0C"> Ans.</strong> Yes. Experimental applications may only use data that you grant them access to. In addition, all experiments must be approved by a university Institutional Review Board (IRB) for human subjects procedures compliance before they may be run on PhoneLab. Together with the IRB, the PhoneLab team will ensure that experiments only collect data absolutely necessary to test their hypotheses. These extra controls make PhoneLab applications substantially safer than ones that you download online through the Android Marketplace or other app store.
 	  	</p>
 	</div>
 	<!-- </div> -->
 	{% endif %}
-	   
+	   </body>
 	{% endblock %}
