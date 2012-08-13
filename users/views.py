@@ -52,7 +52,7 @@ Download Participan Agreement
 @author Manoj
 """
 def download_agreement(request):
-  path = os.path.join(RAW_AGREEMENT_ROOT, 'agreement.pdf')
+  path = os.path.join(RAW_AGREEMENT_ROOT, 'information.pdf')
 
   wrapper = FileWrapper(open(path, "r"))
   content_type = mimetypes.guess_type(path)[0]
