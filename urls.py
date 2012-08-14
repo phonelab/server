@@ -43,6 +43,8 @@ if settings.DEBUG:
     #url(r'^register/$', 'users.views.register'),
     # Information for participants
     url(r'^info/$', 'users.views.info'),
+    #download participant agreement
+    url(r'^info/agreement/$', 'users.views.download_agreement'),
     #participant interest form
     url(r'^join/$', 'users.views.participant'),
     #Participant Register and device Register Form
