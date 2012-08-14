@@ -34,7 +34,8 @@ EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
 EMAIL_HOST_USER = 'AKIAIDSLZDH6UL3PJJMQ'
 EMAIL_HOST_PASSWORD = 'Avkt1coRYp2ZPClhP2oVNtO91sjqM3JaStMu5fB7AU6d'
 EMAIL_PORT = 465
-FROM_EMAIL = 'join@phone-lab.org'
+FROM_EMAIL = 'PhoneLab Team <ops@phone-lab.org>'
+#FROM_EMAIL = 'PhoneLab Team <join@phone-lab.org>'
 
 #Movile setting
 MOBILE_UTILS_SETTINGS = {
