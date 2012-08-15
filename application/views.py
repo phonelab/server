@@ -71,7 +71,7 @@ def index(request):
   userprofile = UserProfile.objects.get(user_id=user.id)
 
   apps = {} 
-  if userprofile.user_type == 'P':
+  if userprofile.user_type == 'P' or userprofile.user_type == 'A':
     # query the database for all applications
     apps = Application.objects.all().order_by('-created')
     
@@ -79,13 +79,9 @@ def index(request):
     #query the database for user's own applications
     apps = Application.objects.filter(user=user)
 
-  elif userprofile.user_type == 'A':
-    apps = Application.objects.all().order_by('-created')
-
   return render_to_response(
       'application/index.html', 
       { 
-#       'group': userprofile.group,
         'apps': apps,
         'userprofile': userprofile
       },
@@ -93,10 +89,12 @@ def index(request):
     )
 
 
+
 """
 Show Application Details [GET]
 
 @date 03/20/2012
+
 @param String appId
 
 @author TKI
@@ -151,6 +149,7 @@ def new(request):
       },
       context_instance=RequestContext(request)
     )
+
 
 """
 Upload Application/Experiment Action
