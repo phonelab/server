@@ -64,11 +64,7 @@ def download_irb(request, irbId):
   response['Content-Length'] = os.path.getsize(path)
   response['Content-Disposition'] = 'attachment; filename=%s' %smart_str(os.path.basename(path))
   return response
-  if app.count() != 1:
-    response['err'] = {
-      'no' : 'err1',
-      'msg': 'application doesn`t exist'
-    }
+  
 
 """
 List all Experiments
@@ -132,17 +128,11 @@ def show(request, expId):
 	user = request.user
 	userprofile = UserProfile.objects.get(user=user)
 	experiment = Experiment.objects.get(id = expId)
-	# members_to_add = UserProfile.objects.filter(group=experiment.group, user_type='M').exclude(user__in=experiment.user.all())
-	# devices_to_add = DeviceProfile.objects.filter(group=experiment.group).exclude(dev__in=experiment.dev.all())
-	# apps_to_add = Application.objects.filter(group=experiment.group).exclude(id__in=experiment.app.all())
+	
 	return render_to_response (
 			'experiment/experiment_profile.html', 
   	  		{
   	  		 'userprofile': userprofile,
-  	  		 # 'group': experiment.group,
-  	  		 # 'members_to_add': members_to_add,
-  	  		 # 'devices_to_add': devices_to_add,
-  	  		 # 'apps_to_add': apps_to_add,
   	  		 'experiment': experiment },
       		context_instance=RequestContext(request)
     	  )
@@ -187,8 +177,9 @@ def create_experiment(request):
 			)
 		exp.save()
 
+		#upload IRB Letter
 		file_type = request.FILES['irbletter'].content_type.split('/')[1]
-		print request.FILES['irbletter'].content_type
+		
 		#save IRB Letter
 		irbname = os.path.join(RAW_IRB_ROOT, str(exp.irb)+'.'+file_type)
 		irbdir = os.path.dirname(irbname)
@@ -210,8 +201,10 @@ def create_experiment(request):
 			fileHandle.write(chunk)
 		# close file handle
 		fileHandle.close()
+
 		response['data'] = "done"
 
+		#add user to the experiment
 		exp.user.add(request.user)
 		
 		devs = Device.objects.all()
@@ -219,9 +212,11 @@ def create_experiment(request):
 		appdescs = request.POST.getlist('appdesc')
 		apptypes = request.POST.getlist('apptype')
 		
+		#add the devices to the experiment
 		for dev in devs:	
 			exp.dev.add(dev)
 
+		#add the apps to the experiment
 		for app in appnames:
 			
 			application = Application(
@@ -238,6 +233,8 @@ def create_experiment(request):
 			application.save()
 			exp.app.add(application)
 			i = i+1
+
+			#create dirs for Applications
 			filename = os.path.join(RAW_APP_ROOT, str(application.id) + ".apk")
 			filedir = os.path.dirname(filename)
 			filenames[app] = filename
@@ -250,6 +247,7 @@ def create_experiment(request):
 		exp_profile.endtime = datetime.now()
 		exp_profile.save()
 
+		#upload experiment
 		for afile in request.FILES.getlist('upload'):
 			# create folder for user if it doesn`t exist
 			try:
@@ -272,6 +270,7 @@ def create_experiment(request):
 			j = j+1
 			response['data'] = "done"
 		
+		#Notify the admin about the new experiment for approval
    		current_site = Site.objects.get_current()
 	 	EMAIL_SUBJECT = 'Phonelab Experiment Authorization'
 	 	c = Context({'user': request.user, 'exp': exp, 'site_name': current_site})
@@ -283,7 +282,8 @@ def create_experiment(request):
 		response["err"] = "err1"
 
 
-	return HttpResponseRedirect('/experiment/' + str(exp.id))
+	return HttpResponseRedirect('/experiments/')
+
 
 """
 Update Experiment Profile
@@ -347,7 +347,7 @@ def delete_exp(request, expId):
 
 
 """
-Delete a member
+Add a member
 
 @date 07/18/2012
 
