@@ -54,7 +54,7 @@ class Participant(models.Model):
 
   
 
-class Participant_Register(models.Model):
+class ParticipantRegister(models.Model):
   lib_number     = models.CharField(max_length=14, null=False)
   meid           = models.CharField(max_length=15, null=False)
   approved       = models.BooleanField(default=False)
