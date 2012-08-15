@@ -142,17 +142,15 @@ def create_or_update_device(request):
         active = "E"
     )
     device.save()
+
     # create monitor interval in StatusMonitor class
-    statusmonitor = StatusMonitor(
-                      name = 'monitorInterval',
-                      value = '10',
-                      units = 'min')
-    statusmonitor.save()
+    # statusmonitor = StatusMonitor(
+    #                   name = 'monitorInterval',
+    #                   value = '10',
+    #                   units = 'min')
+    # statusmonitor.save()
     deviceprofile = DeviceProfile()    
     deviceprofile.statusmonitor.add(statusmonitor)
-    
-
-  
 
     deviceprofile.dev = device
     if params['device_id'].startswith('A0000', 0, 5):

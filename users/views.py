@@ -30,6 +30,7 @@ admin_mail = 'tempphonelab@gmail.com'
 
 #TO = [ email for name, email in ADMINS ]
 
+
 """
 Detailed information for Participants
 
@@ -40,12 +41,12 @@ Detailed information for Participants
 def info(request):
   return render_to_response(
           'info.html',
-          {},
           context_instance = RequestContext(request)
          )
 
+
 """
-Download Participan Agreement
+Download Participant Agreement
 
 @date 08/10/2012
 
@@ -61,6 +62,7 @@ def download_agreement(request):
   response['Content-Disposition'] = 'attachment; filename=%s' %smart_str(os.path.basename(path))
   return response
 
+
 """
 Participant Email List
 
@@ -72,9 +74,10 @@ Participant Email List
 def participant(request):
 
   if request.method == 'POST':
+    #Bind ParticipantForm with the request
     form = ParticipantForm(request.POST)
     if form.is_valid():
-
+      #Save the Participant information
       participant = Participant(
                   name = form.cleaned_data['name'],
                   email = form.cleaned_data['email'],
@@ -85,11 +88,6 @@ def participant(request):
       exp_month = form.cleaned_data['expected_grad_month']
       expected_grad = exp_year+'-'+exp_month+'-01'
       participant.expected_grad = expected_grad
-      print participant.name
-      print participant.email
-      print participant.student_status
-      print participant.submitted_time
-      print participant.expected_grad
       participant.save()
 
       return render_to_response (
@@ -101,7 +99,8 @@ def participant(request):
                )
 
     else: 
-     form = ParticipantForm(request.POST  )
+     #if form is invalid
+     form = ParticipantForm(request.POST)
      return render_to_response(
               'participant_interest_form.html',
               {'form': form},
@@ -121,6 +120,7 @@ def participant(request):
 Register New User with activation
 
 @date 05/09/2010
+
 @author TKI
 """
 def register(request):
@@ -176,67 +176,6 @@ def register(request):
 
 
 """
-Email Authorization
-
-@date 07/03/2012
-
-@params String groupname,
-        activation_key
-        
-
-@author Manoj
-"""
-
-def authorize(request, groupname, activation_key):
-  user_profile = get_object_or_404(UserProfile, activation_key=activation_key)
-  user = user_profile.user
-
-  if user.is_active:
-    return render_to_response(
-             'users/confirm.html', 
-             {'has_account': True,
-              'req_user': user},
-             context_instance=RequestContext(request)
-           )
-  
-  if user_profile.key_expires < datetime.today():
-    return render_to_response(
-             'users/confirm.html', 
-             {'expired': True},
-             context_instance=RequestContext(request)
-           )
-
-  
-  elif user_profile.user_type == 'L':
-    group = Group.objects.create(name=groupname)
-    user.groups = [group]
-    user_profile.group = group
-    user_profile.save()
-    EMAIL_SUBJECT = 'Phonelab Admin Authorization'
-
-  elif user_profile.user_type=='M':
-    group = Group.objects.get(name=groupname)
-    user.groups = [group]
-    user_profile.group = group
-    user_profile.save()
-    EMAIL_SUBJECT = 'Phonelab Leader Authorization'
-    
-  current_site = Site.objects.get_current()
-  c = Context({'user': user, 'group': group ,'user_type': user_profile.user_type, 'key': activation_key, 'site_name': current_site})
-  EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
-  TO_EMAIL = [user.email]
-  send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
-
-  return render_to_response(
-          'users/confirm.html', 
-          {'success': True,
-           'user_type': user_profile.user_type,
-           'req_user': user},
-            context_instance=RequestContext(request)
-         )
-
-
-"""
 Email activation 
 
 @param: activation_key
@@ -275,19 +214,21 @@ def confirm(request, activation_key):
 User Profile
 
 @date 05/21/2010
+
 @author TKI
+
+@date 07/17/2012
+
+Updated to include experiment tab
+
+@author Manoj
+
 """
 @login_required
 def profile(request):
-  group = {}
-  leader = {}
-  members = {}
-  no_of_members = 0
-  no_of_devices = 0
-  devices={}
-  apps = {}
+  
   experiments = {}
-  available_devices= {}
+
   # define default response
   response = {"err": "", "data": ""}
   try:
@@ -298,31 +239,18 @@ def profile(request):
       #get all devices
       devprofiles = DeviceProfile.objects.all()
 
-    #get group its leader and members and its devices
+    #get Experiment details if experimenter
     if(userprofile.user_type== 'E'):
 
-      # get group information
-      devices = DeviceProfile.objects.all()
-      no_of_devices = devices.count()
       experiments = Experiment.objects.filter(user=request.user)
-      #get the availble no of devices
-      available_devices = DeviceProfile.objects.filter(status='W').exclude(dev__in=devices)
-      #get experiment information
-      # experiments = Experiment.objects.filter(group=group).order_by('id')
       
     return render_to_response(
              'users/profile.html', 
              { 'userprofile' : userprofile,
-               'group': group,
-               'leader': leader,
-               'no_of_members': no_of_members,
-               'no_of_devices': no_of_devices, 
-               'devices'  : devices,
-               'available_devices': available_devices,
-               'apps': apps,
                'experiments': experiments },
              context_instance=RequestContext(request)
              )
+  
   # User does not exist
   except UserProfile.DoesNotExist: 
     response['err'] = {
@@ -336,6 +264,7 @@ def profile(request):
 Update User Profile Via Form [POST]
 
 @date 05/21/2012
+
 @param String userId
 
 @author Micheal
@@ -378,109 +307,7 @@ def update(request, userId):
     }
   return json_response_from(response)
 
-"""
-Group Profile
 
-@date 07/16/2012
-
-@param String groupname
-
-@author Manoj
-"""
-
-def group_profile(request):
-
-  #initialize beeloan
-  device_requested = False
-
-  user = request.user
-  userprofile = UserProfile.objects.get(user=user)
-
-  #get the group
-  group = Group.objects.get(user = user)
-
-  #get the devices and number of devices
-  devices = DeviceProfile.objects.filter(group=group)
-  no_of_devices = devices.count()
-
-  
-  #get the leader
-  leader = get_object_or_404(UserProfile, user_type='L', group=group)
-
-  #get the apps
-  apps = Application.objects.filter(group=userprofile.group)
-
-  #get the members
-  members = UserProfile.objects.filter(user_type='M', group=group)
-
-  if request.POST:
-    params = request.POST
-
-    if 'req_devices' in params:
-      req_devices = params['req_devices']
-
-      current_site = Site.objects.get_current()
-      c = Context({'leader': leader.user, 'group': group ,'req_devices': req_devices, 'available_devices': no_of_devices, 'site_name': current_site})
-      EMAIL_SUBJECT = "Group "+group.name+" Device request"
-      EMAIL_BODY = (loader.get_template('users/mails/device_request.txt')).render(c)
-      TO_EMAIL = [admin_mail]
-      send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
-
-      device_requested = True
-
-  return render_to_response(
-          'users/group_profile.html', 
-             { 'device_requested': device_requested,
-               'userprofile' : userprofile,
-               'group': group,
-               'apps': apps,
-               'leader': leader,
-               'members': members,
-               'no_of_devices': no_of_devices, 
-               'devices'  : devices },
-             context_instance=RequestContext(request)
-         )
-
-"""
-Delete member from group
-
-@date 07/16/2012
-
-@param String member
-
-@author Manoj
-"""
-def delete_member(request, member):
-  
-  group_member = User.objects.get(username=member)
-  member_profile = UserProfile.objects.get(user = group_member)
-  group = Group.objects.get(user = group_member)
-
-  #remove the user from group
-  group_member.groups.remove(group)
-
-  #Update userprofile
-  member_profile.group_id = ""
-  member_profile.user_type = "P"
-  
-
-  user = request.user
-  userprofile = UserProfile.objects.get(user=user)
-
-  #Notify the member
-  current_site = Site.objects.get_current()
-  c = Context({'user': group_member, 'group': group ,'leader': user, 'site_name': current_site})
-  EMAIL_SUBJECT = "Phonelab: Group "+group.name+" Notification"
-  EMAIL_BODY = (loader.get_template('users/mails/member_removed.txt')).render(c)
-  TO_EMAIL = [member_profile.user.email]
-  send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
-
-  member_profile.save()
-
-  return HttpResponseRedirect('/accounts/group_profile/')
-
-# usage: @user_passes_test(is_leader, login_url='/login')
-# usage: @user_passes_test(is_member, login_url='/login')
 def is_member(user, deviceId):
   if user:
     return UserProfile.objects.filter(user=user).filter(user_type="M").count() > 0
@@ -490,4 +317,176 @@ def is_leader(user):
   if user:
     return UserProfile.objects.filter(user=user).filter(user_type="L").count() > 0
   return False
+
+
+
+###Group Authorization
+# """
+# Email Authorization
+
+# @date 07/03/2012
+
+# @params String groupname,
+#         activation_key
+        
+
+# @author Manoj
+# """
+
+# def authorize(request, groupname, activation_key):
+#   user_profile = get_object_or_404(UserProfile, activation_key=activation_key)
+#   user = user_profile.user
+
+#   #Account already activated 
+#   if user.is_active:
+#     return render_to_response(
+#              'users/confirm.html', 
+#              {'has_account': True,
+#               'req_user': user},
+#              context_instance=RequestContext(request)
+#            )
+  
+#   #Key Expired 
+#   if user_profile.key_expires < datetime.today():
+#     return render_to_response(
+#              'users/confirm.html', 
+#              {'expired': True},
+#              context_instance=RequestContext(request)
+#            )
+
+  
+#   elif user_profile.user_type == 'L':
+#     group = Group.objects.create(name=groupname)
+#     user.groups = [group]
+#     user_profile.group = group
+#     user_profile.save()
+#     EMAIL_SUBJECT = 'Phonelab Admin Authorization'
+
+#   elif user_profile.user_type=='M':
+#     group = Group.objects.get(name=groupname)
+#     user.groups = [group]
+#     user_profile.group = group
+#     user_profile.save()
+#     EMAIL_SUBJECT = 'Phonelab Leader Authorization'
+    
+#   current_site = Site.objects.get_current()
+#   c = Context({'user': user, 'group': group ,'user_type': user_profile.user_type, 'key': activation_key, 'site_name': current_site})
+#   EMAIL_BODY = (loader.get_template('users/mails/user_signup.txt')).render(c)
+#   TO_EMAIL = [user.email]
+#   send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
+#   return render_to_response(
+#           'users/confirm.html', 
+#           {'success': True,
+#            'user_type': user_profile.user_type,
+#            'req_user': user},
+#             context_instance=RequestContext(request)
+#          )
+
+
+# """
+# Group Profile
+
+# @date 07/16/2012
+
+# @param String groupname
+
+# @author Manoj
+# """
+
+# def group_profile(request):
+
+#   #initialize beeloan
+#   device_requested = False
+
+#   user = request.user
+#   userprofile = UserProfile.objects.get(user=user)
+
+#   #get the group
+#   group = Group.objects.get(user = user)
+
+#   #get the devices and number of devices
+#   devices = DeviceProfile.objects.filter(group=group)
+#   no_of_devices = devices.count()
+
+  
+#   #get the leader
+#   leader = get_object_or_404(UserProfile, user_type='L', group=group)
+
+#   #get the apps
+#   apps = Application.objects.filter(group=userprofile.group)
+
+#   #get the members
+#   members = UserProfile.objects.filter(user_type='M', group=group)
+
+#   if request.POST:
+#     params = request.POST
+
+#     if 'req_devices' in params:
+#       req_devices = params['req_devices']
+
+#       current_site = Site.objects.get_current()
+#       c = Context({'leader': leader.user, 'group': group ,'req_devices': req_devices, 'available_devices': no_of_devices, 'site_name': current_site})
+#       EMAIL_SUBJECT = "Group "+group.name+" Device request"
+#       EMAIL_BODY = (loader.get_template('users/mails/device_request.txt')).render(c)
+#       TO_EMAIL = [admin_mail]
+#       send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
+#       device_requested = True
+
+#   return render_to_response(
+#           'users/group_profile.html', 
+#              { 'device_requested': device_requested,
+#                'userprofile' : userprofile,
+#                'group': group,
+#                'apps': apps,
+#                'leader': leader,
+#                'members': members,
+#                'no_of_devices': no_of_devices, 
+#                'devices'  : devices },
+#              context_instance=RequestContext(request)
+#          )
+
+
+###Part of Groups
+# """
+# Delete member from group
+
+# @date 07/16/2012
+
+# @param String member
+
+# @author Manoj
+# """
+# def delete_member(request, member):
+  
+#   group_member = User.objects.get(username=member)
+#   member_profile = UserProfile.objects.get(user = group_member)
+#   group = Group.objects.get(user = group_member)
+
+#   #remove the user from group
+#   group_member.groups.remove(group)
+
+#   #Update userprofile
+#   member_profile.group_id = ""
+#   member_profile.user_type = "P"
+  
+
+#   user = request.user
+#   userprofile = UserProfile.objects.get(user=user)
+
+#   #Notify the member
+#   current_site = Site.objects.get_current()
+#   c = Context({'user': group_member, 'group': group ,'leader': user, 'site_name': current_site})
+#   EMAIL_SUBJECT = "Phonelab: Group "+group.name+" Notification"
+#   EMAIL_BODY = (loader.get_template('users/mails/member_removed.txt')).render(c)
+#   TO_EMAIL = [member_profile.user.email]
+#   send_mail(EMAIL_SUBJECT, EMAIL_BODY, FROM_EMAIL, TO_EMAIL)
+
+#   member_profile.save()
+
+#   return HttpResponseRedirect('/accounts/group_profile/')
+
+# usage: @user_passes_test(is_leader, login_url='/login')
+# usage: @user_passes_test(is_member, login_url='/login')
 
