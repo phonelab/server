@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 from users.models import UserProfile, Participant
 from django.shortcuts import get_object_or_404
 from django.forms.widgets import RadioSelect 
- 
+import string
 """
 RigistrationForm
 
@@ -131,7 +131,43 @@ class ParticipantForm(forms.Form):
       return status
 
   
-    
+"""
+Particiapnt Register and Device Register
 
+@date 08/13/2012
 
+@author TKI
+"""
+class ParticipantRegisterForm(forms.Form):
+  lib_number = forms.CharField(label=u'Library Number', max_length=14, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
+  meid = forms.CharField(label=u'MEID', max_length=15, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
+  phone_number = forms.CharField(label=u'Phone Number?', max_length=10, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
+  
+  def clean_lib_number(self):
+    lib_number = self.cleaned_data['lib_number']
+    if lib_number.isdigit():
+        return lib_number
+    else: 
+        raise forms.ValidationError('Please enter proper Library Number')
+  
+  def clean_meid(self):
+    meid = self.cleaned_data['meid']
+    if len(meid) ==  14:
+      if (meid in string.hexdigits):
+        raise forms.ValidationError('Please enter proper 4G MEID')
+      else: 
+        return meid
+    elif len(meid) == 15: 
+      if meid.isdigit():
+        return meid
+      else: 
+        raise forms.ValidationError('Please enter proper 3G IMEI')
+    else:
+        raise forms.ValidationError('Please enter proper MEID')
 
+  def clean_phone_number(self):
+    phone_number = self.cleaned_data['phone_number']
+    if phone_number.isdigit():
+        return phone_number
+    else: 
+        raise forms.ValidationError('Please enter proper Phone Number')

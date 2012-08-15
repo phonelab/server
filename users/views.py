@@ -16,7 +16,7 @@ from settings import FROM_EMAIL, ADMINS
 from lib.helper import json_response_from, json
 from users.models import UserProfile, Participant
 from device.models import Device, DeviceProfile
-from users.forms import RegistrationForm, ParticipantForm
+from users.forms import RegistrationForm, ParticipantForm, ParticipantRegisterForm
 from application.models import Application
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse, HttpResponseRedirect
@@ -45,6 +45,41 @@ def info(request):
          )
 
 
+"""
+Participant Register and Device Register
+
+@date 08/13/2012
+
+@author TKI
+"""
+def participant_register(request):
+  if request.method == 'POST':
+    form = ParticipantRegisterForm(request.POST)
+    if form.is_valid():
+
+      return render_to_response (
+               'participant_register_form.html',
+               {
+               'success': True
+               },
+               context_instance=RequestContext(request)
+               )
+
+    else: 
+     form = ParticipantRegisterForm(request.POST)
+     return render_to_response(
+              'participant_register_form.html',
+              {'form': form},
+              context_instance=RequestContext(request)
+              )
+
+  else:
+    form = ParticipantRegisterForm()
+    return render_to_response(
+            'participant_register_form.html',
+            {'form': form},
+            context_instance=RequestContext(request)
+            )
 """
 Download Participant Agreement
 

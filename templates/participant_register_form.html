@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}PhoneLab Participant Register Site{% endblock %}
+{% block content %}
+  {% if success %}
+	<div class="alert alert-success">
+	Thank You for registering with phonelab. You will recieve an email with username and temporary password soon!<br><br>
+	<a href="/" class="btn btn-success">Home</a>
+	</div>
+	{% else %}
+	<!-- <div class="container"> -->
+	<div class="well row" style="background-color: #DDDDDD" >
+		<div class="span2">
+				<br><br><br><img alt='PhoneLab Image' class='pull-right' src='{{ STATIC_URL }}img/phonelab_logo_black.png' style="margin-left:0px; width:180px"/>
+		</div>	
+		<div class="span6 pull-right" style="font-size: 26px; line-height:110%; ">
+				<br><br><br><strong style="font-size: 30px">Join us</strong>, as we build the largest open-access participatory smartphone testbed. <br><br><strong style="font-size: 34px ;">PhoneLab. Only at UB CSE.</strong>
+		</div>
+	  
+    <div class="span4">
+    <div class="well">
+		<h2>Participant Register</h2>
+  	<form class="form" method="post" name="participant_register_form" action="/participant_register/">
+   	<div class='fieldWrapper'>
+ 		  {{form.lib_number.errors}}
+			Library Number: <br>{{form.lib_number}}
+		</div>
+		<div class='fieldWrapper'>
+			{{form.meid.errors}}
+			MEID: <br>{{form.meid}}
+		</div>
+		<div class='fieldWrapper'>
+			{{form.phone_number.errors}}
+			Phone Number:<br> {{form.phone_number}}
+		</div>
+		<input type="submit" class='btn btn-info' value="Submit" />
+		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
+		</form>
+  </div>
+  </div>
+	</div>
+	{% endif %}
+{% endblock %}
+{% block js %}
+<script type="text/javascript"> 
+document.getElementById("lib_number").focus()
+  function convert_tab(obj,e) { 
+    // use window.event for IE
+    // use e for Firefox 
+    var e = (typeof event != 'undefined')? window.event: e;
+    // keycode 13 is enter, '\n'
+    if(e.keyCode == 13) { 
+      var ele = document.forms[0].elements; 
+      for(var i = 0;i < ele.length; i++) { 
+        //check last element and out
+        //otherwise focus the next field.
+        var next = (i == ele.length - 1)? 0: i + 1;
+        if(obj == ele[i]) { 
+          ele[next].focus();
+          break
+        } 
+      } 
+      return false; 
+    } 
+  }
+</script> 
+{% endblock %}
+<!--<form METHOD="POST">
+<label for="name1" class="required">test</label>
+<input name="name1" id="name1" type="text" onkeypress="return convert_tab(this,event)"><br>
+<input name="name2" id="name2" type="text" onkeypress="return convert_tab(this,event)"><br>
+<input name="name3" id="name3" type="text" onkeypress="return convert_tab(this,event)"><br>
+<INPUT TYPE="submit" Value="Ok">
+</form>-->
