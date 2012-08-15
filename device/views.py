@@ -20,7 +20,6 @@ from utils import re_sort_nicely, sort_nicely, is_valid_device
 #from users.views import is_member, is_leader
 import os, errno, re
 import string
-
 # Log Dir
 RAW_LOG_ROOT = settings.RAW_LOG_ROOT
 

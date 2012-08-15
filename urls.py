@@ -49,6 +49,8 @@ if settings.DEBUG:
     url(r'^join/$', 'users.views.participant'),
     #Participant Register and device Register Form
     url(r'^participant_register/$', 'users.views.participant_register'),
+    #Participant Register and device Register Form
+    url(r'^confirm_participant_register/$', 'users.views.confirm_participant_register'),
     #profile page
     url(r'^accounts/profile/$', 'users.views.profile'),
     #delete member from group

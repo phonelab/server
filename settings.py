@@ -15,6 +15,8 @@ RAW_APP_ROOT = os.path.join(SITE_ROOT, 'application', 'apps')
 RAW_IRB_ROOT = os.path.join(SITE_ROOT, 'experiment', 'IRBletters')
 #Participant agreement path
 RAW_AGREEMENT_ROOT = os.path.join(SITE_ROOT, 'users', 'Participant_Agreement')
+#Lookup File path
+RAW_LOOKUP_ROOT = os.path.join(SITE_ROOT, 'users', 'Lookup_File')
 # Env variable
 ENV = os.environ.get("ENV") or "development"
 

@@ -9,13 +9,12 @@ from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
 from django import forms
-import random, hashlib
-import os, errno, mimetypes
+import random, hashlib, os, errno, mimetypes, re
 from settings import FROM_EMAIL, ADMINS
 #from django.utils import  simplejson as json
 from lib.helper import json_response_from, json
 from users.models import UserProfile, Participant
-from device.models import Device, DeviceProfile
+from device.models import Device, DeviceProfile, StatusMonitor
 from users.forms import RegistrationForm, ParticipantForm, ParticipantRegisterForm
 from application.models import Application
 from django.core.servers.basehttp import FileWrapper
@@ -25,6 +24,7 @@ from experiment.models import Experiment
 from django.conf import settings
 
 RAW_AGREEMENT_ROOT = settings.RAW_AGREEMENT_ROOT
+RAW_LOOKUP_ROOT = settings.RAW_LOOKUP_ROOT
 
 admin_mail = 'tempphonelab@gmail.com'
 
@@ -52,33 +52,111 @@ Participant Register and Device Register
 @author TKI
 """
 def participant_register(request):
-  if request.method == 'POST':
-    form = ParticipantRegisterForm(request.POST)
-    if form.is_valid():
+  if request.user.is_superuser:
+    if request.method == 'POST':
+      form = ParticipantRegisterForm(request.POST)
+      if form.is_valid():
+        path = os.path.join(RAW_LOOKUP_ROOT, 'phonelab.txt')
+        f = open(path, 'r') 
+        for line in f:
+          if re.search(form.cleaned_data['lib_number'], line):
+            # result[0]: lib_number, 1: person number, 2:ub_id, 3: last_name, 4: first_name
+            result = line.split(' ,')
+            info = {'ub_id': result[2], 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[3], 'first_name': result[4]}
+            break
+          else:
+            info = {}
 
-      return render_to_response (
-               'participant_register_form.html',
-               {
-               'success': True
-               },
-               context_instance=RequestContext(request)
-               )
-
-    else: 
-     form = ParticipantRegisterForm(request.POST)
-     return render_to_response(
-              'participant_register_form.html',
-              {'form': form},
-              context_instance=RequestContext(request)
+        return render_to_response (
+                 'participant_register_form.html',
+                 {
+                 'preview': True,
+                 'form': form.cleaned_data,
+                 'info': info
+                 },
+                 context_instance=RequestContext(request)
               )
 
+      else: 
+        form = ParticipantRegisterForm(request.POST)
+        return render_to_response(
+                 'participant_register_form.html',
+                 {'form': form},
+                 context_instance=RequestContext(request)
+               )
+
+    else:
+      form = ParticipantRegisterForm()
+      return render_to_response(
+               'participant_register_form.html',
+               {'form': form},
+               context_instance=RequestContext(request)
+             )
   else:
-    form = ParticipantRegisterForm()
+    return HttpResponseRedirect('/')  
+
+def confirm_participant_register(request):
+  # params checking
+  if not (request.POST.has_key('ub_id') and request.POST.has_key('email') \
+          and request.POST.has_key('first_name') and request.POST.has_key('last_name')):
+    return HttpResponseRedirect('/')  
+  else:
+    password = User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
+    user = User.objects.create_user(request.POST['ub_id'], request.POST['email'], password)
+    user.is_active = False
+    user.first_name = request.POST['first_name']
+    user.last_name = request.POST['last_name']
+    user.save() 
+	
+    # Build the activation key for their account                                                                                                                    
+    salt = hashlib.md5(str(random.random())).hexdigest()[:5]
+    activation_key = hashlib.md5(salt+user.username).hexdigest()
+    key_expires = datetime.today() + timedelta(2)
+    userprofile = UserProfile(
+                user = user,
+                user_type = "P",
+                activation_key=activation_key, 
+                key_expires=key_expires
+                )
+    # Create and save their profile                                                                                                                                 
+    userprofile.save()
+
+    device = Device(
+           meid = request.POST['meid'],
+           active = "E"
+           )
+    device_id = device.save()
+    device.save()
+  
+    # create monitor interval in StatusMonitor class
+    statusmonitor = StatusMonitor(
+                  name = 'monitorInterval',
+                  value = '10',
+                  units = 'min')
+    statusmonitor.save()
+  
+    # Create and save device profile
+    deviceprofile = DeviceProfile()
+    deviceprofile.dev = device
+    deviceprofile.user = user
+    deviceprofile.phone_no = request.POST['phone_number']
+    deviceprofile.status = "W"
+    #deviceprofile.purpose = ""
+    if request.POST['meid'].startswith('A0000', 0, 5):
+       deviceprofile.service_type = "4"
+    else:
+       deviceprofile.service_type = "3"
+    deviceprofile.save()
+    deviceprofile.statusmonitor.add(statusmonitor)
+    deviceprofile.save()
     return render_to_response(
-            'participant_register_form.html',
-            {'form': form},
-            context_instance=RequestContext(request)
-            )
+    	'participant_register_form.html',
+      {
+      'success': True,
+      },
+      context_instance=RequestContext(request)
+      )
+
 """
 Download Participan Agreement
 

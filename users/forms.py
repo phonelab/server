@@ -1,10 +1,9 @@
-import re
 from django import forms
 from django.contrib.auth.models import User, Group
 from users.models import UserProfile, Participant
 from django.shortcuts import get_object_or_404
 from django.forms.widgets import RadioSelect 
-import string
+import string, re
 """
 RigistrationForm
 
@@ -141,7 +140,7 @@ Particiapnt Register and Device Register
 class ParticipantRegisterForm(forms.Form):
   lib_number = forms.CharField(label=u'Library Number', max_length=14, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
   meid = forms.CharField(label=u'MEID', max_length=15, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
-  phone_number = forms.CharField(label=u'Phone Number?', max_length=10, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
+#  phone_number = forms.CharField(label=u'Phone Number?', max_length=10, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
   
   def clean_lib_number(self):
     lib_number = self.cleaned_data['lib_number']
@@ -165,9 +164,9 @@ class ParticipantRegisterForm(forms.Form):
     else:
         raise forms.ValidationError('Please enter proper MEID')
 
-  def clean_phone_number(self):
-    phone_number = self.cleaned_data['phone_number']
-    if phone_number.isdigit():
-        return phone_number
-    else: 
-        raise forms.ValidationError('Please enter proper Phone Number')
+#  def clean_phone_number(self):
+#    phone_number = self.cleaned_data['phone_number']
+#    if phone_number.isdigit():
+#        return phone_number
+#    else: 
+#        raise forms.ValidationError('Please enter proper Phone Number')
