@@ -114,7 +114,6 @@ def confirm_participant_register(request):
       )
   else:
     password = User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
-    print password
     user = User.objects.create_user(request.POST['ub_id'], request.POST['email'], password)
     user.is_active = False
     user.first_name = request.POST['first_name']

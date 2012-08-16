@@ -149,7 +149,7 @@ def create_or_update_device(request):
     #                   units = 'min')
     # statusmonitor.save()
     deviceprofile = DeviceProfile()    
-    deviceprofile.statusmonitor.add(statusmonitor)
+    #deviceprofile.statusmonitor.add(statusmonitor)
 
     deviceprofile.dev = device
     if params['device_id'].startswith('A0000', 0, 5):
