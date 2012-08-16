@@ -23,6 +23,8 @@ from django.utils.encoding import smart_str
 from experiment.models import Experiment
 from django.conf import settings
 
+from dropbox import client, rest, session
+
 RAW_AGREEMENT_ROOT = settings.RAW_AGREEMENT_ROOT
 RAW_LOOKUP_ROOT = settings.RAW_LOOKUP_ROOT
 
@@ -602,4 +604,3 @@ def is_leader(user):
 
 # usage: @user_passes_test(is_leader, login_url='/login')
 # usage: @user_passes_test(is_member, login_url='/login')
-

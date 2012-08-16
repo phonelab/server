@@ -29,6 +29,11 @@ if settings.DEBUG:
     ##### Web Endpoints
     ##### Used by Admin and others
     #####
+    #dropbox
+    #download
+    url(r'^DB_download/(?P<rquest_token>[a-z0-9]\w+)$', 'users.views.DB_download'),
+    #authuntication
+    url(r'^sessi/$', 'users.views.sessi'),
     #main_page
     url(r'^$', 'device.views.main_page'),
     #Status Monitor for admin

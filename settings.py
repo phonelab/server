@@ -162,6 +162,12 @@ TEMPLATE_DIRS = (
 #    os.path.join(SITE_ROOT, 'templates/mobile'),
 )
 
+###Dropbox Settings
+DROPBOX_CONSUMER_KEY = '8hbi6sj1lsx4t6n'
+DROPBOX_CONSUMER_SECRET = 'dfeq870qlgv2bcu'
+DROPBOX_ACCESS_TOKEN = 'xxx'
+DROPBOX_ACCESS_TOKEN_SECRET = 'xxx'
+
 INSTALLED_APPS = (
 		'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -181,6 +187,7 @@ INSTALLED_APPS = (
     'experiment', #experiment
     'admin', #admin
     'south', #south
+    'django-dropbox',# dropbox
 )
 
 # A sample logging configuration. The only tangible logging
