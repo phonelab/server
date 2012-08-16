@@ -32,14 +32,12 @@ def download_manifest(request, deviceId):
   response = { "error": "", "data": "" }
   try:
     #if device exists
-    print deviceId
     dev = Device.objects.get(meid=deviceId) 
     app_list = {}
     apps = {}
     tags = {}
     services = {}
     # get apps of particular device
-    print dev
     deviceprofile = DeviceProfile.objects.get(dev=dev)
     # services = deviceprofile.services.all()
 
@@ -50,7 +48,6 @@ def download_manifest(request, deviceId):
           apps[app.id] = {"app_object": app, "app_status": "install"}
         else:  
           apps[app.id] = {"app_object": app, "app_status": "uninstall"}
-      print "Here" 
     #get tag names from experiments
       # for dev in Experiment.dev.all():
       #   print dev.meid

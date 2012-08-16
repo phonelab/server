@@ -22,10 +22,10 @@
       <tr> 
         <td><strong>Name</strong></td>
         {% if info %}
-        <td>{{ info.first_name }} {{info.last_name }}</td>
+        <td>{{ info.last_name }}, {{info.first_name }}</td>
         {% else %}
         <td> Not Available</td>
-        {%/ endif %}
+        {% endif %}
       </tr>
       <tr> 
         <td><strong>UB ID</strong></td>
@@ -170,10 +170,10 @@ It is your responsibility to manage and maintain your phone just as you would wi
 			{{form.meid.errors}}
 			MEID: <br>{{form.meid}}
 		</div>
-		<div class='fieldWrapper'>
+{% comment%}		<div class='fieldWrapper'>
 			{{form.phone_number.errors}}
-			Phone Number:<br> {{form.phone_number}}
-		</div>
+			Phone Number:<br> {{form.phone_number}} 
+		</div> {% endcomment %}
 		<input type="submit" class='btn btn-info' value="Submit" />
 		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
 		</form>
@@ -207,7 +207,7 @@ document.getElementById("lib_number").focus()
 
   function checkCheckBox(f){
     if (f.agree.checked == false ) {
-      alert('Please read terms and condition and check the box to continue.');
+      alert('Please agree to the terms and conditions to continue.');
       return false;
     } else {
        return true;

@@ -13,7 +13,7 @@ import random, hashlib, os, errno, mimetypes, re
 from settings import FROM_EMAIL, ADMINS
 #from django.utils import  simplejson as json
 from lib.helper import json_response_from, json
-from users.models import UserProfile, Participant
+from users.models import UserProfile, Participant, ParticipantRegister
 from device.models import Device, DeviceProfile, StatusMonitor
 from users.forms import RegistrationForm, ParticipantForm, ParticipantRegisterForm
 from application.models import Application
@@ -65,7 +65,7 @@ def participant_register(request):
           if re.search(form.cleaned_data['lib_number'], line):
             # result[0]: lib_number, 1: person number, 2:ub_id, 3: last_name, 4: first_name
             result = line.split(' ,')
-            info = {'ub_id': result[2], 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[3], 'first_name': result[4]}
+            info = {'ub_id': result[2].strip(), 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[3].strip(), 'first_name': result[4].strip()}
             break
           else:
             info = {}
@@ -100,9 +100,20 @@ def participant_register(request):
 
 def confirm_participant_register(request):
   # params checking
-  if not (request.POST.has_key('ub_id') and request.POST.has_key('email') \
-          and request.POST.has_key('first_name') and request.POST.has_key('last_name')):
-    return HttpResponseRedirect('/')  
+  if (request.POST['ub_id'] == '' and request.POST['email'] == '' \
+         and request.POST['first_name'] =='' and request.POST['last_name'] ==''):
+    participantregister = ParticipantRegister(
+                         lib_number = request.POST['lib_number'],
+                         meid       = request.POST['meid']
+                         )
+    participantregister.save()
+    return render_to_response(
+    	'participant_register_form.html',
+      {
+      'success': True,
+      },
+      context_instance=RequestContext(request)
+      )
   else:
     password = User.objects.make_random_password(length=10, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789')
     user = User.objects.create_user(request.POST['ub_id'], request.POST['email'], password)
@@ -142,7 +153,7 @@ def confirm_participant_register(request):
     deviceprofile = DeviceProfile()
     deviceprofile.dev = device
     deviceprofile.user = user
-    deviceprofile.phone_no = request.POST['phone_number']
+    #deviceprofile.phone_no = request.POST['phone_number']
     deviceprofile.status = "W"
     #deviceprofile.purpose = ""
     if request.POST['meid'].startswith('A0000', 0, 5):
