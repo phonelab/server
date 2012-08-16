@@ -54,13 +54,13 @@ if settings.DEBUG:
     #profile page
     url(r'^accounts/profile/$', 'users.views.profile'),
     #delete member from group
-    url(r'^accounts/delete_member/(?P<member>\w+)/$', 'users.views.delete_member'),
+    #url(r'^accounts/delete_member/(?P<member>\w+)/$', 'users.views.delete_member'),
     #group profile
-    url(r'^accounts/group_profile/$', 'users.views.group_profile'),
+    #url(r'^accounts/group_profile/$', 'users.views.group_profile'),
     # Update User Profile Form [POST]
     url(r'^accounts/(?P<userId>\d+)/update/$', 'users.views.update'),
     #signup authorization page
-    url(r'^accounts/authorize/(?P<groupname>\w+)/(?P<activation_key>[a-z0-9]\w+)/$', 'users.views.authorize'),
+    #url(r'^accounts/authorize/(?P<groupname>\w+)/(?P<activation_key>[a-z0-9]\w+)/$', 'users.views.authorize'),
     #signup confirm page
     url(r'^accounts/confirm/(?P<activation_key>[a-z0-9]\w+)/$', 'users.views.confirm'),
     #change password
