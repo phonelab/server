@@ -3,6 +3,9 @@
 import os
 import django
 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 ## Note: These variables are overridden
@@ -32,12 +35,12 @@ CRON_POLLING_FREQUENCY = 60
 #FROM_EMAIL = EMAIL_HOST_USER
 
 # Amazon ses Email setting
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
-EMAIL_HOST_USER = 'AKIAIDSLZDH6UL3PJJMQ'
-EMAIL_HOST_PASSWORD = 'Avkt1coRYp2ZPClhP2oVNtO91sjqM3JaStMu5fB7AU6d'
-EMAIL_PORT = 465
+#EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'
+#EMAIL_HOST_USER = 'AKIAIDSLZDH6UL3PJJMQ'
+#EMAIL_HOST_PASSWORD = 'Avkt1coRYp2ZPClhP2oVNtO91sjqM3JaStMu5fB7AU6d'
+#EMAIL_PORT = 465
 FROM_EMAIL = 'PhoneLab Team <ops@phone-lab.org>'
 #FROM_EMAIL = 'PhoneLab Team <join@phone-lab.org>'
 
@@ -235,7 +238,3 @@ elif ENV == "staging":
     from config_staging import *
 else:
     from config_development import *
-    
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-
