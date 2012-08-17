@@ -23,8 +23,9 @@ PASSWORD_RESET_CONFIRM_DICT = {
                               'template_name': 'users/password_reset_confirm.html',
 }
 
-if settings.DEBUG:
-  urlpatterns = patterns('',
+#if settings.DEBUG:
+#  urlpatterns = patterns('',
+urlpatterns = patterns('',
     #####
     ##### Web Endpoints
     ##### Used by Admin and others
@@ -200,4 +201,4 @@ if settings.DEBUG:
     ## TODO
     # Error Handling [POST]
     # url(r'^error/(?P<deviceId>[A-Z0-9]\w+)/$', 'error.views.create_error'),
-  )
+)
