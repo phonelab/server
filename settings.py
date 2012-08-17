@@ -3,6 +3,9 @@
 import os
 import django
 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 ## Note: These variables are overridden
@@ -235,7 +238,3 @@ elif ENV == "staging":
     from config_staging import *
 else:
     from config_development import *
-    
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-

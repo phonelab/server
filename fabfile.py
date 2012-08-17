@@ -28,8 +28,8 @@ def stop():
   run('/etc/init.d/phonelab stop')
 
 def restart():
-  start()
   stop()
+  start()
 
 def migrate():
   with cd('/home/ec2-user/server'):
