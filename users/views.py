@@ -57,16 +57,25 @@ def participant_register(request):
     if request.method == 'POST':
       form = ParticipantRegisterForm(request.POST)
       if form.is_valid():
-        path = os.path.join(RAW_LOOKUP_ROOT, 'phonelab.txt')
+        os.system(SITE_ROOT + ' get_info.sh ' + form.cleaned_data['lib_number']))
+        path = os.path.join(RAW_LOOKUP_ROOT, 'out.txt')
         f = open(path, 'r') 
+        info = {}
         for line in f:
-          if re.search(form.cleaned_data['lib_number'], line):
-            # result[0]: lib_number, 1: person number, 2:ub_id, 3: last_name, 4: first_name
-            result = line.split(' ,')
-            info = {'ub_id': result[2].strip(), 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[3].strip(), 'first_name': result[4].strip()}
-            break
-          else:
-            info = {}
+          print line
+            # result[0]: ub_id, 1: last_name, 2: first_name
+          result = line.split(' |')
+          info = {'ub_id': result[0].strip(), 'email': result[0].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
+
+#        for line in f:
+#          print line
+#          if re.search(form.cleaned_data['lib_number'], line):
+#            # result[0]: ub_id, 1: last_name, 2: first_name
+#            result = line.split(' ,')
+#            info = {'ub_id': result[2].strip(), 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
+#            break
+#          else:
+#            info = {}
 
         return render_to_response (
                  'participant_register_form.html',
