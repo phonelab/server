@@ -27,6 +27,7 @@ from dropbox import client, rest, session
 
 RAW_AGREEMENT_ROOT = settings.RAW_AGREEMENT_ROOT
 RAW_LOOKUP_ROOT = settings.RAW_LOOKUP_ROOT
+SITE_ROOT = settings.SITE_ROOT
 
 admin_mail = 'tempphonelab@gmail.com'
 
@@ -59,43 +60,45 @@ def participant_register(request):
     if request.method == 'POST':
       form = ParticipantRegisterForm(request.POST)
       if form.is_valid():
-        os.system(SITE_ROOT + ' get_info.sh ' + form.cleaned_data['lib_number']))
+        os.system('bash get_info.sh ' + form.cleaned_data['lib_number'])
         path = os.path.join(RAW_LOOKUP_ROOT, 'out.txt')
         f = open(path, 'r') 
         info = {}
-        for line in f:
-          print line
-            # result[0]: ub_id, 1: last_name, 2: first_name
-          result = line.split(' |')
+        if not os.stat(path)[6]==0:
+          for line in f:
+            result = line.split('\t')
           info = {'ub_id': result[0].strip(), 'email': result[0].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
 
-#        for line in f:
-#          print line
-#          if re.search(form.cleaned_data['lib_number'], line):
-#            # result[0]: ub_id, 1: last_name, 2: first_name
-#            result = line.split(' ,')
-#            info = {'ub_id': result[2].strip(), 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
-#            break
-#          else:
-#            info = {}
+  #        for line in f:
+  #          print line
+  #          if re.search(form.cleaned_data['lib_number'], line):
+  #            # result[0]: ub_id, 1: last_name, 2: first_name
+  #            result = line.split(' ,')
+  #            info = {'ub_id': result[2].strip(), 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
+  #            break
+  #          else:
+  #            info = {}
 
-        return render_to_response (
-                 'participant_register_form.html',
-                 {
-                 'preview': True,
-                 'form': form.cleaned_data,
-                 'info': info
-                 },
-                 context_instance=RequestContext(request)
-              )
+          return render_to_response (
+                   'participant_register_form.html',
+                   {
+                   'preview': True,
+                   'form': form.cleaned_data,
+                   'info': info
+                   },
+                   context_instance=RequestContext(request)
+                )
 
-      else: 
-        form = ParticipantRegisterForm(request.POST)
-        return render_to_response(
-                 'participant_register_form.html',
-                 {'form': form},
-                 context_instance=RequestContext(request)
-               )
+        else: 
+          form = ParticipantRegisterForm(request.POST)
+          return render_to_response(
+                   'participant_register_form.html',
+                   {
+                   'preview': True,
+                   'form': form,
+                   },
+                   context_instance=RequestContext(request)
+                 )
 
     else:
       form = ParticipantRegisterForm()
@@ -115,6 +118,7 @@ def confirm_participant_register(request):
                          lib_number = request.POST['lib_number'],
                          meid       = request.POST['meid']
                          )
+    print request.POST['lib_number']+" -- "+request.POST['meid']
     participantregister.save()
     return render_to_response(
     	'participant_register_form.html',
