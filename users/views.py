@@ -65,8 +65,8 @@ def participant_register(request):
         f = open(path, 'r') 
         info = {}
         if not os.stat(path)[6]==0:
-          for line in f:
-            result = line.split('\t')
+          line = f.readline()
+          result = line.split(' |')
           info = {'ub_id': result[0].strip(), 'email': result[0].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
 
   #        for line in f:
@@ -79,26 +79,25 @@ def participant_register(request):
   #          else:
   #            info = {}
 
-          return render_to_response (
-                   'participant_register_form.html',
-                   {
-                   'preview': True,
-                   'form': form.cleaned_data,
-                   'info': info
-                   },
-                   context_instance=RequestContext(request)
-                )
+        return render_to_response (
+                 'participant_register_form.html',
+                 {
+                 'preview': True,
+                 'form': form.cleaned_data,
+                 'info': info
+                 },
+                 context_instance=RequestContext(request)
+              )
 
-        else: 
-          form = ParticipantRegisterForm(request.POST)
-          return render_to_response(
-                   'participant_register_form.html',
-                   {
-                   'preview': True,
-                   'form': form,
-                   },
-                   context_instance=RequestContext(request)
-                 )
+      else: 
+        form = ParticipantRegisterForm(request.POST)
+        return render_to_response(
+                 'participant_register_form.html',
+                 {
+                 'form': form,
+                 },
+                 context_instance=RequestContext(request)
+               )
 
     else:
       form = ParticipantRegisterForm()
