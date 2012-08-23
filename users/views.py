@@ -89,15 +89,15 @@ def participant_register(request):
             else:
               info = {}
 
-        return render_to_response (
-                 'participant_register_form.html',
-                 {
-                 'preview': True,
-                 'form': form.cleaned_data,
-                 'info': info
-                 },
-                 context_instance=RequestContext(request)
-              )
+          return render_to_response (
+                   'participant_register_form.html',
+                   {
+                   'preview': True,
+                   'form': form.cleaned_data,
+                   'info': info
+                   },
+                   context_instance=RequestContext(request)
+                )
 
       else: 
         form = ParticipantRegisterForm(request.POST)
