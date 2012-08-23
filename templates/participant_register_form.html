@@ -57,7 +57,7 @@
 <!--<textarea class="input-xlarge" id="textarea" rows="10" cols="90" style="width:99%">-->
 <div class="well pre-scrollable" style="height: 450px; overflow: auto; ">
 <div style="text-align: center;"><pre><strong style="font-size: 18px;">PhoneLab Participant Agreement</strong>
-Last Updated: August 10, 2012</pre></div>
+Last Updated: August 21, 2012</pre></div>
 <p><strong style="font-size: 16px; line-height: 180%;">1 &nbsp;Overview</strong><br>
 PhoneLab is an open-access, large-scale, participatory smartphone testbed operated by the PhoneLab team (“we”) in the Computer Science and Engineering Department at the University at Buffalo, The State Uni-versity of New York. It consists of smartphones, participants that use the smartphones, and control software. It is designed to be open-access, meaning that researchers inside and outside of UB will conduct research studies using PhoneLab. It provides realism by having participants use the smartphones in real life; this will allow research experiments to be put under realistic conditions. <br>
 <br>This document contains terms and conditions that each and every participant (“you”) should be aware of and agreed upon before receiving a smartphone from us.</p>
@@ -66,10 +66,10 @@ PhoneLab is an open-access, large-scale, participatory smartphone testbed operat
 The smartphone service plan we provide to you is an unlimited plan from Sprint. Our plan includes: Un-limited Texting, Unlimited Data, Unlimited Mobile to Mobile calling, and 300 minutes to landlines. We do not cover international roaming charges. We will pay for your service plan from August 2012 through July 2013. After July 2013, you will be responsible for the monthly bill. The monthly price we negotiated with Sprint is $44.23/month.</p>
 
 <p><strong style="font-size: 16px; line-height: 180%;">3 Duration of Participation</strong><br>
-If you decide to stop participating in PhoneLab, you can do so after July, 2013. At that point of time, you will need to return the smartphone back to us.</p>
+When we give you a phone, our basic expectation will be for you to participate for three or more years. This is the reason why we are providing the first year of free service as well as a discounted plan for later years. However, you have an option to leave after the first year.  If you decide to stop participating in PhoneLab, you can do so after July, 2013. At that point of time, you will need to return the smartphone back to us.</p>
 
 <p><strong style="font-size: 16px; line-height: 180%;">4 Research Participation</strong><br>
-The academic year 2012-2013 will be our first year of operation. Because of this, we expect different kinds of participation from the Fall to the Spring Semester. The following participation is required; if you fail to participate, we will communicate with you to reach a resolution, which may result in getting your phone returned back to us.</p>
+The academic year 2012-2013 will be our first year of operation. Because of this, we expect different kinds of participation from the Fall to the Spring Semester.</p>
 
 <p><strong style="font-size: 14px; line-height: 180%;">4.1 Fall, 2012</strong><br>
 In the Fall 2012 semester, we will mostly focus on refining the website and software running on the phones. Accordingly, the participation from you should be the following:
@@ -98,6 +98,16 @@ In Spring 2013, we will start conducting research experiments with you and your 
 
 <p><strong style="font-size: 14px; line-height: 180%;">4.3 Later Years</strong><br>
 After the academic year 2012-2013, we will be thoroughly reviewing the progress. We will point out our strong and weak points and address them. We will also review the participation policies and update them as necessary.</p>
+<p><strong style="font-size: 14px; line-height: 180%;">4.4 Participant Responsibilities and Expectations</strong><br>
+
+Since the operation of PhoneLab is part of our research study, we would like to communicate with you clearly about what your responsibilities and our expectations are.
+<ul>
+<li>The above participation is required. If for some reason you do not participate, we will communicate with you to reach a resolution, which may result in temporarily stopping the service on your phone and getting your phone returned back to us.</li>
+<li>The phone should be your primary phone. Please be aware that this is critical for our study because one of our goals is realism. If you plan to switch between multiple phones, then you are unfortunately not qualified for our research participation.</li>
+<li>The phone should not be flashed with a custom “ROM.” This is also critical for our study as we need to keep the same platform for every phone. Although Android phones allow installing custom OSes called “ROMs,” it is not allowed on our phones.</li>
+<li>You are expected to participate for three or more years. The reason why we offer the first year of free service as well as a discounted plan is because we would like you to participate for a long period of time. As we explain above, you have an option to leave after the first year; however, our basic expectation is for you to stay as a participant for three or more years.</li>
+</ul>
+</p>
 
 <p><strong style="font-size: 16px; line-height: 180%;">5 Data Collection</strong><br>
 Distributing smartphones to real people as part of our research involves collecting information from your phone, which sometimes involves information considered private. Thus, it is critical that you understand what data is collected and how it is used. </p>
@@ -147,6 +157,11 @@ It is your responsibility to manage and maintain your phone just as you would wi
   Thank You for registering with phonelab. <br><br>
   You will recieve an email with username and temporary password to login PhoneLab Web site soon!<br><br>
   <a href="/" class="btn btn-success">Home</a>
+  </div>
+  {% elif failure %}
+  <div class="alert alert-error">
+  You have already registered. Thank You!<br><br>
+  <a href="/" class="btn btn-important">Home</a>
   </div>
 	{% else %}
 	<!-- <div class="container"> -->

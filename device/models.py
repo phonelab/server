@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 
 ## other includes
-import urllib, urllib2
+import urllib, urllib2, hashlib
 from urllib2 import URLError
 import datetime
 
@@ -19,7 +19,8 @@ class Device(models.Model):
     (u'E', u'ENABLED'),
     (u'D', u'DISABLED'),
   )
-  meid            = models.CharField(max_length=15, null=False)
+  meid            = models.CharField(max_length=15, null=False, unique=True)
+  hash_meid       = models.CharField(max_length=40, null=False, unique=True)
 #  email           = models.CharField(max_length=30, null=False)
   reg_id          = models.CharField(max_length=300, null=False)
   collapse_key    = models.CharField(max_length=255, null=True)
@@ -32,6 +33,7 @@ class Device(models.Model):
 
   def __unicode__(self):
     return self.meid
+  
 
   """
   Send Message to Device

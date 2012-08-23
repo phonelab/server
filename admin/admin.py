@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from lib.helper import json_response_from, json
 from datetime import datetime, timedelta
+from django.contrib.admin import SimpleListFilter
 
 #TODO: change location and implement inline
 #Inline reference: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.InlineModelAdmin
@@ -86,7 +87,7 @@ def send_email(modeladmin, request, queryset):
 class ParticipantAdmin(admin.ModelAdmin):
   list_display = ('name', 'email', 'student_status', 'expected_grad', 'submitted_time')
   search_fields = ['email', 'name']
-  list_filter = ['student_status']
+  list_filter = ['student_status', 'expected_grad']
   actions = [send_email]
   # list_display_links = ['send_email']
 admin.site.register(Participant, ParticipantAdmin)

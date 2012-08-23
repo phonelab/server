@@ -23,8 +23,6 @@ from django.utils.encoding import smart_str
 from experiment.models import Experiment
 from django.conf import settings
 
-from dropbox import client, rest, session
-
 RAW_AGREEMENT_ROOT = settings.RAW_AGREEMENT_ROOT
 RAW_LOOKUP_ROOT = settings.RAW_LOOKUP_ROOT
 SITE_ROOT = settings.SITE_ROOT
@@ -60,24 +58,36 @@ def participant_register(request):
     if request.method == 'POST':
       form = ParticipantRegisterForm(request.POST)
       if form.is_valid():
-        os.system('bash get_info.sh ' + form.cleaned_data['lib_number'])
-        path = os.path.join(RAW_LOOKUP_ROOT, 'out.txt')
-        f = open(path, 'r') 
-        info = {}
-        if not os.stat(path)[6]==0:
-          line = f.readline()
-          result = line.split(' |')
-          info = {'ub_id': result[0].strip(), 'email': result[0].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
+        #check duplicated device
+        if Device.objects.filter(meid=form.cleaned_data['meid']):
+          return render_to_response (
+                   'participant_register_form.html',
+                   {
+                   'failure': True,
+                   },
+                   context_instance=RequestContext(request)
+                )
 
-  #        for line in f:
-  #          print line
-  #          if re.search(form.cleaned_data['lib_number'], line):
-  #            # result[0]: ub_id, 1: last_name, 2: first_name
-  #            result = line.split(' ,')
-  #            info = {'ub_id': result[2].strip(), 'email': result[2].strip()+'@buffalo.edu', 'last_name': result[1].strip(), 'first_name': result[2].strip()}
-  #            break
-  #          else:
-  #            info = {}
+        path = os.path.join(RAW_LOOKUP_ROOT, 'out.txt')
+        if os.path.isfile(path):
+          f = open(path, 'r') 
+          for line in f:
+            if re.search(form.cleaned_data['lib_number'], line):
+              # result[1]: ub_id, 2: last_name, 3: first_name
+              result = line.split(' |')
+              info = {'ub_id': result[1].strip(), 'email': result[1].strip()+'@buffalo.edu', 'last_name': result[2].strip(), 'first_name': result[3].strip()}
+              #check duplicated user
+              if User.objects.filter(username=result[1].strip()):
+                return render_to_response (
+                         'participant_register_form.html',
+                         {
+                         'failure': True,
+                         },
+                         context_instance=RequestContext(request)
+                       )        
+              break
+            else:
+              info = {}
 
         return render_to_response (
                  'participant_register_form.html',
@@ -149,6 +159,7 @@ def confirm_participant_register(request):
 
     device = Device(
            meid = request.POST['meid'],
+           hash_meid = hashlib.sha1(request.POST['meid']).hexdigest(),
            active = "E"
            )
     device_id = device.save()
