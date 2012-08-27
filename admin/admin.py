@@ -25,7 +25,7 @@ Admin site interface
 """
 
 class DeviceAdmin(admin.ModelAdmin):
-  list_display = ('id', 'meid', 'reg_id')
+  list_display = ('id', 'meid', 'hash_meid', 'reg_id')
   search_fields = ['meid']
 admin.site.register(Device, DeviceAdmin)
 #admin.site.register(Device)

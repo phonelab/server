@@ -21,36 +21,24 @@
       </tr>
       <tr> 
         <td><strong>Name</strong></td>
-        {% if info %}
         <td>{{ info.last_name }}, {{info.first_name }}</td>
-        {% else %}
-        <td> Not Available</td>
-        {% endif %}
       </tr>
       <tr> 
         <td><strong>UB ID</strong></td>
-        {% if info %}
         <td>{{ info.ub_id }}</td>
-        {% else %}
-        <td> Not Available</td>
-        {% endif %}
       </tr>
       <tr> 
         <td><strong>Email Address</strong></td>
-        {% if info %}
         <td>{{ info.email }}</td>
-        {% else %}
-        <td> Not Available</td>
-        {% endif %}
       </tr>
       <tr> 
         <td><strong>MEID</strong></td>
         <td>{{ form.meid }}</td>
       </tr>
-{% comment %}      <tr> 
+      <tr> 
         <td><strong>Phone Number</strong></td>
         <td>{{ form.phone_number }}</td>
-      </tr> {% endcomment %}
+      </tr>
       </tbody>
     </table>
 </div>
@@ -145,7 +133,7 @@ It is your responsibility to manage and maintain your phone just as you would wi
 	  <input type="hidden" name="first_name" value='{{info.first_name}}' />
 	  <input type="hidden" name="last_name" value='{{info.last_name}}' />
 	  <input type="hidden" name="meid" value='{{form.meid}}' />
-{% comment %}	  <input type="hidden" name="phone_number" value='{{form.phone_number}}' /> {% endcomment %}
+    <input type="hidden" name="phone_number" value='{{form.phone_number}}' />
 	  <input type="submit" class='btn btn-info' value="Confirm" />
 		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
   </form>
@@ -161,6 +149,11 @@ It is your responsibility to manage and maintain your phone just as you would wi
   {% elif failure %}
   <div class="alert alert-error">
   You have already registered. Thank You!<br><br>
+  <a href="/" class="btn btn-important">Home</a>
+  </div>
+  {% elif notselected %}
+  <div class="alert alert-error">
+  We are sorry. You have not been selected as a PhoneLab participant this time.<br><br>
   <a href="/" class="btn btn-important">Home</a>
   </div>
 	{% else %}
@@ -185,10 +178,10 @@ It is your responsibility to manage and maintain your phone just as you would wi
 			{{form.meid.errors}}
 			MEID: <br>{{form.meid}}
 		</div>
-{% comment%}		<div class='fieldWrapper'>
+		<div class='fieldWrapper'>
 			{{form.phone_number.errors}}
 			Phone Number:<br> {{form.phone_number}} 
-		</div> {% endcomment %}
+		</div>
 		<input type="submit" class='btn btn-info' value="Submit" />
 		<a class="btn" href="/" data-dismiss="modal">Cancel</a>
 		</form>

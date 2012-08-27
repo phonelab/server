@@ -49,6 +49,8 @@ urlpatterns = patterns('',
     #participant interest form
     url(r'^join/$', 'users.views.participant'),
     #Participant Register and device Register Form
+    url(r'^register_developer/$', 'users.views.register_developer'),
+    #Participant Register and device Register Form
     url(r'^participant_register/$', 'users.views.participant_register'),
     #Participant Register and device Register Form
     url(r'^confirm_participant_register/$', 'users.views.confirm_participant_register'),

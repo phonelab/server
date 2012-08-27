@@ -88,6 +88,14 @@ def participant_register(request):
               break
             else:
               info = {}
+          if not info:
+            return render_to_response (
+                     'participant_register_form.html',
+                     {
+                     'failure': True,
+                     },
+                     context_instance=RequestContext(request)
+                   )        
 
         return render_to_response (
                  'participant_register_form.html',
@@ -113,6 +121,87 @@ def participant_register(request):
       form = ParticipantRegisterForm()
       return render_to_response(
                'participant_register_form.html',
+               {'form': form},
+               context_instance=RequestContext(request)
+             )
+  else:
+    return HttpResponseRedirect('/')  
+
+"""
+Participant Register and Device Register
+
+@date 08/13/2012
+
+@author TKI
+"""
+def register_developer(request):
+  if request.user.is_superuser:
+    if request.method == 'POST':
+      form = ParticipantRegisterForm(request.POST)
+      if form.is_valid():
+        #check duplicated device
+        if Device.objects.filter(meid=form.cleaned_data['meid']):
+          return render_to_response (
+                   'register_developer_form.html',
+                   {
+                   'failure': True,
+                   },
+                   context_instance=RequestContext(request)
+                )
+ 
+        path = os.path.join(RAW_LOOKUP_ROOT, 'registration.out')
+        if os.path.isfile(path):
+          f = open(path, 'r') 
+          for line in f:
+            if re.search(form.cleaned_data['lib_number'], line):
+              # result[1]: ub_id, 2: last_name, 3: first_name
+              result = line.split(' |')
+              info = {'ub_id': result[1].strip(), 'email': result[1].strip()+'@buffalo.edu', 'last_name': result[2].strip(), 'first_name': result[3].strip()}
+              #check duplicated user
+              if User.objects.filter(username=result[1].strip()):
+                return render_to_response (
+                         'register_developer_form.html',
+                         {
+                         'failure': True,
+                         },
+                         context_instance=RequestContext(request)
+                       )        
+              break
+            else:
+              info = {}
+#          if not info:
+#            return render_to_response (
+#                     'register_developer_form.html',
+#                     {
+#                     'failure': True,
+#                     },
+#                     context_instance=RequestContext(request)
+#                   )        
+
+        return render_to_response (
+                 'register_developer_form.html',
+                 {
+                 'preview': True,
+                 'form': form.cleaned_data,
+                 'info': info
+                 },
+                 context_instance=RequestContext(request)
+              )
+
+      else: 
+        form = ParticipantRegisterForm(request.POST)
+        return render_to_response(
+                 'register_developer_form.html',
+                 {
+                 'form': form,
+                 },
+                 context_instance=RequestContext(request)
+               )
+
+    else:
+      form = ParticipantRegisterForm()
+      return render_to_response(
+               'register_developer_form.html',
                {'form': form},
                context_instance=RequestContext(request)
              )
@@ -176,7 +265,7 @@ def confirm_participant_register(request):
     deviceprofile = DeviceProfile()
     deviceprofile.dev = device
     deviceprofile.user = user
-    #deviceprofile.phone_no = request.POST['phone_number']
+    deviceprofile.phone_no = request.POST['phone_number']
     deviceprofile.status = "W"
     #deviceprofile.purpose = ""
     if request.POST['meid'].startswith('A0000', 0, 5):
@@ -233,10 +322,12 @@ def participant(request):
                   student_status = form.cleaned_data['student_status'],
                   submitted_time = datetime.now()
       )
-      exp_year = '20'+form.cleaned_data['expected_grad_year']
-      exp_month = form.cleaned_data['expected_grad_month']
-      expected_grad = exp_year+'-'+exp_month+'-01'
-      participant.expected_grad = expected_grad
+      if not (form.cleaned_data['student_status'] == 'FA' or form.cleaned_data['student_status'] == 'ST'):
+        exp_year = '20'+form.cleaned_data['expected_grad_year']
+        exp_month = form.cleaned_data['expected_grad_month']
+        expected_grad = exp_year+'-'+exp_month+'-01'
+        participant.expected_grad = expected_grad
+
       participant.save()
 
       return render_to_response (

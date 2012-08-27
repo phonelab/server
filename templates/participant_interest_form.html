@@ -118,3 +118,18 @@
 	{% endif %}
 	   </body>
 	{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+  function disable_graduation(){
+    if((document.getElementById('id_student_status').value == 'FA') || (document.getElementById('id_student_status').value == 'ST')){
+      document.getElementById('id_expected_grad_month').disabled = true;
+      document.getElementById('id_expected_grad_year').disabled = true;
+    } else {
+      document.getElementById('id_expected_grad_month').disabled = false;
+      document.getElementById('id_expected_grad_year').disabled = false;
+    }  
+  }
+  </script>
+{% endblock %}
+

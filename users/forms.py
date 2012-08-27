@@ -71,6 +71,8 @@ STUDENT_CHOICES = (
   (u'SE', u'Senior'),
   (u'G', u'Graduate'),
   (u'P', u'PhD'),
+  (u'ST', u'Staff'),
+  (u'FA', u'Faculty'),
   )
 GRADUATION_MONTH_CHOICES = (
   (u'M', u'Month'),
@@ -91,11 +93,12 @@ GRADUATION_YEAR_CHOICES = (
   (u'20', u'2020'),
   )
 class ParticipantForm(forms.Form):
+  is_not_student = 'enabled'
   name =forms.CharField(label=u'Full Name', max_length=50)
   email = forms.EmailField(label=u'Email', widget=forms.TextInput(attrs={'placeholder': 'example@buffalo.edu'}))
-  student_status = forms.ChoiceField(choices=STUDENT_CHOICES, label=u'During 2012-2013 you will be?')
-  expected_grad_month = forms.ChoiceField(choices=GRADUATION_MONTH_CHOICES, widget=forms.Select(attrs={'class': 'input-small'}))
-  expected_grad_year = forms.ChoiceField(choices=GRADUATION_YEAR_CHOICES, label=u'Expected Graduation Date', widget=forms.Select(attrs={'class': 'input-small'}))
+  student_status = forms.ChoiceField(choices=STUDENT_CHOICES, label=u'During 2012-2013 you will be?', widget=forms.Select(attrs={'onchange': 'return disable_graduation()'}))
+  expected_grad_month = forms.ChoiceField(choices=GRADUATION_MONTH_CHOICES, required=False, widget=forms.Select(attrs={'class': 'input-small'} ))
+  expected_grad_year = forms.ChoiceField(choices=GRADUATION_YEAR_CHOICES, required=False, label=u'Expected Graduation Date', widget=forms.Select(attrs={'class': 'input-small'}))
   
   def clean_email(self):
     email = self.cleaned_data['email']
@@ -108,26 +111,31 @@ class ParticipantForm(forms.Form):
         raise forms.ValidationError('Please enter your UB Mail id')
     raise forms.ValidationError('The email "%s" has already been registered. Thank You!' % email)
 
-  def clean_expected_grad_month(self):
-    month = self.cleaned_data['expected_grad_month']
-    if month == 'M':
-      raise forms.ValidationError('Please Select the month your expected to Graduate')
-    else:
-      return month
-
-  def clean_expected_grad_year(self):
-    year = self.cleaned_data['expected_grad_year']
-    if year == 'Y':
-      raise forms.ValidationError('Please Select the Year your expected to Graduate')
-    else:
-      return year
-
   def clean_student_status(self):
     status = self.cleaned_data['student_status']
     if status == 'X':
       raise forms.ValidationError('Please Select your student status during the year 2012-2013')
     else:
       return status
+
+  def clean_expected_grad_month(self):
+    month = self.cleaned_data['expected_grad_month']
+    status = self.cleaned_data['student_status']
+    if not (status == 'FA' or status == 'ST'):
+      if month == 'M':
+        raise forms.ValidationError('Please Select the month your expected to Graduate')
+      else:
+        return month
+
+  def clean_expected_grad_year(self):
+    year = self.cleaned_data['expected_grad_year']
+    status = self.cleaned_data['student_status']
+    if not (status == 'FA' or status == 'ST'):
+      if year == 'Y':
+        raise forms.ValidationError('Please Select the Year your expected to Graduate')
+      else:
+        return year
+
 
   
 """
@@ -140,7 +148,7 @@ Particiapnt Register and Device Register
 class ParticipantRegisterForm(forms.Form):
   lib_number = forms.CharField(label=u'Library Number', max_length=14, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
   meid = forms.CharField(label=u'MEID', max_length=15, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
-#  phone_number = forms.CharField(label=u'Phone Number?', max_length=10, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
+  phone_number = forms.CharField(label=u'Phone Number?', max_length=10, widget=forms.TextInput(attrs={'onkeypress': 'return convert_tab(this, event)'}))
   
   def clean_lib_number(self):
     lib_number = self.cleaned_data['lib_number']
@@ -164,9 +172,9 @@ class ParticipantRegisterForm(forms.Form):
     else:
         raise forms.ValidationError('Please enter proper MEID')
 
-#  def clean_phone_number(self):
-#    phone_number = self.cleaned_data['phone_number']
-#    if phone_number.isdigit():
-#        return phone_number
-#    else: 
-#        raise forms.ValidationError('Please enter proper Phone Number')
+  def clean_phone_number(self):
+    phone_number = self.cleaned_data['phone_number']
+    if phone_number.isdigit():
+        return phone_number
+    else: 
+        raise forms.ValidationError('Please enter proper Phone Number')

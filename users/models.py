@@ -48,7 +48,7 @@ class Participant(models.Model):
   submitted_time = models.DateTimeField()
   approved       = models.BooleanField(default=False)
   student_status = models.CharField(max_length=2, choices=STUDENT_CHOICES)
-  expected_grad = models.DateField()
+  expected_grad = models.DateField(blank=True, null=True)
   # def batch(self):
 
 
