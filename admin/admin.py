@@ -85,7 +85,7 @@ def send_email(modeladmin, request, queryset):
     queryset.update(approved=1)
 
 class ParticipantAdmin(admin.ModelAdmin):
-  list_display = ('name', 'email', 'student_status', 'expected_grad', 'submitted_time')
+  list_display = ('name', 'email', 'student_status', 'expected_grad', 'submitted_time', 'result')
   search_fields = ['email', 'name']
   list_filter = ['student_status', 'expected_grad']
   actions = [send_email]

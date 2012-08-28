@@ -42,14 +42,22 @@ class Participant(models.Model):
     (u'SE', 'Senior'),
     (u'G', 'Graduate'),
     (u'P','PhD'),
+    (u'ST','Staff'),
+    (u'FA','Faculty'),
+    )
+  RESULT_CHOICES = (
+    (u'1', 'First Round'),
+    (u'2', 'Second Round'),
+    (u'3', 'Third Round'),
+    (u'D', 'Decline'),
+    (u'U', 'Undecided'),
     )
   name           = models.CharField(max_length=50, null=False)
   email          = models.CharField(max_length=30, null=False)
   submitted_time = models.DateTimeField()
-  approved       = models.BooleanField(default=False)
   student_status = models.CharField(max_length=2, choices=STUDENT_CHOICES)
-  expected_grad = models.DateField(blank=True, null=True)
-  # def batch(self):
+  expected_grad  = models.DateField(blank=True, null=True)
+  result         = models.CharField(max_length=1, choices=RESULT_CHOICES, default='U')
 
 
   

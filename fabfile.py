@@ -10,12 +10,12 @@ def staging():
   env.hosts = ['staging.phone-lab.org'] #107.22.187.240
 
 def production():
-  env.hosts = ['backend.phone-lab.org'] #107.20.190.88
+  env.hosts = ['phone-lab.org'] #107.20.190.88
 
 def move():
   stop()
-  with cd('/home/ec2-user/server'):
-    run('./south.sh convert')
+#  with cd('/home/ec2-user/server'):
+#    run('./south.sh convert')
   run('rm -rf server')
   run("git clone git://github.com/phonelab/server.git")
   if os.environ.get("ENV") == "production":
