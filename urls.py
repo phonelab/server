@@ -47,7 +47,7 @@ urlpatterns = patterns('',
     #download participant agreement
     url(r'^info/agreement/$', 'users.views.download_agreement'),
     #participant interest form
-    url(r'^join/$', 'users.views.participant'),
+    # url(r'^join/$', 'users.views.participant'),
     #Participant Register and device Register Form
     url(r'^register_developer/$', 'users.views.register_developer'),
     #Participant Register and device Register Form
